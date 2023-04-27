@@ -1,0 +1,2 @@
+# ranch
+Ai Code Translator
