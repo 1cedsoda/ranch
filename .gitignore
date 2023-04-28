@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 .volumes
+
+!ranch-proto/dist/

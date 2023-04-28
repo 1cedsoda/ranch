@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/google-protobuf": "^3.15.6",
     "next": "13.3.1",
+    "ranch-proto": "file:../ranch-proto",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
