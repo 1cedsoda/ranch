@@ -1,0 +1,34 @@
+# mongodb, prisma2, ../ranch-bakcned ../ranch-frontend
+version: "3.7"
+
+services:
+  mongodb:
+    image: mongo:5.0.17
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 8082:27017
+    volumes:
+      - ./.volumes/mongo:/data/db
+
+  backend:
+    build: ../ranch-backend
+    restart: always
+    ports:
+      - 8081:4000
+    depends_on:
+      - mongodb
+    volumes:
+      - ../ranch-backend:/app
+
+  frontend:
+    build: ../ranch-frontend
+    restart: always
+    ports:
+      - 8080:3000
+    depends_on:
+      - backend
+    volumes:
+      - ../ranch-frontend:/app
