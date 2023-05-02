@@ -14,7 +14,9 @@ services:
       - ./.volumes/mongo:/data/db
 
   backend:
-    build: ../ranch-backend
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/backend.Dockerfile
     restart: always
     ports:
       - 8081:4000
@@ -22,9 +24,12 @@ services:
       - mongodb
     volumes:
       - ../ranch-backend:/app
+      - ./.volumes/backend/alpaca.cpp:/app/alpaca.cpp
 
   frontend:
-    build: ../ranch-frontend
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/frontend.Dockerfile
     restart: always
     ports:
       - 8080:3000
