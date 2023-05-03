@@ -10,6 +10,6 @@
     "outDir": "dist",
     "allowJs": true,
   },
-  "include": ["gen", "index.ts"],
+  "include": ["src/**/*"],
 }
   

@@ -132,3 +132,5 @@ dist
 .volumes
 
 !ranch-proto/dist/
+
+.DS_Store

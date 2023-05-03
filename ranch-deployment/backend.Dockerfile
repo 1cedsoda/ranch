@@ -5,21 +5,18 @@ WORKDIR /ranch-backend
 # Install C++ & git-lfs
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
-    apt-get -y install gcc mono-mcs rsync git-lfs && \
+    apt-get -y install gcc && \
     rm -rf /var/lib/apt/lists/*
-RUN git-lfs install
 
 # Install alpaca.cpp
-RUN cd / && git-lfs clone https://github.com/antimatter15/alpaca.cpp
+RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp
 RUN cd /alpaca.cpp && make chat
 
-# Install ranch-proto
-COPY ./ranch-proto /ranch-proto
-
 # Install dependencies
-COPY ./ranch-backend/package.json .
+COPY ./ranch-backend/package*.json .
+COPY ./ranch-proto /ranch-proto
 RUN npm i
 COPY ./ranch-backend .
 
 # Run
-CMD ["sh","run.sh"]
+CMD ["npm", "run", "start"]
