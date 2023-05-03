@@ -2,16 +2,16 @@
 version: "3.7"
 
 services:
-  mongodb:
-    image: mongo:5.0.17
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-    ports:
-      - 8082:27017
-    volumes:
-      - ./.volumes/mongo:/data/db
+  # mongodb:
+  #   image: mongo:5.0.17
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: password
+  #   ports:
+  #     - 8082:27017
+  #   volumes:
+  #     - ./.volumes/mongo:/data/db
 
   backend:
     build:
@@ -20,20 +20,20 @@ services:
     restart: always
     ports:
       - 8081:4000
-    depends_on:
-      - mongodb
+    # depends_on:
+    #   - mongodb
     volumes:
-      - ../ranch-backend:/app
-      - ./.volumes/backend/alpaca.cpp:/app/alpaca.cpp
+      - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
+      - ../ranch-backend/src:/ranch-backend/src
 
-  frontend:
-    build:
-      context: ..
-      dockerfile: ./ranch-deployment/frontend.Dockerfile
-    restart: always
-    ports:
-      - 8080:3000
-    depends_on:
-      - backend
-    volumes:
-      - ../ranch-frontend:/app
+  # frontend:
+  #   build:
+  #     context: ..
+  #     dockerfile: ./ranch-deployment/frontend.Dockerfile
+  #   restart: always
+  #   ports:
+  #     - 8080:3000
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ../ranch-frontend/src:/ranch-frontend/src

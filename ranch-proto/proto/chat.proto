@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+service Chat {
+    rpc GetChats (GetChatsRequest) returns (stream GetChatsReply) {}
+    rpc GetChat (GetChatRequest) returns (GetChatReply) {}
+    rpc AddMessage (AddMessageRequest) returns (AddMessageReply) {}
+}
+
+enum Sender {
+    USER = 0;
+    BOT = 1;
+}
+
+message Message {
+    Sender sender = 1;
+    google.protobuf.Timestamp timestamp = 2;
+    string text = 3;
+}
+
+message ChatObject {
+    string id = 1;
+    string username = 2;
+    repeated Message messages = 3;
+}
+
+message GetChatsRequest {
+    string username = 1;
+}
+
+message GetChatsReply {
+    repeated string chatIds = 2;
+}
+
+message GetChatRequest {
+    string chatId = 1;
+}
+
+message GetChatReply {
+    ChatObject chat = 1;
+}
+
+message AddMessageRequest {
+    string chatId = 1;
+    Message message = 2;
+}
+
+message AddMessageReply {
+    
+}
+
+
+

@@ -2,11 +2,9 @@ FROM node:18-buster
 RUN mkdir /ranch-frontend
 WORKDIR /ranch-frontend
 
-# Install ranch-proto
-COPY ./ranch-proto /ranch-proto 
-
 # Install dependencies
-COPY ./ranch-frontend/package.json .
+COPY ./ranch-frontend/package*.json .
+COPY ./ranch-proto /ranch-proto 
 RUN npm i
 COPY ./ranch-frontend .
 

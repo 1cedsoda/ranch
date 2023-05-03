@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+service Alpaca {
+  rpc GetAlpaca (AlpacaGetRequest) returns (AlpacaGetReply) {}
+  rpc StreamGetAlpaca (AlpacaGetRequest) returns (stream AlpacaGetReply) {}
+  rpc PromptAlpaca (AlpacaPromptRequest) returns (stream AlpacaPromptReply) {}
+}
+
+enum AlpacaState {
+  INIT = 0;
+  READY = 1;
+  RUNNING = 2;
+}
+
+message AlpacaGetRequest {
+  string id = 1;
+}
+
+message AlpacaGetReply {
+  string id = 1;
+  AlpacaState state = 2;
+}
+
+message AlpacaPromptRequest {
+  string id = 1;
+  string prompt = 2;
+}
+
+message AlpacaPromptReply {
+  string text = 1;
+}
