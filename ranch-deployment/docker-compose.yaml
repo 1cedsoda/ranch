@@ -24,7 +24,7 @@ services:
       - mongodb
     volumes:
       - ./.volumes/Alpaca-native-4bit-ggml:/Alpaca-native-4bit-ggml
-      # - ../ranch-backend:/ranch-backend
+      - ../ranch-backend/src:/ranch-backend/src
 
   frontend:
     build:
@@ -35,5 +35,5 @@ services:
       - 8080:3000
     depends_on:
       - backend
-    # volumes:
-    # - ../ranch-frontend:/ranch-frontend
+    volumes:
+      - ../ranch-frontend/src:/ranch-frontend/src

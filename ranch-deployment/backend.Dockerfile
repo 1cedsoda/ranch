@@ -14,7 +14,7 @@ RUN cd / && git-lfs clone https://github.com/antimatter15/alpaca.cpp
 RUN cd /alpaca.cpp && make chat
 
 # Install ranch-proto
-COPY ./ranch-proto /ranch-proto 
+COPY ./ranch-proto /ranch-proto
 
 # Install dependencies
 COPY ./ranch-backend/package.json .
