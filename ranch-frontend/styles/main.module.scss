@@ -1,0 +1,80 @@
+.landingPage {
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.loginPage {
+    // height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.goButton {
+    color: white;
+    background: #D466C3;
+    border: none;
+    border-radius: 0.5rem;
+    padding-left: 4.375rem;
+    padding-right: 4.375rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 4.375rem;
+    text-align: center;
+    // height: 70
+}
+
+.goButton:hover {
+    box-shadow: 0 0.313rem 0.938rem rgba(217, 70, 217, 0.4);
+    padding-left: 4.450rem;
+    padding-right: 4.450rem;
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    font-size: 4.450rem;
+}
+
+.h1 {
+    font-size: 4rem;
+    padding-left: 1rem;
+    margin: 0;
+    text-shadow: 2px 2px 2px rgb(128, 128, 128);
+    // color: white;
+    
+}
+
+.logoBar {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.25rem;
+}
+
+.logo {
+    border-radius: 100%;
+    box-shadow: 2px 2px 2px #d41fb9;
+}
+
+.goButtonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar {
+    position: fixed;
+    height: 100vh;
+    width: 20rem;
+    background-color: #d5d5d5;
+    transform: translateX(-100%);
+}
+
+.chatbox {
+    // background-color: #e3e3e3;
+    
+    width: 60rem;
+    height: 50rem;
+    position: fixed;
+    margin-top: 6rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    // padding-top: 100rem;
+}
