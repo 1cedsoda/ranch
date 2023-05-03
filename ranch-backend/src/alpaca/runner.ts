@@ -1,7 +1,7 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process'
 import { EventEmitter } from 'events'
 
-enum AlpacaState {
+export enum AlpacaRunnerState {
     INIT,
     READY,
     RUNNING,
@@ -9,24 +9,22 @@ enum AlpacaState {
 
 export class AlpacaRunner extends EventEmitter {
     cp: ChildProcessWithoutNullStreams
-    state: AlpacaState
+    state: AlpacaRunnerState
 
     constructor() {
         super()
-        this.state = AlpacaState.INIT
+        this.state = AlpacaRunnerState.INIT
         this.cp = spawn('./chat', [], {
             cwd: '/alpaca.cpp',
             shell: true
         })
-        this.emit('state', AlpacaState.INIT)
-        this.cp.stdout.on('data', (data) => {
+        this.emit('state', AlpacaRunnerState.INIT)
+        this.cp.stdout.once('data', (data) => {
             data = data.toString()
-            if (this.state == AlpacaState.INIT || this.state == AlpacaState.RUNNING) {
-                if (this.isPromptCursor(data)) {
-                    this.state = AlpacaState.READY
-                    this.emit('state', AlpacaState.READY)
-                    this.emit('ready')
-                }
+            if (this.isPromptCursor(data) && this.state != AlpacaRunnerState.READY) {
+                this.state = AlpacaRunnerState.READY
+                this.emit('state', this.state)
+                this.emit('ready')
             }
         })
     }
@@ -35,48 +33,52 @@ export class AlpacaRunner extends EventEmitter {
         return data.includes("\n> ")
     }
 
+    kill() {
+        this.cp.kill()
+    }
+
     async whenReady(): Promise<void> {
         return new Promise((resolve, reject) => {
             this.onStateChange((state)=>{
-                if (state == AlpacaState.READY) {
+                if (state == AlpacaRunnerState.READY) {
                     resolve();
                 }
             })
         })
     }
 
-    async onStateChange(callback: (state: AlpacaState)=>void) {
-        const listener = this.on('state', (state: AlpacaState) => {
+    async onStateChange(callback: (state: AlpacaRunnerState)=>void) {
+        const listener = this.on('state', (state: AlpacaRunnerState) => {
             callback(state)
         })
     }
 
-
-    async prompt(runner: AlpacaRunner, prompt: string, onData?: (data: string) => void, onEnd?: () => void): Promise<string> {
-        if (this.state != AlpacaState.READY) {
+    async prompt(prompt: string, onData?: (data: string) => void, onEnd?: () => void): Promise<string> {
+        if (this.state != AlpacaRunnerState.READY) {
             throw new Error('Alpaca is not ready')
         }
 
         const preparedPrompt = prompt.replace("\n", "\\") + "\n"
-        runner.cp.stdin.write(prompt + '\n')
+        this.cp.stdin.write(prompt + '\n')
+        this.state = AlpacaRunnerState.RUNNING
+        this.emit('state', this.state)
+
         let output = ""
 
         return new Promise((resolve, reject) => {
-            runner.cp.stdout.on('data', (data: any) => {
+            this.cp.stdout.on('data', (data: any) => {
                 data = data.toString()
                 if (this.isPromptCursor(data)) {
                     if (onEnd) onEnd()
                     resolve(output)
+                    this.state = AlpacaRunnerState.READY
+                    this.emit('state', this.state)
+                    this.emit('ready')
                 } else {
                     if (onData) onData(data)
                     output += data
                 }
             })
         })
-        
-        // log errors   
-        // runner.cp.stderr.on('data', (data) => {
-        //     // console.log("ERR",data.toString())
-        // })
     }
 }

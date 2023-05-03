@@ -6,30 +6,24 @@ import {
 } from '@grpc/grpc-js';
 import { AlpacaRunner } from './alpaca/runner';
 import { AlpacaServer } from './services/alpaca';
-import { ChatService, AlpacaService } from 'ranch-proto';
+import { ChatService, AlpacaService, AlpacaState } from 'ranch-proto';
 import { ChatServer } from './services/chat';
-
-class TypedServerOverride extends Server {
-    addServiceTyped<TypedServiceImplementation extends Record<any,any>>(service: ServiceDefinition<UntypedServiceImplementation>, implementation: TypedServiceImplementation): void {
-        this.addService(service, implementation)
-    }
-}
+import { alpacaRunnerManager } from './alpaca/runner_manager';
 
 async function main(): Promise<void> {
-    const server = new TypedServerOverride();
-    server.addService(AlpacaService as unknown as ServiceDefinition, new AlpacaServer() as unknown as UntypedServiceImplementation);
+    const server = new Server();
+    server.addService(AlpacaService, new AlpacaServer());
+    server.addService(ChatService, new ChatServer());
     server.bindAsync('0.0.0.0:4000', ServerCredentials.createInsecure(), () => {
         server.start();
         console.log('server is running on 0.0.0.0:4000');
     });
 
-    const a = new AlpacaRunner();
-    a.onStateChange((s)=>{console.log(s)})
+    const a = alpacaRunnerManager.createRunner('test');
+    a.onStateChange((state)=>{console.log("State:", state)})
     await a.whenReady();
-    a.prompt(a, 'wer ist elon musk', (data) => {
-        console.log(data);
-    }, () => {
-        console.log('end');
+    a.prompt('100*100=').then((answer) => {
+        console.log(answer);
     });
 }
 
