@@ -62,19 +62,47 @@
 .sidebar {
     position: fixed;
     height: 100vh;
-    width: 20rem;
+    width: 16rem;
     background-color: #d5d5d5;
     transform: translateX(-100%);
 }
 
 .chatbox {
-    // background-color: #e3e3e3;
-    
-    width: 60rem;
-    height: 50rem;
+    background-color: #e3e3e3;
+    width: 50rem;
+    height: 41.5rem;
     position: fixed;
     margin-top: 6rem;
     border-radius: 0.5rem;
     overflow: hidden;
     // padding-top: 100rem;
 }
+
+.messagebox {
+    background-color: #ffffff;
+    width: 50rem;
+    height: 3rem;
+    position: fixed;
+    margin-top: 48rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.textinput {
+    height: 100%;
+    width: 46rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border: none;
+    font-size: 1rem;
+    overflow-y: hidden;
+    padding: 0.8rem;
+    resize: none;
+}
+
+.textinput:focus {
+    outline: none;
+}
+

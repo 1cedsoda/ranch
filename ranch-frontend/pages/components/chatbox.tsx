@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import styles from '../../styles/main.module.scss';
 import Image from 'next/image'
 
-export default function Chat()
+export default function Chatbox()
 {
     return (
         <div className={classNames(styles.chatbox)}>
