@@ -23,8 +23,8 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ../ranch-backend:/app
-      - ./.volumes/backend/alpaca.cpp:/app/alpaca.cpp
+      - ./.volumes/Alpaca-native-4bit-ggml:/Alpaca-native-4bit-ggml
+      # - ../ranch-backend:/ranch-backend
 
   frontend:
     build:
@@ -35,5 +35,5 @@ services:
       - 8080:3000
     depends_on:
       - backend
-    volumes:
-      - ../ranch-frontend:/app
+    # volumes:
+    # - ../ranch-frontend:/ranch-frontend
