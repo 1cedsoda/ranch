@@ -3,9 +3,10 @@ RUN mkdir /ranch-frontend
 WORKDIR /ranch-frontend
 
 # Install dependencies
+RUN npm i -g pnpm
 COPY ./ranch-frontend/package*.json .
 COPY ./ranch-proto /ranch-proto 
-RUN npm i
+RUN pnpm i --verbose
 COPY ./ranch-frontend .
 
 # Run

@@ -2,7 +2,7 @@ FROM node:18-buster
 RUN mkdir /ranch-backend
 WORKDIR /ranch-backend
 
-# Install C++ & git-lfs
+# Install C++
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
     apt-get -y install gcc && \
@@ -13,9 +13,10 @@ RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp
 RUN cd /alpaca.cpp && make chat
 
 # Install dependencies
-COPY ./ranch-backend/package*.json .
+RUN npm i -g pnpm
+COPY ./ranch-backend/package.json .
 COPY ./ranch-proto /ranch-proto
-RUN npm i
+RUN pnpm i --verbose
 COPY ./ranch-backend .
 
 # Run

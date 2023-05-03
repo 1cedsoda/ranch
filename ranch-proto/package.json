@@ -1,8 +1,12 @@
 {
   "name": "ranch-proto",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "./build.sh && tsc"
+    "build": "./build.sh && tsc && npm run install-in",
+    "install-in": "npm run install-in-backend && npm run install-in-frontend",
+    "install-in-backend": "cd ../ranch-backend && rm -r node_modules/ranch-proto && npm i ../ranch-proto",
+    "install-in-frontend": "cd ../ranch-frontend && rm -r node_modules/ranch-proto && npm i ../ranch-proto"
   },
   "devDependencies": {
     "grpc_tools_node_protoc_ts": "^5.3.3",
@@ -11,7 +15,6 @@
     "@types/google-protobuf": "^3.15.6"
   },
   "dependencies": {
-    "@grpc/grpc-js": "^1.8.14",
-    "google-protobuf": "^3.21.2"
+    "@grpc/grpc-js": "^1.8.14"
   }
 }
