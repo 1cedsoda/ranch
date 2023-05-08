@@ -1,0 +1,181 @@
+.landingPage {
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.mainPage {
+    display: flex;
+    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+//go Button styles
+.goButton {
+    color: white;
+    background: #D466C3;
+    border: none;
+    border-radius: 0.5rem;
+    padding-left: 5.375rem;
+    padding-right: 5.375rem;
+    padding-top: 1.325rem;
+    padding-bottom: 1.325rem;
+    font-size: 5.375rem;
+    text-align: center;
+}
+
+.goButton:hover {
+    box-shadow: 0 0.313rem 0.938rem rgba(217, 70, 217, 0.4);
+    padding-left: 5.450rem;
+    padding-right: 5.450rem;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
+    font-size: 5.450rem;
+}
+
+//h1 styles
+.h1 {
+    font-size: 5rem;
+    padding-left: 1rem;
+    margin: 0;
+    text-shadow: 0.125rem 0.125rem 0.125rem rgb(128, 128, 128);
+    color: white;
+    
+}
+
+.h1MainPage {
+    font-size: 2.5rem;
+    padding-left: 1rem;
+    margin: 0;
+    text-shadow: 0.125rem 0.125rem 0.125rem rgb(128, 128, 128);
+    color: white;
+}
+
+.logoMainPage {
+    border-radius: 100%;
+    box-shadow: 0.125rem 0.125rem 0.125rem #d41fb9;
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.logoBar {
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.25rem;
+    justify-content: center;
+}
+
+.logo {
+    border-radius: 100%;
+    box-shadow: 0.125rem 0.125rem 0.125rem #d41fb9;
+    width: 5.5rem;
+    height: 5.5rem;
+}
+
+.goButtonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.sidebar {
+    height: 100vh;
+    width: 80%;
+    background-color: #d5d5d5;
+    transform: translateX(-100%);
+    
+    // overflow: auto;
+}
+
+.sidebarElements {
+    display: flex;
+    justify-content: center;
+}
+
+.newChatButton {
+    background-color: #d5d5d5;
+    border: 0.125rem solid #8A92A1;;
+    border-radius: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: #8A92A1;
+}
+
+.chatbox {
+    background-color: #28121200;
+    justify-content: center;
+    height: 75%;
+    border-radius: 0.5rem;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+.messagebox {
+    background-color: #ffffff;
+    height: 5.5%;
+    margin: 0;
+    margin-top: 2%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.textinput {
+    height: 100%;
+    width: 60.5rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border: none;
+    font-size: 1.25rem;
+    overflow-y: hidden;
+    padding: 0.8rem;
+    resize: none;
+    color: #8A92A1;
+}
+
+.textinput:focus {
+    outline: none;
+}
+
+.messageDiv {
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 3rem;
+    // padding: 1rem;
+}
+
+.spanMessage {
+    padding-left: 1rem;
+    text-align: justify;
+    font-size: 1rem;
+}
+
+.messageboxIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 1%;
+}
+
+.chatboxLogo {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 100%;
+}
+
