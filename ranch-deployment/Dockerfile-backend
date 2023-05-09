@@ -13,10 +13,9 @@ RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp
 RUN cd /alpaca.cpp && make chat
 
 # Install dependencies
-RUN npm i -g pnpm
 COPY ./ranch-backend/package.json .
 COPY ./ranch-proto /ranch-proto
-RUN pnpm i --verbose
+RUN npm i --verbose
 COPY ./ranch-backend .
 
 # Run
