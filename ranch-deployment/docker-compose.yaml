@@ -1,6 +1,9 @@
 # mongodb, prisma2, ../ranch-bakcned ../ranch-frontend
 version: "3.7"
 
+volumes:
+  ranch-mongo:
+
 services:
   mongodb:
     image: mongo:6
@@ -11,12 +14,12 @@ services:
     ports:
       - 8082:27017
     volumes:
-      - ./.volumes/mongo:/data/db
+      - ranch-mongo:/data/db
 
   backend:
     build:
       context: ..
-      dockerfile: ./ranch-deployment/Dockerfile-backend
+      dockerfile: ./ranch-deployment/ranch-backend.Dockerfile
     image: ranch-backend
     restart: "no"
     ports:
@@ -25,25 +28,22 @@ services:
     #   - mongodb
     volumes:
       - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
-      - ../ranch-backend/src:/ranch-backend/src
 
   frontend:
     build:
       context: ..
-      dockerfile: ./ranch-deployment/Dockerfile-frontend
+      dockerfile: ./ranch-deployment/ranch-frontend.Dockerfile
     image: ranch-frontend
     restart: "no"
     ports:
       - 8080:3000
-    # depends_on:
-    #   - backend
     volumes:
       - ../ranch-frontend/src:/ranch-frontend/src
 
   envoy:
     build:
       context: ..
-      dockerfile: ./ranch-deployment/Dockerfile-envoy
+      dockerfile: ./ranch-deployment/ranch-envoy.Dockerfile
     image: ranch-envoy
     restart: "no"
     ports:

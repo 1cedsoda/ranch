@@ -10,14 +10,12 @@
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.8.14",
-    "grpc-web": "^1.4.2"
-  },
-  "devDependencies": {
+    "google-protobuf": "^3.21.2",
     "@types/google-protobuf": "^3.15.6",
+    "grpc-web": "^1.4.2",
     "grpc_tools_node_protoc_ts": "^5.3.3",
     "grpc-tools": "^1.12.4",
     "protoc-gen-grpc-web": "^1.4.1",
     "typescript": "^5.0.4"
   }
-  
 }
