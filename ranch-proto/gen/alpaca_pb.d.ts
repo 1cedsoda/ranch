@@ -6,87 +6,87 @@
 
 import * as jspb from "google-protobuf";
 
-export class AlpacaGetRequest extends jspb.Message { 
+export class GetStateRequest extends jspb.Message { 
     getId(): string;
-    setId(value: string): AlpacaGetRequest;
+    setId(value: string): GetStateRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AlpacaGetRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: AlpacaGetRequest): AlpacaGetRequest.AsObject;
+    toObject(includeInstance?: boolean): GetStateRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetStateRequest): GetStateRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AlpacaGetRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AlpacaGetRequest;
-    static deserializeBinaryFromReader(message: AlpacaGetRequest, reader: jspb.BinaryReader): AlpacaGetRequest;
+    static serializeBinaryToWriter(message: GetStateRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetStateRequest;
+    static deserializeBinaryFromReader(message: GetStateRequest, reader: jspb.BinaryReader): GetStateRequest;
 }
 
-export namespace AlpacaGetRequest {
+export namespace GetStateRequest {
     export type AsObject = {
         id: string,
     }
 }
 
-export class AlpacaGetReply extends jspb.Message { 
+export class GetStateResponse extends jspb.Message { 
     getId(): string;
-    setId(value: string): AlpacaGetReply;
+    setId(value: string): GetStateResponse;
     getState(): AlpacaState;
-    setState(value: AlpacaState): AlpacaGetReply;
+    setState(value: AlpacaState): GetStateResponse;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AlpacaGetReply.AsObject;
-    static toObject(includeInstance: boolean, msg: AlpacaGetReply): AlpacaGetReply.AsObject;
+    toObject(includeInstance?: boolean): GetStateResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetStateResponse): GetStateResponse.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AlpacaGetReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AlpacaGetReply;
-    static deserializeBinaryFromReader(message: AlpacaGetReply, reader: jspb.BinaryReader): AlpacaGetReply;
+    static serializeBinaryToWriter(message: GetStateResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetStateResponse;
+    static deserializeBinaryFromReader(message: GetStateResponse, reader: jspb.BinaryReader): GetStateResponse;
 }
 
-export namespace AlpacaGetReply {
+export namespace GetStateResponse {
     export type AsObject = {
         id: string,
         state: AlpacaState,
     }
 }
 
-export class AlpacaPromptRequest extends jspb.Message { 
+export class PromptRequest extends jspb.Message { 
     getId(): string;
-    setId(value: string): AlpacaPromptRequest;
+    setId(value: string): PromptRequest;
     getPrompt(): string;
-    setPrompt(value: string): AlpacaPromptRequest;
+    setPrompt(value: string): PromptRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AlpacaPromptRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: AlpacaPromptRequest): AlpacaPromptRequest.AsObject;
+    toObject(includeInstance?: boolean): PromptRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: PromptRequest): PromptRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AlpacaPromptRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AlpacaPromptRequest;
-    static deserializeBinaryFromReader(message: AlpacaPromptRequest, reader: jspb.BinaryReader): AlpacaPromptRequest;
+    static serializeBinaryToWriter(message: PromptRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PromptRequest;
+    static deserializeBinaryFromReader(message: PromptRequest, reader: jspb.BinaryReader): PromptRequest;
 }
 
-export namespace AlpacaPromptRequest {
+export namespace PromptRequest {
     export type AsObject = {
         id: string,
         prompt: string,
     }
 }
 
-export class AlpacaPromptReply extends jspb.Message { 
+export class PromptResponse extends jspb.Message { 
     getText(): string;
-    setText(value: string): AlpacaPromptReply;
+    setText(value: string): PromptResponse;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AlpacaPromptReply.AsObject;
-    static toObject(includeInstance: boolean, msg: AlpacaPromptReply): AlpacaPromptReply.AsObject;
+    toObject(includeInstance?: boolean): PromptResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: PromptResponse): PromptResponse.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AlpacaPromptReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AlpacaPromptReply;
-    static deserializeBinaryFromReader(message: AlpacaPromptReply, reader: jspb.BinaryReader): AlpacaPromptReply;
+    static serializeBinaryToWriter(message: PromptResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PromptResponse;
+    static deserializeBinaryFromReader(message: PromptResponse, reader: jspb.BinaryReader): PromptResponse;
 }
 
-export namespace AlpacaPromptReply {
+export namespace PromptResponse {
     export type AsObject = {
         text: string,
     }

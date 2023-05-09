@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { AlpacaClient } from "ranch-proto"
 import { ChannelCredentials } from "@grpc/grpc-js"
-import { AlpacaState, alpacaSlice, initialAlpacaState } from "./alpaca"
 import { AuthState, authSlice, initialAuthState } from "./auth"
+import { AlpacaStoreState, alpacaSlice, initialAlpacaState } from "./alpaca"
 
 export type RootState = {
-    alpaca: AlpacaState,
+    alpaca: AlpacaStoreState,
     auth: AuthState
 }
 
@@ -16,7 +16,7 @@ export const initialRootStore: RootState = {
 
 export type ThunkExtra = {
     extra: {
-        alpacaService: AlpacaClient;
+        alpacaClient: AlpacaClient;
     };
   };
 
@@ -29,7 +29,7 @@ export const createStore = () =>
         middleware: (getDefaultMiddleware) => getDefaultMiddleware({
             thunk: {
                 extraArgument: {
-                    alpacaService: new AlpacaClient('http://localhost:4000', ChannelCredentials.createInsecure())
+                    alpacaClient: new AlpacaClient('http://localhost:4000', ChannelCredentials.createInsecure())
                 }
             }
         })
