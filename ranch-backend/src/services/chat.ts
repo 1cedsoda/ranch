@@ -1,6 +1,6 @@
 import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, sendUnaryData } from '@grpc/grpc-js'
 import { IChatServer } from 'ranch-proto/dist/grpc';
-import { AddMessageResponse, AddMessageRequest, GetChatsResponse, GetChatsRequest, GetChatsRequestEz, AddMessageRequestEz, GetChatsResponseEz, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse, GetChatMessagesRequestEz, SetChatTitleRequestEz, ChatObject, ChatObjectEz, Message, MessageEz, GetChatMessagesResponseEz, SetChatTitleResponseEz } from 'ranch-proto/dist/pb';
+import { AddMessageResponse, AddMessageRequest, GetChatsResponse, GetChatsRequest, GetChatsRequestEz, AddMessageRequestEz, GetChatsResponseEz, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse, GetChatMessagesRequestEz, SetChatTitleRequestEz, ChatObject, ChatObjectEz, Message, MessageEz, GetChatMessagesResponseEz, SetChatTitleResponseEz, AddMessageResponseEz } from 'ranch-proto/dist/pb';
 import { UntypedHandleCall } from '@grpc/grpc-js';
 import { prisma } from '../prisma/prisma';
 import { convert, convertList } from '../prisma/mappers';
@@ -53,19 +53,14 @@ export class ChatServer implements IChatServer {
     const req = call.request as GetChatMessagesRequestEz;
     const { chatId } = req;
 
-    const chat = await prisma.chat.findUnique({
+    const messages = await prisma.message.findMany({
       where: {
-        id: chatId,
+        chatId: chatId
       },
     });
 
-    if (!chat) {
-      callback(new Error('chat not found'));
-      return;
-    }
-
-    const messages = convertList<prisma_client.Message, MessageEz>(chat.messages);
-    const res = new GetChatMessagesResponseEz(messages);
+    const protoMessages = convertList<prisma_client.Message, MessageEz>(messages);
+    const res = new GetChatMessagesResponseEz(protoMessages);
     callback(null, res);
   };
 
@@ -82,8 +77,7 @@ export class ChatServer implements IChatServer {
       },
     });
 
-    const res = new SetChatTitleResponseEz();
-    callback(null, res);
+    callback(null, new SetChatTitleResponseEz());
   };
 
   async addMessage (call: ServerUnaryCall<AddMessageRequest, AddMessageResponse>, callback: sendUnaryData<AddMessageResponse>) {
@@ -93,24 +87,12 @@ export class ChatServer implements IChatServer {
     
     const prismaMessage = convert<MessageEz, prisma_client.Message>(message);
 
-    const chat = await prisma.chat.findUnique({
-      where: {
-        id: chatId
-      }
-    })
-
-    const messagesBefore = chat?.messages
-
-    prisma.chat.update({
-      where: {
-        id: chatId
-      },
+    await prisma.message.create({
       data: {
-        messages: messagesBefore ?
-          messagesBefore.concat(prismaMessage)
-          : [prismaMessage]
+        ...prismaMessage,
       }
-    })
+    });
 
+    callback(null, new AddMessageResponseEz());
   };
 }

@@ -23,12 +23,14 @@ const protoMessageSenderToPrismaMessageSender = (a: MessageSender): prisma_clien
 
 const prismaMessageToProtoMessageEz = (a: prisma_client.Message): MessageEz => {
     let sender = prismaMessageSenderToProtoMessageSender(a.sender)
-    return new MessageEz(sender, Timestamp.fromDate(a.timestamp), a.text)
+    return new MessageEz(a.id, a.chatId, sender, Timestamp.fromDate(a.timestamp), a.text)
 }
 
 const protoMessageEzToPrismaMessage = (a: MessageEz): prisma_client.Message => {
     let sender = protoMessageSenderToPrismaMessageSender(a.sender)
     return {
+        id: a.id,
+        chatId: a.chatId,
         text: a.text,
         timestamp: a.timestamp.toDate(),
         sender: sender
