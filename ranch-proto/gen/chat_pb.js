@@ -276,9 +276,11 @@ proto.Message.prototype.toObject = function(opt_includeInstance) {
  */
 proto.Message.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sender: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    id: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    chatid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    sender: jspb.Message.getFieldWithDefault(msg, 3, 0),
     timestamp: (f = msg.getTimestamp()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
-    text: jspb.Message.getFieldWithDefault(msg, 3, "")
+    text: jspb.Message.getFieldWithDefault(msg, 5, "")
   };
 
   if (includeInstance) {
@@ -316,15 +318,23 @@ proto.Message.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setChatid(value);
+      break;
+    case 3:
       var value = /** @type {!proto.MessageSender} */ (reader.readEnum());
       msg.setSender(value);
       break;
-    case 2:
+    case 4:
       var value = new google_protobuf_timestamp_pb.Timestamp;
       reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
       msg.setTimestamp(value);
       break;
-    case 3:
+    case 5:
       var value = /** @type {string} */ (reader.readString());
       msg.setText(value);
       break;
@@ -357,17 +367,31 @@ proto.Message.prototype.serializeBinary = function() {
  */
 proto.Message.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getId();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getChatid();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
   f = message.getSender();
   if (f !== 0.0) {
     writer.writeEnum(
-      1,
+      3,
       f
     );
   }
   f = message.getTimestamp();
   if (f != null) {
     writer.writeMessage(
-      2,
+      4,
       f,
       google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
     );
@@ -375,7 +399,7 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
   f = message.getText();
   if (f.length > 0) {
     writer.writeString(
-      3,
+      5,
       f
     );
   }
@@ -383,11 +407,47 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional MessageSender sender = 1;
+ * optional string id = 1;
+ * @return {string}
+ */
+proto.Message.prototype.getId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.Message} returns this
+ */
+proto.Message.prototype.setId = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string chatId = 2;
+ * @return {string}
+ */
+proto.Message.prototype.getChatid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.Message} returns this
+ */
+proto.Message.prototype.setChatid = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional MessageSender sender = 3;
  * @return {!proto.MessageSender}
  */
 proto.Message.prototype.getSender = function() {
-  return /** @type {!proto.MessageSender} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {!proto.MessageSender} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
@@ -396,17 +456,17 @@ proto.Message.prototype.getSender = function() {
  * @return {!proto.Message} returns this
  */
 proto.Message.prototype.setSender = function(value) {
-  return jspb.Message.setProto3EnumField(this, 1, value);
+  return jspb.Message.setProto3EnumField(this, 3, value);
 };
 
 
 /**
- * optional google.protobuf.Timestamp timestamp = 2;
+ * optional google.protobuf.Timestamp timestamp = 4;
  * @return {?proto.google.protobuf.Timestamp}
  */
 proto.Message.prototype.getTimestamp = function() {
   return /** @type{?proto.google.protobuf.Timestamp} */ (
-    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 2));
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 4));
 };
 
 
@@ -415,7 +475,7 @@ proto.Message.prototype.getTimestamp = function() {
  * @return {!proto.Message} returns this
 */
 proto.Message.prototype.setTimestamp = function(value) {
-  return jspb.Message.setWrapperField(this, 2, value);
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
@@ -433,16 +493,16 @@ proto.Message.prototype.clearTimestamp = function() {
  * @return {boolean}
  */
 proto.Message.prototype.hasTimestamp = function() {
-  return jspb.Message.getField(this, 2) != null;
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
 /**
- * optional string text = 3;
+ * optional string text = 5;
  * @return {string}
  */
 proto.Message.prototype.getText = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
@@ -451,7 +511,7 @@ proto.Message.prototype.getText = function() {
  * @return {!proto.Message} returns this
  */
 proto.Message.prototype.setText = function(value) {
-  return jspb.Message.setProto3StringField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 5, value);
 };
 
 

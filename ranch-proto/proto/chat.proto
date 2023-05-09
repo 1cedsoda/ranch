@@ -16,9 +16,11 @@ enum MessageSender {
 }
 
 message Message {
-    MessageSender sender = 1;
-    google.protobuf.Timestamp timestamp = 2;
-    string text = 3;
+    string id = 1;
+    string chatId = 2;
+    MessageSender sender = 3;
+    google.protobuf.Timestamp timestamp = 4;
+    string text = 5;
 }
 
 message ChatObject {

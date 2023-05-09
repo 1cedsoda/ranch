@@ -2,16 +2,28 @@ import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 import { AddMessageResponse, AddMessageRequest, ChatObject, GetChatsResponse, GetChatsRequest, Message, MessageSender, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse } from "../../gen/chat_pb";
 
 export class MessageEz extends Message {
+    id: string
+    chatId: string
     sender: MessageSender
     timestamp: Timestamp
     text: string
-    constructor(sender: MessageSender, timestamp: Timestamp, text: string) {
+    constructor(id: string, chatId: string, sender: MessageSender, timestamp: Timestamp, text: string) {
         super()
+        this.id = id
+        this.chatId = chatId
         this.sender = sender
         this.timestamp = timestamp
         this.text = text
     }
 }
+Object.defineProperty(Message.prototype, 'id', {
+    get (this: Message) { return this.getId() },
+    set (this: Message, chatId: string) { this.setId(chatId) },
+})
+Object.defineProperty(Message.prototype, 'chatId', {
+    get (this: Message) { return this.getChatid() },
+    set (this: Message, chatId: string) { this.setChatid(chatId) },
+})
 Object.defineProperty(Message.prototype, 'sender', {
     get (this: Message) { return this.getSender() },
     set (this: Message, sender: MessageSender) { this.setSender(sender) },

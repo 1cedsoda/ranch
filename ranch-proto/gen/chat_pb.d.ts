@@ -8,6 +8,10 @@ import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class Message extends jspb.Message { 
+    getId(): string;
+    setId(value: string): Message;
+    getChatid(): string;
+    setChatid(value: string): Message;
     getSender(): MessageSender;
     setSender(value: MessageSender): Message;
 
@@ -30,6 +34,8 @@ export class Message extends jspb.Message {
 
 export namespace Message {
     export type AsObject = {
+        id: string,
+        chatid: string,
         sender: MessageSender,
         timestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         text: string,

@@ -1,10 +1,12 @@
 import { Timestamp } from "google-protobuf/google/protobuf/timestamp_pb";
 import { AddMessageResponse, AddMessageRequest, ChatObject, GetChatsResponse, GetChatsRequest, Message, MessageSender, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse } from "../../gen/chat_pb";
 export declare class MessageEz extends Message {
+    id: string;
+    chatId: string;
     sender: MessageSender;
     timestamp: Timestamp;
     text: string;
-    constructor(sender: MessageSender, timestamp: Timestamp, text: string);
+    constructor(id: string, chatId: string, sender: MessageSender, timestamp: Timestamp, text: string);
 }
 export declare class ChatObjectEz extends ChatObject {
     id: string;

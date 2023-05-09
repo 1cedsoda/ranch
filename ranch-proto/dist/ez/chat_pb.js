@@ -3,14 +3,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AddMessageResponseEz = exports.AddMessageRequestEz = exports.SetChatTitleResponseEz = exports.SetChatTitleRequestEz = exports.GetChatMessagesResponseEz = exports.GetChatMessagesRequestEz = exports.GetChatsResponseEz = exports.GetChatsRequestEz = exports.ChatObjectEz = exports.MessageEz = void 0;
 const chat_pb_1 = require("../../gen/chat_pb");
 class MessageEz extends chat_pb_1.Message {
-    constructor(sender, timestamp, text) {
+    constructor(id, chatId, sender, timestamp, text) {
         super();
+        this.id = id;
+        this.chatId = chatId;
         this.sender = sender;
         this.timestamp = timestamp;
         this.text = text;
     }
 }
 exports.MessageEz = MessageEz;
+Object.defineProperty(chat_pb_1.Message.prototype, 'id', {
+    get() { return this.getId(); },
+    set(chatId) { this.setId(chatId); },
+});
+Object.defineProperty(chat_pb_1.Message.prototype, 'chatId', {
+    get() { return this.getChatid(); },
+    set(chatId) { this.setChatid(chatId); },
+});
 Object.defineProperty(chat_pb_1.Message.prototype, 'sender', {
     get() { return this.getSender(); },
     set(sender) { this.setSender(sender); },
