@@ -4,84 +4,84 @@
 var grpc = require('@grpc/grpc-js');
 var alpaca_pb = require('./alpaca_pb.js');
 
-function serialize_AlpacaGetReply(arg) {
-  if (!(arg instanceof alpaca_pb.AlpacaGetReply)) {
-    throw new Error('Expected argument of type AlpacaGetReply');
+function serialize_GetStateRequest(arg) {
+  if (!(arg instanceof alpaca_pb.GetStateRequest)) {
+    throw new Error('Expected argument of type GetStateRequest');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_AlpacaGetReply(buffer_arg) {
-  return alpaca_pb.AlpacaGetReply.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_GetStateRequest(buffer_arg) {
+  return alpaca_pb.GetStateRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_AlpacaGetRequest(arg) {
-  if (!(arg instanceof alpaca_pb.AlpacaGetRequest)) {
-    throw new Error('Expected argument of type AlpacaGetRequest');
+function serialize_GetStateResponse(arg) {
+  if (!(arg instanceof alpaca_pb.GetStateResponse)) {
+    throw new Error('Expected argument of type GetStateResponse');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_AlpacaGetRequest(buffer_arg) {
-  return alpaca_pb.AlpacaGetRequest.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_GetStateResponse(buffer_arg) {
+  return alpaca_pb.GetStateResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_AlpacaPromptReply(arg) {
-  if (!(arg instanceof alpaca_pb.AlpacaPromptReply)) {
-    throw new Error('Expected argument of type AlpacaPromptReply');
+function serialize_PromptRequest(arg) {
+  if (!(arg instanceof alpaca_pb.PromptRequest)) {
+    throw new Error('Expected argument of type PromptRequest');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_AlpacaPromptReply(buffer_arg) {
-  return alpaca_pb.AlpacaPromptReply.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_PromptRequest(buffer_arg) {
+  return alpaca_pb.PromptRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_AlpacaPromptRequest(arg) {
-  if (!(arg instanceof alpaca_pb.AlpacaPromptRequest)) {
-    throw new Error('Expected argument of type AlpacaPromptRequest');
+function serialize_PromptResponse(arg) {
+  if (!(arg instanceof alpaca_pb.PromptResponse)) {
+    throw new Error('Expected argument of type PromptResponse');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_AlpacaPromptRequest(buffer_arg) {
-  return alpaca_pb.AlpacaPromptRequest.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_PromptResponse(buffer_arg) {
+  return alpaca_pb.PromptResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 
 var AlpacaService = exports.AlpacaService = {
-  getAlpaca: {
-    path: '/Alpaca/GetAlpaca',
+  getState: {
+    path: '/Alpaca/GetState',
     requestStream: false,
     responseStream: false,
-    requestType: alpaca_pb.AlpacaGetRequest,
-    responseType: alpaca_pb.AlpacaGetReply,
-    requestSerialize: serialize_AlpacaGetRequest,
-    requestDeserialize: deserialize_AlpacaGetRequest,
-    responseSerialize: serialize_AlpacaGetReply,
-    responseDeserialize: deserialize_AlpacaGetReply,
+    requestType: alpaca_pb.GetStateRequest,
+    responseType: alpaca_pb.GetStateResponse,
+    requestSerialize: serialize_GetStateRequest,
+    requestDeserialize: deserialize_GetStateRequest,
+    responseSerialize: serialize_GetStateResponse,
+    responseDeserialize: deserialize_GetStateResponse,
   },
-  streamGetAlpaca: {
-    path: '/Alpaca/StreamGetAlpaca',
+  streamState: {
+    path: '/Alpaca/StreamState',
     requestStream: false,
     responseStream: true,
-    requestType: alpaca_pb.AlpacaGetRequest,
-    responseType: alpaca_pb.AlpacaGetReply,
-    requestSerialize: serialize_AlpacaGetRequest,
-    requestDeserialize: deserialize_AlpacaGetRequest,
-    responseSerialize: serialize_AlpacaGetReply,
-    responseDeserialize: deserialize_AlpacaGetReply,
+    requestType: alpaca_pb.GetStateRequest,
+    responseType: alpaca_pb.GetStateResponse,
+    requestSerialize: serialize_GetStateRequest,
+    requestDeserialize: deserialize_GetStateRequest,
+    responseSerialize: serialize_GetStateResponse,
+    responseDeserialize: deserialize_GetStateResponse,
   },
-  promptAlpaca: {
-    path: '/Alpaca/PromptAlpaca',
+  prompt: {
+    path: '/Alpaca/Prompt',
     requestStream: false,
     responseStream: true,
-    requestType: alpaca_pb.AlpacaPromptRequest,
-    responseType: alpaca_pb.AlpacaPromptReply,
-    requestSerialize: serialize_AlpacaPromptRequest,
-    requestDeserialize: deserialize_AlpacaPromptRequest,
-    responseSerialize: serialize_AlpacaPromptReply,
-    responseDeserialize: deserialize_AlpacaPromptReply,
+    requestType: alpaca_pb.PromptRequest,
+    responseType: alpaca_pb.PromptResponse,
+    requestSerialize: serialize_PromptRequest,
+    requestDeserialize: deserialize_PromptRequest,
+    responseSerialize: serialize_PromptResponse,
+    responseDeserialize: deserialize_PromptResponse,
   },
 };
 

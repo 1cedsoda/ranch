@@ -12,11 +12,14 @@ RUN apt-get update && \
 RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp
 RUN cd /alpaca.cpp && make chat
 
-# Install dependencies
-RUN npm i -g pnpm
-COPY ./ranch-backend/package.json .
+# Install ranch-proto
+COPY ./ranch-proto/package*.json /ranch-proto/
+RUN cd /ranch-proto && npm i --verbose --omit=dev --omit=optional
 COPY ./ranch-proto /ranch-proto
-RUN pnpm i --verbose
+
+# Install dependencies
+COPY ./ranch-backend/package*.json .
+RUN npm i --verbose --omit=dev --omit=optional
 COPY ./ranch-backend .
 
 # Run

@@ -1,39 +1,55 @@
 # mongodb, prisma2, ../ranch-bakcned ../ranch-frontend
 version: "3.7"
 
+volumes:
+  ranch-mongo:
+
 services:
-  # mongodb:
-  #   image: mongo:5.0.17
-  #   restart: always
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: password
-  #   ports:
-  #     - 8082:27017
-  #   volumes:
-  #     - ./.volumes/mongo:/data/db
+  frontend:
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/ranch-frontend.Dockerfile
+    image: ranch-frontend
+    restart: "no"
+    ports:
+      - 8080:8080
+    volumes:
+      - ../ranch-frontend/stores:/ranch-frontend/stores
+      - ../ranch-frontend/components:/ranch-frontend/components
+      - ../ranch-frontend/styles:/ranch-frontend/styles
+      - ../ranch-frontend/pages:/ranch-frontend/pages
+      - ../ranch-frontend/public:/ranch-frontend/public
+      - ../ranch-frontend/.next:/ranch-frontend/.next
+
+  envoy:
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/ranch-envoy.Dockerfile
+    image: ranch-envoy
+    restart: "no"
+    ports:
+      - 8081:8080
+  mongodb:
+    image: mongo:6
+    restart: "no"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 8082:27017
+    volumes:
+      - ranch-mongo:/data/db
 
   backend:
     build:
       context: ..
-      dockerfile: ./ranch-deployment/backend.Dockerfile
-    restart: always
+      dockerfile: ./ranch-deployment/ranch-backend.Dockerfile
+    image: ranch-backend
+    restart: "no"
     ports:
-      - 8081:4000
+      - 8083:8080
     # depends_on:
     #   - mongodb
     volumes:
       - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
       - ../ranch-backend/src:/ranch-backend/src
-
-  # frontend:
-  #   build:
-  #     context: ..
-  #     dockerfile: ./ranch-deployment/frontend.Dockerfile
-  #   restart: always
-  #   ports:
-  #     - 8080:3000
-  #   depends_on:
-  #     - backend
-  #   volumes:
-  #     - ../ranch-frontend/src:/ranch-frontend/src

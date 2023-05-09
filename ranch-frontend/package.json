@@ -3,24 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev  -p 8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "next lint"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "classnames": "^2.3.2",
+    "google-protobuf": "^3.21.2",
+    "grpc-web": "^1.4.2",
     "next": "13.4.1",
+    "ranch-proto": "file:../ranch-proto",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sass": "^1.62.1"
+    "react-redux": "^8.0.5",
+    "sass": "^1.62.1",
+    "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/node": "20.1.0",
+    "@types/google-protobuf": "^3.15.6",
+    "@types/node": "^20.1.0",
     "@types/react": "18.2.6",
-    "@types/react-dom": "18.2.4",
-    "eslint": "8.40.0",
-    "eslint-config-next": "13.4.1",
-    "typescript": "5.0.4"
+    "@types/react-dom": "18.2.4"
   }
 }
