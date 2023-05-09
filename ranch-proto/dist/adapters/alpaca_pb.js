@@ -24,74 +24,52 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromptResponse = exports.PromptRequest = exports.GetStateResponse = exports.GetStateRequest = void 0;
-const proto = __importStar(require("../../gen/alpaca_pb"));
-// message GetStateRequest {
-//   string id = 1;
-// }
-class GetStateRequest {
+const alpaca_pb = __importStar(require("../../gen/alpaca_pb"));
+class GetStateRequest extends alpaca_pb.GetStateRequest {
     constructor(id) {
-        this.id = id;
+        super();
+        this.setId(id);
     }
-    static fromProto(proto) {
-        return new GetStateRequest(proto.getId());
-    }
-    get proto() {
-        return new proto.GetStateRequest()
-            .setId(this.id);
+    get id() {
+        return this.getId();
     }
 }
 exports.GetStateRequest = GetStateRequest;
-// message GetStateResponse {
-//   string id = 1;
-//   AlpacaState state = 2;
-// }
-class GetStateResponse {
+class GetStateResponse extends alpaca_pb.GetStateResponse {
     constructor(id, state) {
-        this.id = id;
-        this.state = state;
+        super();
+        this.setId(id);
+        this.setState(state);
     }
-    static fromProto(proto) {
-        return new GetStateResponse(proto.getId(), proto.getState());
+    get id() {
+        return this.getId();
     }
-    get proto() {
-        return new proto.GetStateResponse()
-            .setId(this.id)
-            .setState(this.state);
+    get state() {
+        return this.getState();
     }
 }
 exports.GetStateResponse = GetStateResponse;
-// message PromptRequest {
-//   string id = 1;
-//   string prompt = 2;
-// }
-class PromptRequest {
+class PromptRequest extends alpaca_pb.PromptRequest {
     constructor(id, prompt) {
-        this.id = id;
-        this.prompt = prompt;
+        super();
+        this.setId(id);
+        this.setPrompt(prompt);
     }
-    static fromProto(proto) {
-        return new PromptRequest(proto.getId(), proto.getPrompt());
+    get id() {
+        return this.getId();
     }
-    get proto() {
-        return new proto.PromptRequest()
-            .setId(this.id)
-            .setPrompt(this.prompt);
+    get prompt() {
+        return this.getPrompt();
     }
 }
 exports.PromptRequest = PromptRequest;
-// message PromptResponse {
-//   string text = 1;
-// }
-class PromptResponse {
+class PromptResponse extends alpaca_pb.PromptResponse {
     constructor(text) {
-        this.text = text;
+        super();
+        this.setText(text);
     }
-    static fromProto(proto) {
-        return new PromptResponse(proto.getText());
-    }
-    get proto() {
-        return new proto.PromptResponse()
-            .setText(this.text);
+    get text() {
+        return this.getText();
     }
 }
 exports.PromptResponse = PromptResponse;
