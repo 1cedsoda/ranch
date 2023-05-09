@@ -35,7 +35,7 @@ class GetStateRequest {
     static fromProto(proto) {
         return new GetStateRequest(proto.getId());
     }
-    toProto() {
+    get proto() {
         return new proto.GetStateRequest()
             .setId(this.id);
     }
@@ -53,7 +53,7 @@ class GetStateResponse {
     static fromProto(proto) {
         return new GetStateResponse(proto.getId(), proto.getState());
     }
-    toProto() {
+    get proto() {
         return new proto.GetStateResponse()
             .setId(this.id)
             .setState(this.state);
@@ -72,7 +72,7 @@ class PromptRequest {
     static fromProto(proto) {
         return new PromptRequest(proto.getId(), proto.getPrompt());
     }
-    toProto() {
+    get proto() {
         return new proto.PromptRequest()
             .setId(this.id)
             .setPrompt(this.prompt);
@@ -89,7 +89,7 @@ class PromptResponse {
     static fromProto(proto) {
         return new PromptResponse(proto.getText());
     }
-    toProto() {
+    get proto() {
         return new proto.PromptResponse()
             .setText(this.text);
     }

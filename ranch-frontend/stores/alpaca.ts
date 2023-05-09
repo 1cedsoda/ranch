@@ -60,7 +60,7 @@ type StreamStateParams = {
 export const streamState = createAsyncThunk<void, StreamPromptParams, ThunkExtra>(
     "alpaca/streamState",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-      const protoRequest = new models.GetStateRequest(params.id).toProto();
+      const protoRequest = new models.GetStateRequest(params.id).proto;
       const stream = alpacaClient.streamState(protoRequest);
   
       stream.on("data", (protoResponse: proto.GetStateResponse) => {
@@ -81,7 +81,7 @@ type GetStateParams = StreamStateParams
 export const getState = createAsyncThunk<void, GetStateParams, ThunkExtra>(
     "alpaca/getState",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-        const protoRequest = new models.GetStateRequest(params.id).toProto();
+        const protoRequest = new models.GetStateRequest(params.id).proto;
         const response = alpacaClient.getState(protoRequest, (err, protoRes) => {
             if (err) {
                 rejectWithValue(err);
@@ -101,7 +101,7 @@ type StreamPromptParams = {
 export const streamPrompt = createAsyncThunk<void, StreamPromptParams, ThunkExtra>(
     "alpaca/streamPrompt",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-      const protoRequest = new models.PromptRequest(params.id, params.prompt).toProto();
+      const protoRequest = new models.PromptRequest(params.id, params.prompt).proto;
       const stream = alpacaClient.prompt(protoRequest);
   
       stream.on("data", (protoResponse: proto.PromptResponse) => {

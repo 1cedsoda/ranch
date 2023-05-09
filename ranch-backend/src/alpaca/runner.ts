@@ -1,11 +1,6 @@
 import { spawn, ChildProcessWithoutNullStreams } from 'child_process'
 import { EventEmitter } from 'events'
-
-export enum AlpacaRunnerState {
-    INIT,
-    READY,
-    RUNNING,
-}
+import { AlpacaRunnerState } from './runner_state'
 
 export class AlpacaRunner extends EventEmitter {
     cp: ChildProcessWithoutNullStreams

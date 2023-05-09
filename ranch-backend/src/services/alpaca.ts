@@ -1,12 +1,14 @@
-import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, loadPackageDefinition, sendUnaryData } from '@grpc/grpc-js';
-import { AlpacaGetReply, AlpacaGetRequest, AlpacaPromptReply, AlpacaPromptRequest, AlpacaState, IAlpacaServer } from 'ranch-proto'
+import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, loadPackageDefinition, sendUnaryData } from '@grpc/grpc-js';
+import { AlpacaState, GetStateRequest, GetStateResponse, IAlpacaServer, PromptRequest, PromptResponse } from 'ranch-proto'
 import { alpacaRunnerManager } from '../alpaca/runner_manager';
-import { AlpacaRunner, AlpacaRunnerState } from '../alpaca/runner';
+import { alpacaStateToProto } from '../alpaca/runner_state';
+import { AlpacaRunner } from '../alpaca/runner';
+import { UntypedHandleCall } from '@grpc/grpc-js';
+import * as models from 'ranch-proto/dist/models';
 
 export class AlpacaServer implements IAlpacaServer {
-    [name: string]: import("@grpc/grpc-js").UntypedHandleCall;
-
-    getAlpaca(call: ServerUnaryCall<AlpacaGetRequest, AlpacaGetReply>, callback: sendUnaryData<AlpacaGetReply>) {
+    [name: string]: UntypedHandleCall;
+    getState(call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
         const id = call.request.getId();
         const runner = alpacaRunnerManager.getRunner(id)
 
@@ -15,10 +17,9 @@ export class AlpacaServer implements IAlpacaServer {
             return
         }
 
-        callback(null, protoAlpacaRunner(id, runner));
+        callback(null, runnerToStateResponse(id, runner));
     }
-
-    streamGetAlpaca(call: ServerWritableStream<AlpacaGetRequest, AlpacaGetReply>) {
+    streamState(call: ServerWritableStream<GetStateRequest, GetStateResponse>) {
 
         const id = call.request.getId();
         const runner = alpacaRunnerManager.getRunner(id)
@@ -27,15 +28,14 @@ export class AlpacaServer implements IAlpacaServer {
             return call.end();
         }
 
-        let reply = protoAlpacaRunner(id, runner);
+        let reply = runnerToStateResponse(id, runner);
 
         runner.onStateChange((state) => {
-            reply = protoAlpacaRunner(id, runner);
+            reply = runnerToStateResponse(id, runner);
             call.write(reply);
         })
     }
-
-    promptAlpaca(call: ServerWritableStream<AlpacaPromptRequest, AlpacaPromptReply>) {
+    prompt(call: ServerWritableStream<PromptRequest, PromptResponse>) {
         const id = call.request.getId();
         const prompt = call.request.getPrompt();
         const runner = alpacaRunnerManager.getRunner(id)
@@ -45,26 +45,11 @@ export class AlpacaServer implements IAlpacaServer {
         }
 
         runner.prompt(prompt, (text)=>{
-            const reply = new AlpacaPromptReply()
-            .setText(text)
-            call.write(reply);
+            const res = new models.PromptResponse(text).proto;
         }, ()=>{
             call.end();
         })
     }
 }
 
-function protoAlpacaRunner(id: string, runner: AlpacaRunner): AlpacaGetReply {
-    function alpacaStateToGrpc(state: AlpacaRunnerState): AlpacaState {
-        switch (state) {
-            case AlpacaRunnerState.READY: return AlpacaState.READY;
-            case AlpacaRunnerState.RUNNING: return AlpacaState.RUNNING;
-            case AlpacaRunnerState.INIT: return AlpacaState.INIT;
-        }
-    }
-    const proto_state = alpacaStateToGrpc(runner.state);
-    const reply = new AlpacaGetReply()
-    .setId(id)
-    .setState(proto_state)
-    return reply;
-}
+const runnerToStateResponse = (id: string, runner: AlpacaRunner): GetStateResponse => new models.GetStateResponse(id, alpacaStateToProto(runner.state)).proto

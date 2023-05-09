@@ -11,7 +11,7 @@ export class GetStateRequest {
     static fromProto(proto: proto.GetStateRequest): GetStateRequest {
         return new GetStateRequest(proto.getId());
     }
-    toProto(): proto.GetStateRequest {
+    get proto(): proto.GetStateRequest {
         return new proto.GetStateRequest()
             .setId(this.id);
     }
@@ -31,7 +31,7 @@ export class GetStateResponse {
     static fromProto(proto: proto.GetStateResponse): GetStateResponse {
         return new GetStateResponse(proto.getId(), proto.getState());
     }
-    toProto(): proto.GetStateResponse {
+    get proto(): proto.GetStateResponse {
         return new proto.GetStateResponse()
             .setId(this.id)
             .setState(this.state);
@@ -52,7 +52,7 @@ export class PromptRequest {
     static fromProto(proto: proto.PromptRequest): PromptRequest {
         return new PromptRequest(proto.getId(), proto.getPrompt());
     }
-    toProto(): proto.PromptRequest {
+    get proto (): proto.PromptRequest {
         return new proto.PromptRequest()
             .setId(this.id)
             .setPrompt(this.prompt);
@@ -70,7 +70,7 @@ export class PromptResponse {
     static fromProto(proto: proto.PromptResponse): PromptResponse {
         return new PromptResponse(proto.getText());
     }
-    toProto(): proto.PromptResponse {
+    get proto (): proto.PromptResponse {
         return new proto.PromptResponse()
             .setText(this.text);
     }
