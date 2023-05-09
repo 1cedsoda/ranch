@@ -10,7 +10,7 @@ generator client {
 }
 
 model Chat {
-    id        String    @id @default(cuid()) @map("_id")
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
     messages  Message[]
     userId    String
     timestamp DateTime  @default(now())
@@ -18,12 +18,12 @@ model Chat {
 }
 
 model Message {
-    id        String        @id @default(cuid()) @map("_id")
-    chatId    String
+    id        String        @id @default(auto()) @map("_id") @db.ObjectId
+    chatId    String        @db.ObjectId
+    chat      Chat          @relation(fields: [chatId], references: [id])
     text      String
     timestamp DateTime      @default(now())
     sender    MessageSender
-    Chat      Chat          @relation(fields: [chatId], references: [id])
 }
 
 enum MessageSender {
