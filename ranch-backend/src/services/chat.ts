@@ -1,18 +1,116 @@
-import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, sendUnaryData } from '@grpc/grpc-js'
+import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, sendUnaryData } from '@grpc/grpc-js'
 import { IChatServer } from 'ranch-proto/dist/grpc';
-import { AddMessageReply, AddMessageRequest, GetChatReply, GetChatRequest, GetChatsReply, GetChatsRequest } from 'ranch-proto/dist/pb';
+import { AddMessageResponse, AddMessageRequest, GetChatsResponse, GetChatsRequest, GetChatsRequestEz, AddMessageRequestEz, GetChatsResponseEz, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse, GetChatMessagesRequestEz, SetChatTitleRequestEz, ChatObject, ChatObjectEz, Message, MessageEz, GetChatMessagesResponseEz, SetChatTitleResponseEz } from 'ranch-proto/dist/pb';
+import { UntypedHandleCall } from '@grpc/grpc-js';
+import { prisma } from '../prisma/prisma';
+import { convert, convertList } from '../prisma/mappers';
+import * as prisma_client from '@prisma/client';
+
+function findChats (userId: string): Promise<prisma_client.Chat[]> {
+  return prisma.chat.findMany({
+    where: {
+      userId: {
+        equals: userId,
+      },
+    },
+  });
+}
 
 export class ChatServer implements IChatServer {
-  [name: string]: import('@grpc/grpc-js').UntypedHandleCall;
-  getChats (call: ServerWritableStream<GetChatsRequest, GetChatsReply>) {
+  [name: string]: UntypedHandleCall;
+  async getChats (call: ServerUnaryCall<GetChatsRequest, GetChatsResponse>, callback: sendUnaryData<GetChatsResponse>) {
+    const req = call.request as GetChatsRequestEz;
+    const { userId } = req;
 
-  }
-
-  getChat (call: ServerUnaryCall<GetChatRequest, GetChatReply>, callback: sendUnaryData<GetChatReply>) {
-
+    const chats = await findChats(userId);
+    const chatObjects = convertList<prisma_client.Chat, ChatObjectEz>(chats);
+    const res = new GetChatsResponseEz(chatObjects);
   };
 
-  addMessage (call: ServerUnaryCall<AddMessageRequest, AddMessageReply>, callback: sendUnaryData<AddMessageReply>) {
+  // streamChats: handleServerStreamingCall<GetChatsRequest, GetChatsResponse>;
+  streamChats (call: ServerWritableStream<GetChatsRequest, GetChatsResponse>) {
+    const req = call.request as GetChatsRequestEz;
+    const { userId } = req;
+
+    let lastChats: prisma_client.Chat[] = [];
+
+    const runIntercal = async () => {
+      let chats = await findChats(userId);
+      let equals = lastChats.length == chats.length;
+  
+      if (!equals) {
+        const chatObjects = convertList<prisma_client.Chat, ChatObjectEz>(chats);
+        const res = new GetChatsResponseEz(chatObjects);
+        call.write(res);
+      }
+    }
+
+    runIntercal();
+    setInterval(runIntercal, 500);
+  };
+
+  async getChatMessages (call: ServerUnaryCall<GetChatMessagesRequest, GetChatMessagesResponse>, callback: sendUnaryData<GetChatMessagesResponse>) {
+    const req = call.request as GetChatMessagesRequestEz;
+    const { chatId } = req;
+
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
+      },
+    });
+
+    if (!chat) {
+      callback(new Error('chat not found'));
+      return;
+    }
+
+    const messages = convertList<prisma_client.Message, MessageEz>(chat.messages);
+    const res = new GetChatMessagesResponseEz(messages);
+    callback(null, res);
+  };
+
+  setChatTitle (call: ServerUnaryCall<SetChatTitleRequest, SetChatTitleResponse>, callback: sendUnaryData<SetChatTitleResponse>) {
+    const req = call.request as SetChatTitleRequestEz;
+    const { chatId, title } = req;
+
+    prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        title,
+      },
+    });
+
+    const res = new SetChatTitleResponseEz();
+    callback(null, res);
+  };
+
+  async addMessage (call: ServerUnaryCall<AddMessageRequest, AddMessageResponse>, callback: sendUnaryData<AddMessageResponse>) {
+    const req = call.request as AddMessageRequestEz;
+    const { chatId } = req;
+    const message = req.message as MessageEz;
+    
+    const prismaMessage = convert<MessageEz, prisma_client.Message>(message);
+
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId
+      }
+    })
+
+    const messagesBefore = chat?.messages
+
+    prisma.chat.update({
+      where: {
+        id: chatId
+      },
+      data: {
+        messages: messagesBefore ?
+          messagesBefore.concat(prismaMessage)
+          : [prismaMessage]
+      }
+    })
 
   };
 }

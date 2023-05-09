@@ -8,8 +8,8 @@ import * as jspb from "google-protobuf";
 import * as google_protobuf_timestamp_pb from "google-protobuf/google/protobuf/timestamp_pb";
 
 export class Message extends jspb.Message { 
-    getSender(): Sender;
-    setSender(value: Sender): Message;
+    getSender(): MessageSender;
+    setSender(value: MessageSender): Message;
 
     hasTimestamp(): boolean;
     clearTimestamp(): void;
@@ -30,7 +30,7 @@ export class Message extends jspb.Message {
 
 export namespace Message {
     export type AsObject = {
-        sender: Sender,
+        sender: MessageSender,
         timestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
         text: string,
     }
@@ -39,12 +39,18 @@ export namespace Message {
 export class ChatObject extends jspb.Message { 
     getId(): string;
     setId(value: string): ChatObject;
-    getUsername(): string;
-    setUsername(value: string): ChatObject;
-    clearMessagesList(): void;
-    getMessagesList(): Array<Message>;
-    setMessagesList(value: Array<Message>): ChatObject;
-    addMessages(value?: Message, index?: number): Message;
+    getUserid(): string;
+    setUserid(value: string): ChatObject;
+
+    hasTimestamp(): boolean;
+    clearTimestamp(): void;
+    getTimestamp(): google_protobuf_timestamp_pb.Timestamp | undefined;
+    setTimestamp(value?: google_protobuf_timestamp_pb.Timestamp): ChatObject;
+
+    hasTitle(): boolean;
+    clearTitle(): void;
+    getTitle(): string | undefined;
+    setTitle(value: string): ChatObject;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ChatObject.AsObject;
@@ -59,14 +65,15 @@ export class ChatObject extends jspb.Message {
 export namespace ChatObject {
     export type AsObject = {
         id: string,
-        username: string,
-        messagesList: Array<Message.AsObject>,
+        userid: string,
+        timestamp?: google_protobuf_timestamp_pb.Timestamp.AsObject,
+        title?: string,
     }
 }
 
 export class GetChatsRequest extends jspb.Message { 
-    getUsername(): string;
-    setUsername(value: string): GetChatsRequest;
+    getUserid(): string;
+    setUserid(value: string): GetChatsRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): GetChatsRequest.AsObject;
@@ -80,72 +87,114 @@ export class GetChatsRequest extends jspb.Message {
 
 export namespace GetChatsRequest {
     export type AsObject = {
-        username: string,
+        userid: string,
     }
 }
 
-export class GetChatsReply extends jspb.Message { 
-    clearChatidsList(): void;
-    getChatidsList(): Array<string>;
-    setChatidsList(value: Array<string>): GetChatsReply;
-    addChatids(value: string, index?: number): string;
+export class GetChatsResponse extends jspb.Message { 
+    clearChatsList(): void;
+    getChatsList(): Array<ChatObject>;
+    setChatsList(value: Array<ChatObject>): GetChatsResponse;
+    addChats(value?: ChatObject, index?: number): ChatObject;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetChatsReply.AsObject;
-    static toObject(includeInstance: boolean, msg: GetChatsReply): GetChatsReply.AsObject;
+    toObject(includeInstance?: boolean): GetChatsResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetChatsResponse): GetChatsResponse.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetChatsReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetChatsReply;
-    static deserializeBinaryFromReader(message: GetChatsReply, reader: jspb.BinaryReader): GetChatsReply;
+    static serializeBinaryToWriter(message: GetChatsResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetChatsResponse;
+    static deserializeBinaryFromReader(message: GetChatsResponse, reader: jspb.BinaryReader): GetChatsResponse;
 }
 
-export namespace GetChatsReply {
+export namespace GetChatsResponse {
     export type AsObject = {
-        chatidsList: Array<string>,
+        chatsList: Array<ChatObject.AsObject>,
     }
 }
 
-export class GetChatRequest extends jspb.Message { 
+export class GetChatMessagesRequest extends jspb.Message { 
     getChatid(): string;
-    setChatid(value: string): GetChatRequest;
+    setChatid(value: string): GetChatMessagesRequest;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetChatRequest.AsObject;
-    static toObject(includeInstance: boolean, msg: GetChatRequest): GetChatRequest.AsObject;
+    toObject(includeInstance?: boolean): GetChatMessagesRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: GetChatMessagesRequest): GetChatMessagesRequest.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetChatRequest, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetChatRequest;
-    static deserializeBinaryFromReader(message: GetChatRequest, reader: jspb.BinaryReader): GetChatRequest;
+    static serializeBinaryToWriter(message: GetChatMessagesRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetChatMessagesRequest;
+    static deserializeBinaryFromReader(message: GetChatMessagesRequest, reader: jspb.BinaryReader): GetChatMessagesRequest;
 }
 
-export namespace GetChatRequest {
+export namespace GetChatMessagesRequest {
     export type AsObject = {
         chatid: string,
     }
 }
 
-export class GetChatReply extends jspb.Message { 
-
-    hasChat(): boolean;
-    clearChat(): void;
-    getChat(): ChatObject | undefined;
-    setChat(value?: ChatObject): GetChatReply;
+export class GetChatMessagesResponse extends jspb.Message { 
+    clearMessagesList(): void;
+    getMessagesList(): Array<Message>;
+    setMessagesList(value: Array<Message>): GetChatMessagesResponse;
+    addMessages(value?: Message, index?: number): Message;
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): GetChatReply.AsObject;
-    static toObject(includeInstance: boolean, msg: GetChatReply): GetChatReply.AsObject;
+    toObject(includeInstance?: boolean): GetChatMessagesResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: GetChatMessagesResponse): GetChatMessagesResponse.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: GetChatReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): GetChatReply;
-    static deserializeBinaryFromReader(message: GetChatReply, reader: jspb.BinaryReader): GetChatReply;
+    static serializeBinaryToWriter(message: GetChatMessagesResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): GetChatMessagesResponse;
+    static deserializeBinaryFromReader(message: GetChatMessagesResponse, reader: jspb.BinaryReader): GetChatMessagesResponse;
 }
 
-export namespace GetChatReply {
+export namespace GetChatMessagesResponse {
     export type AsObject = {
-        chat?: ChatObject.AsObject,
+        messagesList: Array<Message.AsObject>,
+    }
+}
+
+export class SetChatTitleRequest extends jspb.Message { 
+    getChatid(): string;
+    setChatid(value: string): SetChatTitleRequest;
+
+    hasTitle(): boolean;
+    clearTitle(): void;
+    getTitle(): string | undefined;
+    setTitle(value: string): SetChatTitleRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetChatTitleRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: SetChatTitleRequest): SetChatTitleRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetChatTitleRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetChatTitleRequest;
+    static deserializeBinaryFromReader(message: SetChatTitleRequest, reader: jspb.BinaryReader): SetChatTitleRequest;
+}
+
+export namespace SetChatTitleRequest {
+    export type AsObject = {
+        chatid: string,
+        title?: string,
+    }
+}
+
+export class SetChatTitleResponse extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetChatTitleResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: SetChatTitleResponse): SetChatTitleResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetChatTitleResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetChatTitleResponse;
+    static deserializeBinaryFromReader(message: SetChatTitleResponse, reader: jspb.BinaryReader): SetChatTitleResponse;
+}
+
+export namespace SetChatTitleResponse {
+    export type AsObject = {
     }
 }
 
@@ -175,24 +224,24 @@ export namespace AddMessageRequest {
     }
 }
 
-export class AddMessageReply extends jspb.Message { 
+export class AddMessageResponse extends jspb.Message { 
 
     serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): AddMessageReply.AsObject;
-    static toObject(includeInstance: boolean, msg: AddMessageReply): AddMessageReply.AsObject;
+    toObject(includeInstance?: boolean): AddMessageResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: AddMessageResponse): AddMessageResponse.AsObject;
     static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
     static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: AddMessageReply, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): AddMessageReply;
-    static deserializeBinaryFromReader(message: AddMessageReply, reader: jspb.BinaryReader): AddMessageReply;
+    static serializeBinaryToWriter(message: AddMessageResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): AddMessageResponse;
+    static deserializeBinaryFromReader(message: AddMessageResponse, reader: jspb.BinaryReader): AddMessageResponse;
 }
 
-export namespace AddMessageReply {
+export namespace AddMessageResponse {
     export type AsObject = {
     }
 }
 
-export enum Sender {
+export enum MessageSender {
     USER = 0,
     BOT = 1,
 }

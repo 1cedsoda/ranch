@@ -16,5 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./ez/alpaca_pb"), exports);
 __exportStar(require("../gen/alpaca_pb"), exports);
-// export * from './ez/chat_pb'
+__exportStar(require("./ez/chat_pb"), exports);
 __exportStar(require("../gen/chat_pb"), exports);

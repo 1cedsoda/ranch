@@ -79,13 +79,13 @@ proto.ChatPromiseClient =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.GetChatsRequest,
- *   !proto.GetChatsReply>}
+ *   !proto.GetChatsResponse>}
  */
 const methodDescriptor_Chat_GetChats = new grpc.web.MethodDescriptor(
   '/Chat/GetChats',
-  grpc.web.MethodType.SERVER_STREAMING,
+  grpc.web.MethodType.UNARY,
   proto.GetChatsRequest,
-  proto.GetChatsReply,
+  proto.GetChatsResponse,
   /**
    * @param {!proto.GetChatsRequest} request
    * @return {!Uint8Array}
@@ -93,37 +93,42 @@ const methodDescriptor_Chat_GetChats = new grpc.web.MethodDescriptor(
   function(request) {
     return request.serializeBinary();
   },
-  proto.GetChatsReply.deserializeBinary
+  proto.GetChatsResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.GetChatsRequest} request The request proto
- * @param {?Object<string, string>=} metadata User defined
+ * @param {!proto.GetChatsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.GetChatsReply>}
+ * @param {function(?grpc.web.RpcError, ?proto.GetChatsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.GetChatsResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.ChatClient.prototype.getChats =
-    function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
       '/Chat/GetChats',
       request,
       metadata || {},
-      methodDescriptor_Chat_GetChats);
+      methodDescriptor_Chat_GetChats,
+      callback);
 };
 
 
 /**
- * @param {!proto.GetChatsRequest} request The request proto
+ * @param {!proto.GetChatsRequest} request The
+ *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!grpc.web.ClientReadableStream<!proto.GetChatsReply>}
- *     The XHR Node Readable Stream
+ * @return {!Promise<!proto.GetChatsResponse>}
+ *     Promise that resolves to the response
  */
 proto.ChatPromiseClient.prototype.getChats =
     function(request, metadata) {
-  return this.client_.serverStreaming(this.hostname_ +
+  return this.client_.unaryCall(this.hostname_ +
       '/Chat/GetChats',
       request,
       metadata || {},
@@ -134,61 +139,178 @@ proto.ChatPromiseClient.prototype.getChats =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.GetChatRequest,
- *   !proto.GetChatReply>}
+ *   !proto.GetChatsRequest,
+ *   !proto.GetChatsResponse>}
  */
-const methodDescriptor_Chat_GetChat = new grpc.web.MethodDescriptor(
-  '/Chat/GetChat',
-  grpc.web.MethodType.UNARY,
-  proto.GetChatRequest,
-  proto.GetChatReply,
+const methodDescriptor_Chat_StreamChats = new grpc.web.MethodDescriptor(
+  '/Chat/StreamChats',
+  grpc.web.MethodType.SERVER_STREAMING,
+  proto.GetChatsRequest,
+  proto.GetChatsResponse,
   /**
-   * @param {!proto.GetChatRequest} request
+   * @param {!proto.GetChatsRequest} request
    * @return {!Uint8Array}
    */
   function(request) {
     return request.serializeBinary();
   },
-  proto.GetChatReply.deserializeBinary
+  proto.GetChatsResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.GetChatRequest} request The
+ * @param {!proto.GetChatsRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.GetChatsResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.ChatClient.prototype.streamChats =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/Chat/StreamChats',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_StreamChats);
+};
+
+
+/**
+ * @param {!proto.GetChatsRequest} request The request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!grpc.web.ClientReadableStream<!proto.GetChatsResponse>}
+ *     The XHR Node Readable Stream
+ */
+proto.ChatPromiseClient.prototype.streamChats =
+    function(request, metadata) {
+  return this.client_.serverStreaming(this.hostname_ +
+      '/Chat/StreamChats',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_StreamChats);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.GetChatMessagesRequest,
+ *   !proto.GetChatMessagesResponse>}
+ */
+const methodDescriptor_Chat_GetChatMessages = new grpc.web.MethodDescriptor(
+  '/Chat/GetChatMessages',
+  grpc.web.MethodType.UNARY,
+  proto.GetChatMessagesRequest,
+  proto.GetChatMessagesResponse,
+  /**
+   * @param {!proto.GetChatMessagesRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.GetChatMessagesResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.GetChatMessagesRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.GetChatReply)}
+ * @param {function(?grpc.web.RpcError, ?proto.GetChatMessagesResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.GetChatReply>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.GetChatMessagesResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.ChatClient.prototype.getChat =
+proto.ChatClient.prototype.getChatMessages =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/Chat/GetChat',
+      '/Chat/GetChatMessages',
       request,
       metadata || {},
-      methodDescriptor_Chat_GetChat,
+      methodDescriptor_Chat_GetChatMessages,
       callback);
 };
 
 
 /**
- * @param {!proto.GetChatRequest} request The
+ * @param {!proto.GetChatMessagesRequest} request The
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.GetChatReply>}
+ * @return {!Promise<!proto.GetChatMessagesResponse>}
  *     Promise that resolves to the response
  */
-proto.ChatPromiseClient.prototype.getChat =
+proto.ChatPromiseClient.prototype.getChatMessages =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/Chat/GetChat',
+      '/Chat/GetChatMessages',
       request,
       metadata || {},
-      methodDescriptor_Chat_GetChat);
+      methodDescriptor_Chat_GetChatMessages);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.SetChatTitleRequest,
+ *   !proto.SetChatTitleResponse>}
+ */
+const methodDescriptor_Chat_SetChatTitle = new grpc.web.MethodDescriptor(
+  '/Chat/SetChatTitle',
+  grpc.web.MethodType.UNARY,
+  proto.SetChatTitleRequest,
+  proto.SetChatTitleResponse,
+  /**
+   * @param {!proto.SetChatTitleRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.SetChatTitleResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.SetChatTitleRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.SetChatTitleResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.SetChatTitleResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ChatClient.prototype.setChatTitle =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Chat/SetChatTitle',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_SetChatTitle,
+      callback);
+};
+
+
+/**
+ * @param {!proto.SetChatTitleRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.SetChatTitleResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ChatPromiseClient.prototype.setChatTitle =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Chat/SetChatTitle',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_SetChatTitle);
 };
 
 
@@ -196,13 +318,13 @@ proto.ChatPromiseClient.prototype.getChat =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.AddMessageRequest,
- *   !proto.AddMessageReply>}
+ *   !proto.AddMessageResponse>}
  */
 const methodDescriptor_Chat_AddMessage = new grpc.web.MethodDescriptor(
   '/Chat/AddMessage',
   grpc.web.MethodType.UNARY,
   proto.AddMessageRequest,
-  proto.AddMessageReply,
+  proto.AddMessageResponse,
   /**
    * @param {!proto.AddMessageRequest} request
    * @return {!Uint8Array}
@@ -210,7 +332,7 @@ const methodDescriptor_Chat_AddMessage = new grpc.web.MethodDescriptor(
   function(request) {
     return request.serializeBinary();
   },
-  proto.AddMessageReply.deserializeBinary
+  proto.AddMessageResponse.deserializeBinary
 );
 
 
@@ -219,9 +341,9 @@ const methodDescriptor_Chat_AddMessage = new grpc.web.MethodDescriptor(
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.RpcError, ?proto.AddMessageReply)}
+ * @param {function(?grpc.web.RpcError, ?proto.AddMessageResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.AddMessageReply>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.AddMessageResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.ChatClient.prototype.addMessage =
@@ -240,7 +362,7 @@ proto.ChatClient.prototype.addMessage =
  *     request proto
  * @param {?Object<string, string>=} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.AddMessageReply>}
+ * @return {!Promise<!proto.AddMessageResponse>}
  *     Promise that resolves to the response
  */
 proto.ChatPromiseClient.prototype.addMessage =

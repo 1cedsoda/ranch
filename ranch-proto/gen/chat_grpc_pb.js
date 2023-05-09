@@ -5,17 +5,6 @@ var grpc = require('@grpc/grpc-js');
 var chat_pb = require('./chat_pb.js');
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 
-function serialize_AddMessageReply(arg) {
-  if (!(arg instanceof chat_pb.AddMessageReply)) {
-    throw new Error('Expected argument of type AddMessageReply');
-  }
-  return Buffer.from(arg.serializeBinary());
-}
-
-function deserialize_AddMessageReply(buffer_arg) {
-  return chat_pb.AddMessageReply.deserializeBinary(new Uint8Array(buffer_arg));
-}
-
 function serialize_AddMessageRequest(arg) {
   if (!(arg instanceof chat_pb.AddMessageRequest)) {
     throw new Error('Expected argument of type AddMessageRequest');
@@ -27,37 +16,37 @@ function deserialize_AddMessageRequest(buffer_arg) {
   return chat_pb.AddMessageRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_GetChatReply(arg) {
-  if (!(arg instanceof chat_pb.GetChatReply)) {
-    throw new Error('Expected argument of type GetChatReply');
+function serialize_AddMessageResponse(arg) {
+  if (!(arg instanceof chat_pb.AddMessageResponse)) {
+    throw new Error('Expected argument of type AddMessageResponse');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_GetChatReply(buffer_arg) {
-  return chat_pb.GetChatReply.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_AddMessageResponse(buffer_arg) {
+  return chat_pb.AddMessageResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_GetChatRequest(arg) {
-  if (!(arg instanceof chat_pb.GetChatRequest)) {
-    throw new Error('Expected argument of type GetChatRequest');
+function serialize_GetChatMessagesRequest(arg) {
+  if (!(arg instanceof chat_pb.GetChatMessagesRequest)) {
+    throw new Error('Expected argument of type GetChatMessagesRequest');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_GetChatRequest(buffer_arg) {
-  return chat_pb.GetChatRequest.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_GetChatMessagesRequest(buffer_arg) {
+  return chat_pb.GetChatMessagesRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_GetChatsReply(arg) {
-  if (!(arg instanceof chat_pb.GetChatsReply)) {
-    throw new Error('Expected argument of type GetChatsReply');
+function serialize_GetChatMessagesResponse(arg) {
+  if (!(arg instanceof chat_pb.GetChatMessagesResponse)) {
+    throw new Error('Expected argument of type GetChatMessagesResponse');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_GetChatsReply(buffer_arg) {
-  return chat_pb.GetChatsReply.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_GetChatMessagesResponse(buffer_arg) {
+  return chat_pb.GetChatMessagesResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_GetChatsRequest(arg) {
@@ -71,40 +60,95 @@ function deserialize_GetChatsRequest(buffer_arg) {
   return chat_pb.GetChatsRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_GetChatsResponse(arg) {
+  if (!(arg instanceof chat_pb.GetChatsResponse)) {
+    throw new Error('Expected argument of type GetChatsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_GetChatsResponse(buffer_arg) {
+  return chat_pb.GetChatsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_SetChatTitleRequest(arg) {
+  if (!(arg instanceof chat_pb.SetChatTitleRequest)) {
+    throw new Error('Expected argument of type SetChatTitleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_SetChatTitleRequest(buffer_arg) {
+  return chat_pb.SetChatTitleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_SetChatTitleResponse(arg) {
+  if (!(arg instanceof chat_pb.SetChatTitleResponse)) {
+    throw new Error('Expected argument of type SetChatTitleResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_SetChatTitleResponse(buffer_arg) {
+  return chat_pb.SetChatTitleResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var ChatService = exports.ChatService = {
   getChats: {
     path: '/Chat/GetChats',
     requestStream: false,
-    responseStream: true,
+    responseStream: false,
     requestType: chat_pb.GetChatsRequest,
-    responseType: chat_pb.GetChatsReply,
+    responseType: chat_pb.GetChatsResponse,
     requestSerialize: serialize_GetChatsRequest,
     requestDeserialize: deserialize_GetChatsRequest,
-    responseSerialize: serialize_GetChatsReply,
-    responseDeserialize: deserialize_GetChatsReply,
+    responseSerialize: serialize_GetChatsResponse,
+    responseDeserialize: deserialize_GetChatsResponse,
   },
-  getChat: {
-    path: '/Chat/GetChat',
+  streamChats: {
+    path: '/Chat/StreamChats',
+    requestStream: false,
+    responseStream: true,
+    requestType: chat_pb.GetChatsRequest,
+    responseType: chat_pb.GetChatsResponse,
+    requestSerialize: serialize_GetChatsRequest,
+    requestDeserialize: deserialize_GetChatsRequest,
+    responseSerialize: serialize_GetChatsResponse,
+    responseDeserialize: deserialize_GetChatsResponse,
+  },
+  getChatMessages: {
+    path: '/Chat/GetChatMessages',
     requestStream: false,
     responseStream: false,
-    requestType: chat_pb.GetChatRequest,
-    responseType: chat_pb.GetChatReply,
-    requestSerialize: serialize_GetChatRequest,
-    requestDeserialize: deserialize_GetChatRequest,
-    responseSerialize: serialize_GetChatReply,
-    responseDeserialize: deserialize_GetChatReply,
+    requestType: chat_pb.GetChatMessagesRequest,
+    responseType: chat_pb.GetChatMessagesResponse,
+    requestSerialize: serialize_GetChatMessagesRequest,
+    requestDeserialize: deserialize_GetChatMessagesRequest,
+    responseSerialize: serialize_GetChatMessagesResponse,
+    responseDeserialize: deserialize_GetChatMessagesResponse,
+  },
+  setChatTitle: {
+    path: '/Chat/SetChatTitle',
+    requestStream: false,
+    responseStream: false,
+    requestType: chat_pb.SetChatTitleRequest,
+    responseType: chat_pb.SetChatTitleResponse,
+    requestSerialize: serialize_SetChatTitleRequest,
+    requestDeserialize: deserialize_SetChatTitleRequest,
+    responseSerialize: serialize_SetChatTitleResponse,
+    responseDeserialize: deserialize_SetChatTitleResponse,
   },
   addMessage: {
     path: '/Chat/AddMessage',
     requestStream: false,
     responseStream: false,
     requestType: chat_pb.AddMessageRequest,
-    responseType: chat_pb.AddMessageReply,
+    responseType: chat_pb.AddMessageResponse,
     requestSerialize: serialize_AddMessageRequest,
     requestDeserialize: deserialize_AddMessageRequest,
-    responseSerialize: serialize_AddMessageReply,
-    responseDeserialize: deserialize_AddMessageReply,
+    responseSerialize: serialize_AddMessageResponse,
+    responseDeserialize: deserialize_AddMessageResponse,
   },
 };
 

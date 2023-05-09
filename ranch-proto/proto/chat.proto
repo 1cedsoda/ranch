@@ -3,50 +3,67 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
 service Chat {
-    rpc GetChats (GetChatsRequest) returns (stream GetChatsReply) {}
-    rpc GetChat (GetChatRequest) returns (GetChatReply) {}
-    rpc AddMessage (AddMessageRequest) returns (AddMessageReply) {}
+    rpc GetChats (GetChatsRequest) returns (GetChatsResponse) {}
+    rpc StreamChats (GetChatsRequest) returns (stream GetChatsResponse) {}
+    rpc GetChatMessages (GetChatMessagesRequest) returns (GetChatMessagesResponse) {}
+    rpc SetChatTitle (SetChatTitleRequest) returns (SetChatTitleResponse) {}
+    rpc AddMessage (AddMessageRequest) returns (AddMessageResponse) {}
 }
 
-enum Sender {
+enum MessageSender {
     USER = 0;
     BOT = 1;
 }
 
 message Message {
-    Sender sender = 1;
+    MessageSender sender = 1;
     google.protobuf.Timestamp timestamp = 2;
     string text = 3;
 }
 
 message ChatObject {
     string id = 1;
-    string username = 2;
-    repeated Message messages = 3;
+    string userId = 2;
+    google.protobuf.Timestamp timestamp = 3;
+    optional string title = 4;
 }
 
+// === GetChats ===
 message GetChatsRequest {
-    string username = 1;
+    string userId = 1;
 }
 
-message GetChatsReply {
-    repeated string chatIds = 2;
+message GetChatsResponse {
+    repeated ChatObject chats = 1;
 }
 
-message GetChatRequest {
+// === GetChatMessages ===
+message GetChatMessagesRequest {
     string chatId = 1;
 }
 
-message GetChatReply {
-    ChatObject chat = 1;
+message GetChatMessagesResponse {
+    repeated Message messages = 1;
 }
+
+// === SetChatTitle ===
+message SetChatTitleRequest {
+    string chatId = 1;
+    optional string title = 2;
+}
+
+message SetChatTitleResponse {
+    
+}
+
+// === AddMessage ===
 
 message AddMessageRequest {
     string chatId = 1;
     Message message = 2;
 }
 
-message AddMessageReply {
+message AddMessageResponse {
     
 }
 

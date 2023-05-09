@@ -6,6 +6,7 @@ import {
 import { AlpacaServer } from './services/alpaca'
 import { ChatServer } from './services/chat'
 import { AlpacaService, ChatService } from 'ranch-proto/dist/grpc'
+import { prisma } from './prisma/prisma'
 
 async function main (): Promise<void> {
   const server = new Server()
@@ -18,3 +19,11 @@ async function main (): Promise<void> {
 }
 
 main()
+  .then(async () => {
+    await prisma.$disconnect()
+  })
+  .catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  })
