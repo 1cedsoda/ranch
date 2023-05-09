@@ -14,12 +14,12 @@ RUN cd /alpaca.cpp && make chat
 
 # Install ranch-proto
 COPY ./ranch-proto/package*.json /ranch-proto/
-RUN cd /ranch-proto && npm i --verbose
+RUN cd /ranch-proto && npm i --verbose --omit=dev --omit=optional
 COPY ./ranch-proto /ranch-proto
 
 # Install dependencies
 COPY ./ranch-backend/package*.json .
-RUN npm i --verbose
+RUN npm i --verbose --omit=dev --omit=optional
 COPY ./ranch-backend .
 
 # Run

@@ -5,6 +5,25 @@ volumes:
   ranch-mongo:
 
 services:
+  frontend:
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/ranch-frontend.Dockerfile
+    image: ranch-frontend
+    restart: "no"
+    ports:
+      - 8080:8080
+    volumes:
+      - ../ranch-frontend/src:/ranch-frontend/src
+
+  envoy:
+    build:
+      context: ..
+      dockerfile: ./ranch-deployment/ranch-envoy.Dockerfile
+    image: ranch-envoy
+    restart: "no"
+    ports:
+      - 8081:8080
   mongodb:
     image: mongo:6
     restart: "no"
@@ -23,28 +42,8 @@ services:
     image: ranch-backend
     restart: "no"
     ports:
-      - 8081:4000
+      - 8083:8080
     # depends_on:
     #   - mongodb
     volumes:
       - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
-
-  frontend:
-    build:
-      context: ..
-      dockerfile: ./ranch-deployment/ranch-frontend.Dockerfile
-    image: ranch-frontend
-    restart: "no"
-    ports:
-      - 8080:3000
-    volumes:
-      - ../ranch-frontend/src:/ranch-frontend/src
-
-  envoy:
-    build:
-      context: ..
-      dockerfile: ./ranch-deployment/ranch-envoy.Dockerfile
-    image: ranch-envoy
-    restart: "no"
-    ports:
-      - 8083:8080

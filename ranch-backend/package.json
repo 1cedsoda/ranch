@@ -3,13 +3,13 @@
     "start": "ts-node ./src/index.ts --watch"
   },
   "devDependencies": {
-    "typescript": "^5.0.4"
+    "@types/google-protobuf": "^3.15.6"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.8.14",
-    "@types/google-protobuf": "^3.15.6",
     "google-protobuf": "^3.21.2",
     "ranch-proto": "file:../ranch-proto",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
   }
 }

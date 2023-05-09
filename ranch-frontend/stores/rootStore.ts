@@ -1,8 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit"
-import { AlpacaClient } from "ranch-proto"
-import { ChannelCredentials } from "@grpc/grpc-js"
+import { AnyAction, ThunkDispatch, configureStore } from "@reduxjs/toolkit"
+import { AlpacaPromiseClient } from "ranch-proto/dist/grpc_web"
 import { AuthState, authSlice, initialAuthState } from "./auth"
 import { AlpacaStoreState, alpacaSlice, initialAlpacaState } from "./alpaca"
+import { useDispatch } from "react-redux"
 
 export type RootState = {
     alpaca: AlpacaStoreState,
@@ -14,9 +14,13 @@ export const initialRootStore: RootState = {
     auth: initialAuthState
 }
 
+export type RootThunkDispatch = ThunkDispatch<RootState, any, AnyAction>;
+
+export const useRootDispatch = () => useDispatch<RootThunkDispatch>();
+
 export type ThunkExtra = {
     extra: {
-        alpacaClient: AlpacaClient;
+        alpacaClient: AlpacaPromiseClient;
     };
   };
 
@@ -29,7 +33,7 @@ export const createStore = () =>
         middleware: (getDefaultMiddleware) => getDefaultMiddleware({
             thunk: {
                 extraArgument: {
-                    alpacaClient: new AlpacaClient('http://localhost:4000', ChannelCredentials.createInsecure())
+                    alpacaClient: new AlpacaPromiseClient('http://localhost:8081')
                 }
             }
         })

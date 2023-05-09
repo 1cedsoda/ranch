@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
-import * as proto from 'ranch-proto'
-import * as models from 'ranch-proto/dist/models'
-import { ThunkExtra } from './rootStore'
+import { AlpacaState, GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseEz, PromptRequest, PromptRequestEz, PromptResponse, PromptResponseEz } from 'ranch-proto/dist/pb'
+import { RootState, ThunkExtra } from './rootStore'
+import { ClientReadableStream } from 'grpc-web'
 
 // === STORE ===
 export interface AlpacaStoreState {
     id: string | undefined
-    state: proto.AlpacaState | undefined,
+    state: AlpacaState | undefined,
     promptResponse: string | undefined,
     promptRunning: boolean
 }
@@ -60,17 +60,20 @@ type StreamStateParams = {
 export const streamState = createAsyncThunk<void, StreamPromptParams, ThunkExtra>(
     "alpaca/streamState",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-      const protoRequest = new models.GetStateRequest(params.id).proto;
-      const stream = alpacaClient.streamState(protoRequest);
+      const request = new GetStateRequestEz(params.id);
+      const stream = alpacaClient.streamState(request) as ClientReadableStream<GetStateResponse>;
   
-      stream.on("data", (protoResponse: proto.GetStateResponse) => {
-        let reponse = models.GetStateResponse.fromProto(protoResponse);
-        dispatch(setState(reponse));
+      stream.on("data", (protoResponse: GetStateResponse) => {
+        const response = protoResponse as GetStateResponseEz;
+        dispatch(setState({
+          id: response.id,
+          state: response.state
+        }));
       });
   
       stream.on("end", () => {});
   
-      stream.on("error", (error) => {
+      stream.on("error", (error: any) => {
         rejectWithValue(error);
       });
     }
@@ -81,19 +84,21 @@ type GetStateParams = StreamStateParams
 export const getState = createAsyncThunk<void, GetStateParams, ThunkExtra>(
     "alpaca/getState",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-        const protoRequest = new models.GetStateRequest(params.id).proto;
-        const response = alpacaClient.getState(protoRequest, (err, protoRes) => {
-            if (err) {
-                rejectWithValue(err);
-            } else {
-                let res = models.GetStateResponse.fromProto(protoRes);
-                dispatch(setState(res));
-            }
-        });
+        const protoRequest = new GetStateRequestEz(params.id);
+        try {
+          const protoResponse = await alpacaClient.getState(protoRequest);
+          const response = protoResponse as GetStateResponseEz;
+          dispatch(setState({
+            id: response.id,
+            state: response.state
+          }));
+        } catch (error) {
+            rejectWithValue(error);
+        }
     }
 );
 
-type StreamPromptParams = {
+export type StreamPromptParams = {
     id: string
     prompt: string
 }
@@ -101,36 +106,26 @@ type StreamPromptParams = {
 export const streamPrompt = createAsyncThunk<void, StreamPromptParams, ThunkExtra>(
     "alpaca/streamPrompt",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
-      const protoRequest = new models.PromptRequest(params.id, params.prompt).proto;
-      const stream = alpacaClient.prompt(protoRequest);
+      const protoRequest = new PromptRequestEz(params.id, params.prompt);
+      const stream = alpacaClient.prompt(protoRequest) as ClientReadableStream<PromptResponse>;
   
-      stream.on("data", (protoResponse: proto.PromptResponse) => {
-        let reponse = models.PromptResponse.fromProto(protoResponse);
-        dispatch(appendPromptResult(reponse.text));
+      stream.on("data", (protoResponse: PromptResponse) => {
+        const response = protoResponse as PromptResponseEz;
+        dispatch(appendPromptResult(response.text));
       });
   
       stream.on("end", () => {
         dispatch(stopPromptRunning());
       });
   
-      stream.on("error", (error) => {
+      stream.on("error", (error: any) => {
         rejectWithValue(error);
       });
     }
   );
 
 // === SELECTORS ===
-export const selectAlpacaState = (state: any): AlpacaStoreState => state.alpaca
-
-export const selectAlpacaId = createSelector(
-    selectAlpacaState,
-    (state: AlpacaStoreState) => state.id
-)
-
-export const selectAlpacaStateState = createSelector(
-    selectAlpacaState,
-    (state: AlpacaStoreState) => state.state
-)
+export const selectAlpacaStore = (state: RootState): AlpacaStoreState => state.alpaca
 
 // === EXPORT ===
 export default alpacaSlice.reducer

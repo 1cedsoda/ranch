@@ -1,55 +1,60 @@
-import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, loadPackageDefinition, sendUnaryData } from '@grpc/grpc-js';
-import { AlpacaState, GetStateRequest, GetStateResponse, IAlpacaServer, PromptRequest, PromptResponse } from 'ranch-proto'
-import { alpacaRunnerManager } from '../alpaca/runner_manager';
-import { alpacaStateToProto } from '../alpaca/runner_state';
-import { AlpacaRunner } from '../alpaca/runner';
-import { UntypedHandleCall } from '@grpc/grpc-js';
-import * as models from 'ranch-proto/dist/models';
-
+import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, loadPackageDefinition, sendUnaryData } from '@grpc/grpc-js'
+import { IAlpacaServer } from 'ranch-proto/dist/grpc'
+import { GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseEz, PromptRequest, PromptRequestEz, PromptResponse, PromptResponseEz } from 'ranch-proto/dist/pb'
+import { alpacaRunnerManager } from '../alpaca/runner_manager'
+import { alpacaStateToProto } from '../alpaca/runner_state'
+import { AlpacaRunner } from '../alpaca/runner'
 export class AlpacaServer implements IAlpacaServer {
-    [name: string]: UntypedHandleCall;
-    getState(call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
-        const id = call.request.getId();
-        const runner = alpacaRunnerManager.getRunner(id)
+  [name: string]: import("@grpc/grpc-js").UntypedHandleCall
+  getState (call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
+    const req = call.request as GetStateRequestEz
+    console.log('AlpacaServer.getState', req.toObject())
 
-        if (!runner) {
-            callback(new Error('Runner not found'), null);
-            return
-        }
+    const runner = alpacaRunnerManager.getRunner(req.id)
 
-        callback(null, runnerToStateResponse(id, runner));
+    if (runner == null) {
+      callback(new Error('Runner not found'), null)
+      return
     }
-    streamState(call: ServerWritableStream<GetStateRequest, GetStateResponse>) {
 
-        const id = call.request.getId();
-        const runner = alpacaRunnerManager.getRunner(id)
+    callback(null, runnerToStateResponse(req.id, runner))
+  }
 
-        if (!runner) {
-            return call.end();
-        }
+  streamState (call: ServerWritableStream<GetStateRequest, GetStateResponse>) {
+    const req = call.request as GetStateRequestEz
+    console.log('AlpacaServer.streamState', req.toObject())
 
-        let reply = runnerToStateResponse(id, runner);
+    const runner = alpacaRunnerManager.getRunner(req.id)
 
-        runner.onStateChange((state) => {
-            reply = runnerToStateResponse(id, runner);
-            call.write(reply);
-        })
+    if (runner == null) {
+      return call.end()
     }
-    prompt(call: ServerWritableStream<PromptRequest, PromptResponse>) {
-        const id = call.request.getId();
-        const prompt = call.request.getPrompt();
-        const runner = alpacaRunnerManager.getRunner(id)
 
-        if (!runner) {
-            return call.end();
-        }
+    let reply = runnerToStateResponse(req.id, runner)
 
-        runner.prompt(prompt, (text)=>{
-            const res = new models.PromptResponse(text).proto;
-        }, ()=>{
-            call.end();
-        })
+    runner.onStateChange((state) => {
+      reply = runnerToStateResponse(req.id, runner)
+      call.write(reply)
+    })
+  }
+
+  prompt (call: ServerWritableStream<PromptRequest, PromptResponse>) {
+    const req = call.request as PromptRequestEz
+    console.log('AlpacaServer.prompt', req.toObject())
+
+    const prompt = req.prompt
+    const runner = alpacaRunnerManager.getRunner(req.id)
+
+    if (runner == null) {
+      return call.end()
     }
+
+    runner.prompt(prompt, (text) => {
+      const res = new PromptResponseEz(text)
+    }, () => {
+      call.end()
+    })
+  }
 }
 
-const runnerToStateResponse = (id: string, runner: AlpacaRunner): GetStateResponse => new models.GetStateResponse(id, alpacaStateToProto(runner.state)).proto
+const runnerToStateResponse = (id: string, runner: AlpacaRunner): GetStateResponse => new GetStateResponseEz(id, alpacaStateToProto(runner.state))
