@@ -12,14 +12,16 @@ export class AlpacaRunnerManager {
 
   constructor () {
     this.runners = {
-      prepared_runner: new AlpacaRunner()
+      // prepared_runner: new AlpacaRunner()
     }
   }
 
   createRunner (id: string): AlpacaRunner {
-    this.runners[id] = this.runners.prepared_runner
-    delete this.runners.prepared_runner
-    this.runners.prepared_runner = new AlpacaRunner()
+    console.log('AlpacaRunnerManager.createRunner', id)
+    // this.runners[id] = this.runners.prepared_runner
+    // delete this.runners.prepared_runner
+    // this.runners.prepared_runner = new AlpacaRunner()
+    this.runners[id] = new AlpacaRunner()
     setTimeout(() => {
       this.runners[id].kill()
       delete this.runners[id]
@@ -28,6 +30,7 @@ export class AlpacaRunnerManager {
   }
 
   getRunner (id: string): AlpacaRunner | undefined {
+    console.log('AlpacaRunnerManager.getRunner', id)
     if (id in this.runners) {
       return this.runners[id]
     }

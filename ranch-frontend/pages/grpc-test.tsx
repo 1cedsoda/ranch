@@ -16,12 +16,18 @@ export const Page: NextPage = () => {
   function handleStreamPrompt() {
     dispatch(streamPrompt({
       id: "test",
-      prompt: "test"
+      prompt: "100+100="
     }));
   }
 
   function handleGetState() {
     dispatch(getState({
+      id: "test"
+    }))
+  }
+
+  function handleStreamState() {
+    dispatch(streamState({
       id: "test"
     }))
   }
@@ -35,6 +41,9 @@ export const Page: NextPage = () => {
       </button>
       <button onClick={handleGetState}>
         getState
+      </button>
+      <button onClick={handleStreamState}>
+        streamState
       </button>
     </>
   );

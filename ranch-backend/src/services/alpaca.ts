@@ -9,42 +9,49 @@ export class AlpacaServer implements IAlpacaServer {
   [name: string]: UntypedHandleCall
   getState (call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
     const req = call.request as GetStateRequestEz
+    const { id } = req
     console.log('AlpacaServer.getState', req.toObject())
 
-    const runner = alpacaRunnerManager.getRunner(req.id)
+    let runner = alpacaRunnerManager.getRunner(id)
 
     if (runner == null) {
-      callback(new Error('Runner not found'), null)
-      return
+      runner = alpacaRunnerManager.createRunner(id)
     }
 
-    callback(null, runnerToStateResponse(req.id, runner))
+    callback(null, runnerToStateResponse(id, runner))
   }
 
   streamState (call: ServerWritableStream<GetStateRequest, GetStateResponse>) {
     const req = call.request as GetStateRequestEz
+    const { id } = req
     console.log('AlpacaServer.streamState', req.toObject())
 
-    const runner = alpacaRunnerManager.getRunner(req.id)
+    let runner = alpacaRunnerManager.getRunner(id)
 
     if (runner == null) {
-      return call.end()
+      runner = alpacaRunnerManager.createRunner(id)
     }
 
-    let reply = runnerToStateResponse(req.id, runner)
+    let res = runnerToStateResponse(id, runner)
+    call.write(res)
 
     runner.onStateChange((state) => {
-      reply = runnerToStateResponse(req.id, runner)
-      call.write(reply)
+      let runner = alpacaRunnerManager.getRunner(id)
+      if (runner == null) {
+        return call.end()
+      }
+      res = runnerToStateResponse(id, runner)
+      call.write(res)
     })
   }
 
   prompt (call: ServerWritableStream<PromptRequest, PromptResponse>) {
     const req = call.request as PromptRequestEz
+    const { id } = req
     console.log('AlpacaServer.prompt', req.toObject())
 
     const prompt = req.prompt
-    const runner = alpacaRunnerManager.getRunner(req.id)
+    const runner = alpacaRunnerManager.getRunner(id)
 
     if (runner == null) {
       return call.end()
@@ -54,6 +61,8 @@ export class AlpacaServer implements IAlpacaServer {
       const res = new PromptResponseEz(text)
       call.write(res)
     }, () => {
+      call.end()
+    }, (error) => {
       call.end()
     })
   }

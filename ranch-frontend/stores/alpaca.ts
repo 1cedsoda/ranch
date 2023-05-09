@@ -2,6 +2,7 @@ import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
 import { AlpacaState, GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseEz, PromptRequest, PromptRequestEz, PromptResponse, PromptResponseEz } from 'ranch-proto/dist/pb'
 import { RootState, ThunkExtra } from './rootStore'
 import { ClientReadableStream } from 'grpc-web'
+import { init } from 'next/dist/compiled/@vercel/og/satori'
 
 // === STORE ===
 export interface AlpacaStoreState {
@@ -26,17 +27,23 @@ export const alpacaSlice = createSlice({
     name: 'alpaca',
     initialState: initialAlpacaState,
     reducers: {
-        setState: (state: AlpacaStoreState, actions: { payload: SetStatePayload }) => {
+        setState: (_state: AlpacaStoreState, actions: { payload: SetStatePayload }) => {
             return {
-                ...state,
-                id: actions.payload.id,
-                state: actions.payload.state,
+                ..._state,
+                ...actions.payload
             }
         },
         appendPromptResult: (state: AlpacaStoreState, actions: { payload: AppendPromptResultPayload }) => {
             return {
                 ...state,
                 promptResponse: state.promptResponse ? state.promptResponse + actions.payload : actions.payload,
+                promptRunning: true
+            }
+        },
+        initPromptResult: (state: AlpacaStoreState) => {
+            return {
+                ...state,
+                promptResponse: undefined,
                 promptRunning: true
             }
         },
@@ -49,15 +56,14 @@ export const alpacaSlice = createSlice({
     }
 })
 
-export const { setState, appendPromptResult, stopPromptRunning } = alpacaSlice.actions
-
+export const { setState, appendPromptResult, initPromptResult, stopPromptRunning } = alpacaSlice.actions
 
 // === ACTIONS ===
 type StreamStateParams = {
   id: string
 }
 
-export const streamState = createAsyncThunk<void, StreamPromptParams, ThunkExtra>(
+export const streamState = createAsyncThunk<void, StreamStateParams, ThunkExtra>(
     "alpaca/streamState",
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
       const request = new GetStateRequestEz(params.id);
@@ -108,6 +114,8 @@ export const streamPrompt = createAsyncThunk<void, StreamPromptParams, ThunkExtr
     async (params, { dispatch, rejectWithValue, extra: { alpacaClient } }) => {
       const protoRequest = new PromptRequestEz(params.id, params.prompt);
       const stream = alpacaClient.prompt(protoRequest) as ClientReadableStream<PromptResponse>;
+      
+      dispatch(initPromptResult());
   
       stream.on("data", (protoResponse: PromptResponse) => {
         const response = protoResponse as PromptResponseEz;
