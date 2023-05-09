@@ -5,7 +5,12 @@
     "build": "./build.sh && tsc && npm run install-in",
     "install-in": "npm run install-in-backend && npm run install-in-frontend",
     "install-in-backend": "cd ../ranch-backend && rm -r node_modules/ranch-proto && npm i ../ranch-proto",
-    "install-in-frontend": "cd ../ranch-frontend && rm -r node_modules/ranch-proto && npm i ../ranch-proto"
+    "install-in-frontend": "cd ../ranch-frontend && rm -r node_modules/ranch-proto && npm i ../ranch-proto",
+    "lint": "eslint --ext .ts ."
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.8.14",
+    "grpc-web": "^1.4.2"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.15.6",
@@ -13,9 +18,6 @@
     "grpc-tools": "^1.12.4",
     "protoc-gen-grpc-web": "^1.4.1",
     "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "@grpc/grpc-js": "^1.8.14",
-    "grpc-web": "^1.4.2"
   }
+  
 }

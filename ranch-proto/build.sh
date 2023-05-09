@@ -5,7 +5,7 @@ OUT_DIR=./gen
 
 # Generate JavaScript code
 npx grpc_tools_node_protoc \
-    --grpc-web_out=import_style=commonjs+dts,mode=grpcweb:$OUT_DIR \
+    --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:$OUT_DIR \
     --js_out=import_style=commonjs,binary:$OUT_DIR \
     --grpc_out=grpc_js:$OUT_DIR \
     -I ./proto \

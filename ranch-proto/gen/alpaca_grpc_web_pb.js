@@ -32,7 +32,7 @@ const proto = require('./alpaca_pb.js');
 proto.AlpacaClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options.format = 'binary';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -58,7 +58,7 @@ proto.AlpacaClient =
 proto.AlpacaPromiseClient =
     function(hostname, credentials, options) {
   if (!options) options = {};
-  options.format = 'binary';
+  options.format = 'text';
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client

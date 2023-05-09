@@ -14,5 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./adapters/alpaca_pb"), exports);
-__exportStar(require("./adapters/chat_pb"), exports);
+__exportStar(require("./ez/alpaca_pb"), exports);
+__exportStar(require("../gen/alpaca_pb"), exports);
+// export * from './ez/chat_pb'
+__exportStar(require("../gen/chat_pb"), exports);

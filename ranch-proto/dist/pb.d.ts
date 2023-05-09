@@ -1,2 +1,3 @@
-export * from './adapters/alpaca_pb';
-export * from './adapters/chat_pb';
+export * from './ez/alpaca_pb';
+export * from '../gen/alpaca_pb';
+export * from '../gen/chat_pb';
