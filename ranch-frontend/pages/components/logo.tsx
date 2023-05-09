@@ -1,24 +1,22 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import classNames from 'classnames'
 import styles from '../../styles/main.module.scss';
 import Image from 'next/image'
 
-function showSidebar()
-{
-    const sidebar = document.getElementById('sidebar') as HTMLElement;
-    sidebar.animate(
-        {transform: ['translateX(-100%)', 'translateX(0)']},
-        {duration: 500}
-    );
-    sidebar.style.transform = 'translateX(0)';
+interface componentProps {
+    className? : string;
+    style? : CSSProperties;
+    id? : string;
+    logoClassname? : string;
+    h1Classname? : string;
 }
 
-export default function Logo()
+export default function Logo(props : componentProps)
 {
     return(
-        <div className={classNames(styles.logoBar)} onClick={showSidebar}>
-            <Image src="/ranchLogo.jpg" alt="Ranch Logo" width={72} height={72} className={classNames(styles.logo)}/>
-            <h1 className={classNames(styles.h1)}>Ranch</h1>
+        <div className={props.className} style={props.style} id={props.id}>
+            <img src="/ranchLogo.jpg" alt="Ranch Logo" className={props.logoClassname} id='mainLogo'/>
+            <h1 className={props.h1Classname} id='h1'>Ranch</h1>
         </div>
     )
 }
