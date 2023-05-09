@@ -1,5 +1,29 @@
 # ranch
 Ai Code Translator
+
+# Tech Stack
+## Frontend
+- SPA with **Next.js**
+- State Management with **Redux Toolkit**
+- Styling with **SASS**
+- Written in **TypeScript**
+
+## API
+- **gRPC** API Paradigma
+- (De)Serialization with **Protocol Buffers**
+- Client with **grpc-web**
+- Server with **grpc-js**
+- gRPC web proxy with **Envoy**
+
+## Backend
+- Written in **TypeScript**
+- Running on **Node.js**
+- Interfacing database with **Prisma**
+- Database is **MongoDB**
+
+## Deployment
+- Containerized with **Docker**
+- Orchestration with **Docker Compose**
  
 # Setup
 ## Install Protobuf Conpiler `protoc`

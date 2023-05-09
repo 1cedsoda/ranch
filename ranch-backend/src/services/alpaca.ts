@@ -4,8 +4,9 @@ import { GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseE
 import { alpacaRunnerManager } from '../alpaca/runner_manager'
 import { alpacaStateToProto } from '../alpaca/runner_state'
 import { AlpacaRunner } from '../alpaca/runner'
+import { UntypedHandleCall } from '@grpc/grpc-js'
 export class AlpacaServer implements IAlpacaServer {
-  [name: string]: import("@grpc/grpc-js").UntypedHandleCall
+  [name: string]: UntypedHandleCall
   getState (call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
     const req = call.request as GetStateRequestEz
     console.log('AlpacaServer.getState', req.toObject())
@@ -51,6 +52,7 @@ export class AlpacaServer implements IAlpacaServer {
 
     runner.prompt(prompt, (text) => {
       const res = new PromptResponseEz(text)
+      call.write(res)
     }, () => {
       call.end()
     })

@@ -14,7 +14,12 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ../ranch-frontend/src:/ranch-frontend/src
+      - ../ranch-frontend/stores:/ranch-frontend/stores
+      - ../ranch-frontend/components:/ranch-frontend/components
+      - ../ranch-frontend/styles:/ranch-frontend/styles
+      - ../ranch-frontend/pages:/ranch-frontend/pages
+      - ../ranch-frontend/public:/ranch-frontend/public
+      - ../ranch-frontend/.next:/ranch-frontend/.next
 
   envoy:
     build:
@@ -47,3 +52,4 @@ services:
     #   - mongodb
     volumes:
       - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
+      - ../ranch-backend/src:/ranch-backend/src

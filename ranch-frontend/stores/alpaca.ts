@@ -98,7 +98,7 @@ export const getState = createAsyncThunk<void, GetStateParams, ThunkExtra>(
     }
 );
 
-export type StreamPromptParams = {
+type StreamPromptParams = {
     id: string
     prompt: string
 }
