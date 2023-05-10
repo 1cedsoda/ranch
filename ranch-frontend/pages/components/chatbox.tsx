@@ -10,7 +10,7 @@ function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messag
     const message = (document.getElementById('messageArea') as HTMLTextAreaElement).value;
     if (message == '') return;
     const words = message.split(' ');
-    if (words.length == 1 && (document.getElementById('sidebar') as HTMLElement).style.transform != 'translateX(0)')
+    if (words.length == 1 && letter == '')
     {
         letter = message.charAt(0).toUpperCase();
         showSidebar();
