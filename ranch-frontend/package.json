@@ -15,7 +15,7 @@
     "grpc-web": "^1.4.2",
     "next": "13.4.1",
     "ranch-proto": "file:../ranch-proto",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.0.5",
     "sass": "^1.62.1",

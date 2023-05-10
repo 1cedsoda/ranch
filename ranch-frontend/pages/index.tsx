@@ -1,11 +1,14 @@
-
+import { useDispatch, useSelector } from 'react-redux';
+import { getState, selectAlpacaStore, streamPrompt, streamState } from '../stores/alpaca';
 import type { NextPage } from 'next';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import styles from '../styles/main.module.scss';
-import Logo from './components/logo';
-import Chatbox from './components/chatbox';
-import Sidebar from './components/sidebar';
+import Logo from '../components/logo';
+import Chatbox from '../components/chatbox';
+import Sidebar from '../components/sidebar';
+import { Stream } from 'stream';
+import { useRootDispatch } from '../stores/rootStore';
 
 function changeToMainPage(setPageStyle : Dispatch<SetStateAction<string>>, setContent : Dispatch<SetStateAction<JSX.Element>>)
 {

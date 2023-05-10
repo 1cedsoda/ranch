@@ -1,9 +1,16 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { getState, selectAlpacaStore, streamPrompt, streamState } from '../stores/alpaca';
 import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
-import classNames from 'classnames'
-import styles from '../../styles/main.module.scss';
+import classNames from 'classnames';
+import styles from '../styles/main.module.scss';
 import Logo from './logo';
+import { Stream } from 'stream';
+import { useRootDispatch } from '../stores/rootStore';
 
 var letter = '';
+
+const dispatch = useRootDispatch();
+const alpacaStore = useSelector(selectAlpacaStore);
 
 function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element)
 {
@@ -46,6 +53,10 @@ function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messag
         </>
     );
     (document.getElementById('messageArea') as HTMLTextAreaElement).value = '';
+    // dispatch(streamPrompt({
+    //     id: "test",
+    //     prompt: message
+    //   }));
 }
 
 function showSidebar()
