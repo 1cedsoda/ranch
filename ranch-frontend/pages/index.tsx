@@ -16,7 +16,6 @@ function changeToMainPage(setPageStyle : Dispatch<SetStateAction<string>>, setCo
         <>
             <Sidebar/>
             <Chatbox/>
-            <div></div>
         </>
     );
     setPageStyle(classNames(styles.mainPage));

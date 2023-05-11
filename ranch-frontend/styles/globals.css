@@ -5,4 +5,36 @@ body {
   color: #8A92A1;
   overflow: auto;
   background: #e3e3e3;
+  cursor: url('/cursor.png'), auto;
+}
+
+/* Customize the scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 20px; /* Set the width of the scrollbar */
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #24242400; /* Set the background color of the scrollbar track */
+}
+
+/* Customize the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background: #ffffff00; /* Set the background color of the scrollbar thumb */
+  border-radius: 5px; /* Add rounded corners to the scrollbar thumb */
+}
+
+/* Customize the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff00 /* Set a different background color on hover */
+}
+
+/* Hide the scrollbar arrows */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+button, a, input, textarea, div{
+  cursor: url('/cursor.png'), auto;
 }

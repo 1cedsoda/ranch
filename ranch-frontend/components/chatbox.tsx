@@ -9,8 +9,8 @@ import { useRootDispatch } from '../stores/rootStore';
 
 var letter = '';
 
-const dispatch = useRootDispatch();
-const alpacaStore = useSelector(selectAlpacaStore);
+// const dispatch = useRootDispatch();
+// const alpacaStore = useSelector(selectAlpacaStore);
 
 function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element)
 {
@@ -78,12 +78,14 @@ export default function Chatbox()
             <span className={classNames(styles.spanMessage)}>What is your alias?</span>
         </div>
     )
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' && document.activeElement?.id == 'messageArea')
-        {
-            sendMessage(setMessages, messages);
-        }
-    });
+    useEffect(()=>{
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && document.activeElement?.id == 'messageArea')
+            {
+                sendMessage(setMessages, messages);
+            }
+        });
+    }, [])
 
     return (
         <div className={classNames(styles.chatboxComponent)}>
