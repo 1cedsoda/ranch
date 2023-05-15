@@ -12,6 +12,7 @@ function setEnabled(counter : Number)
     console.log(counter);
     const input = document.getElementById('inputChatName' + counter) as HTMLInputElement;
     input.disabled = false;
+    input.focus();
 }
 
 function setDisabled(counter : Number)
@@ -25,7 +26,7 @@ export default function Sidebar()
 {
     const [sidebarComponents, setSidebarComponents] = useState<JSX.Element>();
     const [counter, setCounter] = useState(1);
-    // const counter = useRef(0);
+    const counterNr = useRef(1);
 
     function addNewChat()
     {
@@ -33,12 +34,15 @@ export default function Sidebar()
         setSidebarComponents(
             <>
                 <div className={classNames(styles.sidebarComponents)}>
-                    <input type='text' className={classNames(styles.chatHistoryInput)} defaultValue={counter + '. Chat'} id={'inputChatName' + counter} disabled onBlur={() => setDisabled(counter)}/>
-                    <img src='/edit.svg' width='20px' height='20px' onClick={() => setEnabled(counter)}/>
+                    <div className={classNames(styles.sidebarInnerComponents)}>
+                        <input type='text' className={classNames(styles.chatHistoryInput)} defaultValue={counterNr.current + '. Chat'} id={'inputChatName' + counter} disabled onBlur={() => setDisabled(counter)}/>
+                        <img src='/edit.svg' width='20px' height='20px' onClick={() => setEnabled(counter)}/>
+                    </div>
                 </div>
                 {sidebarComponents}
             </>
         );
+        counterNr.current++;
         setCounter(counter + 1);
     }
 

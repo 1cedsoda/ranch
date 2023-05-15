@@ -9,16 +9,22 @@ import { useRootDispatch } from '../stores/rootStore';
 
 var letter = '';
 
+interface componentProps {
+    handleLogin : ((value: boolean) => void);
+}
+
 // const dispatch = useRootDispatch();
 // const alpacaStore = useSelector(selectAlpacaStore);
 
-function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element)
+function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element, handleLogin : ((value: boolean) => void))
 {
     const message = (document.getElementById('messageArea') as HTMLTextAreaElement).value;
     if (message == '') return;
     const words = message.split(' ');
     if (words.length == 1 && letter == '')
     {
+        handleLogin(true);
+        (document.getElementById('sidebar') as HTMLDivElement).style.width = '15rem';
         letter = message.charAt(0).toUpperCase();
         showSidebar();
         setMessages(
@@ -69,7 +75,7 @@ function showSidebar()
     sidebar.style.transform = 'translateX(0)';
 }
 
-export default function Chatbox()
+export default function Chatbox(props : componentProps)
 {
     
     const [messages, setMessages] = useState(
@@ -82,7 +88,7 @@ export default function Chatbox()
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter' && document.activeElement?.id == 'messageArea')
             {
-                sendMessage(setMessages, messages);
+                sendMessage(setMessages, messages, props.handleLogin);
             }
         });
     }, [])
@@ -95,7 +101,7 @@ export default function Chatbox()
             </div>
             <div className={classNames(styles.messagebox)}>
                 <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
-                <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages)}/>
+                <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin)}/>
             </div>
         </div>
     )
