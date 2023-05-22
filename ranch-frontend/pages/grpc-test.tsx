@@ -8,11 +8,13 @@ import { addMessage, createChat, getChatMessages, getChats, initializeForUser, s
 import style from './grpc-test.module.scss';
 import classNames from 'classnames';
 import { MessageSender } from 'ranch-proto/gen/chat_pb';
+import { login, logout, selectAuthStore } from '../stores/auth';
 
 export const Page: NextPage = () => {
   const dispatch = useRootDispatch();
   const alpacaStore = useSelector(selectAlpacaStore);
   const chatStore = useSelector(selectChatStore);
+  const authStore = useSelector(selectAuthStore);
 
   useEffect(() => {
     console.log(alpacaStore);
@@ -105,6 +107,23 @@ export const Page: NextPage = () => {
     }))
   }, [chatStore.chats, messageValue])
 
+  const usernameRef = createRef<HTMLInputElement>();
+  const [usernameValue, setUsernameValue] = useState("admin");
+
+  const passwordRef = createRef<HTMLInputElement>();
+  const [passwordValue, setPasswordValue] = useState("secret_password");
+
+  const handleLogin = useCallback(() => {
+    dispatch(login({
+      username: usernameValue,
+      password: passwordValue,
+    }))
+  }, [usernameValue, passwordValue])
+
+  const handleLogout = useCallback(() => {
+    dispatch(logout())
+  }, [])
+
   return (
     <>
       <h1>gRPC Test</h1>
@@ -171,6 +190,27 @@ export const Page: NextPage = () => {
 
         </textarea>
       </div>
+      <div className={classNames(style.vertical)}>
+        <h2>AuthService</h2>
+        <div className={classNames(style.horizontal)}>
+          <span>username</span>
+          <input ref={usernameRef} type='text' value={usernameValue} onChange={(e) => setUsernameValue(e.target.value)}/>
+        </div>
+        <div className={classNames(style.horizontal)}>
+          <span>password</span>
+          <input ref={passwordRef} type='text' value={passwordValue} onChange={(e) => setPasswordValue(e.target.value)}/>
+        </div>
+        <button onClick={handleLogin}>
+          login
+        </button>
+        <button onClick={handleLogout}>
+          logout
+        </button>
+        <textarea value={JSON.stringify(authStore)}>
+        </textarea>
+
+      </div>
+
     </>
   );
 };

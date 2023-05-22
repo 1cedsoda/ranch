@@ -1,5 +1,5 @@
 import { AnyAction, ThunkDispatch, configureStore } from "@reduxjs/toolkit"
-import { AlpacaPromiseClient, ChatClient, ChatPromiseClient } from "ranch-proto/dist/grpc_web"
+import { AlpacaPromiseClient, AuthPromiseClient, ChatClient, ChatPromiseClient } from "ranch-proto/dist/grpc_web"
 import { AuthState, authSlice, initialAuthState } from "./auth"
 import { AlpacaStoreState, alpacaSlice, initialAlpacaState } from "./alpaca"
 import { useDispatch } from "react-redux"
@@ -25,6 +25,7 @@ export type ThunkExtra = {
     extra: {
         alpacaClient: AlpacaPromiseClient;
         chatClient: ChatPromiseClient;
+        authClient: AuthPromiseClient;
     };
   };
 
@@ -39,7 +40,8 @@ export const createStore = () =>
             thunk: {
                 extraArgument: {
                     alpacaClient: new AlpacaPromiseClient('http://localhost:8081'),
-                    chatClient: new ChatPromiseClient('http://localhost:8081')
+                    chatClient: new ChatPromiseClient('http://localhost:8081'),
+                    authClient: new AuthPromiseClient('http://localhost:8081')
                 }
             }
         })

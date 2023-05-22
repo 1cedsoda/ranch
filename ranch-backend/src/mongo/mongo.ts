@@ -38,6 +38,13 @@ export interface IChat extends Document {
   chatTitle?: string;
 }
 
+export interface IUser extends Document {
+  _id: Schema.Types.ObjectId;
+  username: string;
+  password_hash: string;
+  password_salt: string;
+}
+
 const messageSchema = new Schema<IMessage>({
   chatId: {
     type: Schema.Types.ObjectId,
@@ -64,8 +71,15 @@ const chatSchema = new Schema<IChat>({
   title: String,
 });
 
+const userSchema = new Schema<IUser>({
+  username: String,
+  password_hash: String,
+  password_salt: String,
+});
+
 export const Chat = model<IChat>('Chat', chatSchema);
 export const Message = model<IMessage>('Message', messageSchema);
+export const User = model<IUser>('User', userSchema);
 
 export type MaybeObjectId = Schema.Types.ObjectId | string;
 export function ensureObjectId (id: MaybeObjectId): Schema.Types.ObjectId {

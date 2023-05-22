@@ -16,3 +16,4 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("../gen/alpaca_grpc_web_pb"), exports);
 __exportStar(require("../gen/chat_grpc_web_pb"), exports);
+__exportStar(require("../gen/auth_grpc_web_pb"), exports);
