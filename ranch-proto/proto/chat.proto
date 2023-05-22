@@ -3,51 +3,80 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
 service Chat {
-    rpc GetChats (GetChatsRequest) returns (stream GetChatsReply) {}
-    rpc GetChat (GetChatRequest) returns (GetChatReply) {}
-    rpc AddMessage (AddMessageRequest) returns (AddMessageReply) {}
+    rpc CreateChat (CreateChatRequest) returns (CreateChatResponse) {}
+    rpc GetChats (GetChatsRequest) returns (GetChatsResponse) {}
+    rpc StreamChats (GetChatsRequest) returns (stream GetChatsResponse) {}
+    rpc GetChatMessages (GetChatMessagesRequest) returns (GetChatMessagesResponse) {}
+    rpc SetChatTitle (SetChatTitleRequest) returns (SetChatTitleResponse) {}
+    rpc AddMessage (AddMessageRequest) returns (AddMessageResponse) {}
 }
 
-enum Sender {
+enum MessageSender {
     USER = 0;
     BOT = 1;
 }
 
 message Message {
-    Sender sender = 1;
-    google.protobuf.Timestamp timestamp = 2;
-    string text = 3;
+    string id = 1;
+    string chatId = 2;
+    MessageSender sender = 3;
+    google.protobuf.Timestamp timestamp = 4;
+    string text = 5;
 }
 
 message ChatObject {
     string id = 1;
-    string username = 2;
-    repeated Message messages = 3;
+    string userId = 2;
+    google.protobuf.Timestamp timestamp = 3;
+    optional string title = 4;
 }
 
-message GetChatsRequest {
-    string username = 1;
+// === CreateChat ===
+message CreateChatRequest {
+    string userId = 1;
 }
 
-message GetChatsReply {
-    repeated string chatIds = 2;
-}
-
-message GetChatRequest {
-    string chatId = 1;
-}
-
-message GetChatReply {
+message CreateChatResponse {
     ChatObject chat = 1;
 }
 
-message AddMessageRequest {
-    string chatId = 1;
-    Message message = 2;
+// === GetChats ===
+message GetChatsRequest {
+    string userId = 1;
 }
 
-message AddMessageReply {
+message GetChatsResponse {
+    repeated ChatObject chats = 1;
+}
+
+// === GetChatMessages ===
+message GetChatMessagesRequest {
+    string chatId = 1;
+}
+
+message GetChatMessagesResponse {
+    repeated Message messages = 1;
+}
+
+// === SetChatTitle ===
+message SetChatTitleRequest {
+    string chatId = 1;
+    string title = 2;
+}
+
+message SetChatTitleResponse {
     
+}
+
+// === AddMessage ===
+message AddMessageRequest {
+    string chatId = 1;
+    string text = 2;
+    MessageSender sender = 3;
+}
+
+message AddMessageResponse {
+    Message message = 1;
 }
 
 

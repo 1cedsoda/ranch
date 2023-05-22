@@ -18,7 +18,7 @@ Ai Code Translator
 ## Backend
 - Written in **TypeScript**
 - Running on **Node.js**
-- Interfacing database with **Prisma**
+- Interfacing database with **Mongoose**
 - Database is **MongoDB**
 
 ## Deployment
@@ -31,3 +31,13 @@ Ai Code Translator
 ## Download Alpaca Model Weights
 1. Download the model file [ggml-alpaca-7b-q4.bin](https://huggingface.co/Sosaka/Alpaca-native-4bit-ggml/blob/main/ggml-alpaca-7b-q4.bin)
 2. Place it into `ranch-deployment/.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin`
+
+
+# Ports
+| Service | Port |
+| --- | --- |
+| ranch-frontend | 8080 |
+| Envoy Proxy for gRPC Web | 8081 |
+| ranch-backend | 8082 |
+| MongoDB | 8083 |
+| MongoDB Express | 8084 |

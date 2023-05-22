@@ -1,18 +1,99 @@
-import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, sendUnaryData } from '@grpc/grpc-js'
+import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, sendUnaryData } from '@grpc/grpc-js'
 import { IChatServer } from 'ranch-proto/dist/grpc';
-import { AddMessageReply, AddMessageRequest, GetChatReply, GetChatRequest, GetChatsReply, GetChatsRequest } from 'ranch-proto/dist/pb';
+import { AddMessageResponse, AddMessageRequest, GetChatsResponse, GetChatsRequest, GetChatsRequestEz, AddMessageRequestEz, GetChatsResponseEz, GetChatMessagesRequest, GetChatMessagesResponse, SetChatTitleRequest, SetChatTitleResponse, GetChatMessagesRequestEz, SetChatTitleRequestEz, ChatObject, ChatObjectEz, Message, MessageEz, GetChatMessagesResponseEz, SetChatTitleResponseEz, AddMessageResponseEz, CreateChatRequest, CreateChatResponse, CreateChatRequestEz, CreateChatResponseEz, MessageSender } from 'ranch-proto/dist/pb';
+import { UntypedHandleCall } from '@grpc/grpc-js';
+import * as mongo from '../mongo/mongo';
+import { mongoChatToProtoChatObjectEz, mongoMessageSenderToProtoMessageSender, mongoMessageToProtoMessageEz, protoMessageSenderToMongoMessageSender } from '../mongo/mappers';
+import { chatRepository } from '../repository/chat';
 
 export class ChatServer implements IChatServer {
-  [name: string]: import('@grpc/grpc-js').UntypedHandleCall;
-  getChats (call: ServerWritableStream<GetChatsRequest, GetChatsReply>) {
+  [name: string]: UntypedHandleCall;
+  async createChat (call: ServerUnaryCall<CreateChatRequest, CreateChatResponse>, callback: sendUnaryData<CreateChatResponse>) {
+    console.log('createChat', call.request.toObject());
+    const req = call.request as CreateChatRequestEz;
+    const { userId } = req;
 
-  }
+    const chat = await chatRepository.createChat(userId);
 
-  getChat (call: ServerUnaryCall<GetChatRequest, GetChatReply>, callback: sendUnaryData<GetChatReply>) {
-
+    const chatObject = mongoChatToProtoChatObjectEz(chat);
+    const res = new CreateChatResponseEz(chatObject);
+    callback(null, res);
   };
 
-  addMessage (call: ServerUnaryCall<AddMessageRequest, AddMessageReply>, callback: sendUnaryData<AddMessageReply>) {
+  async getChats (call: ServerUnaryCall<GetChatsRequest, GetChatsResponse>, callback: sendUnaryData<GetChatsResponse>) {
+    console.log('getChats', call.request.toObject());
+    const req = call.request as GetChatsRequestEz;
+    const { userId } = req;
 
+    const chats = await chatRepository.findChats(userId);
+
+    const chatObjects = chats.map((chat) => mongoChatToProtoChatObjectEz(chat));
+    const res = new GetChatsResponseEz(chatObjects);
+    callback(null, res);
+  };
+
+  streamChats (call: ServerWritableStream<GetChatsRequest, GetChatsResponse>) {
+    console.log('streamChats', call.request.toObject());
+    const req = call.request as GetChatsRequestEz;
+    const { userId } = req;
+
+    let lastChats: mongo.IChat[] = [];
+
+    const runInterval = async () => {
+
+      let chats = await chatRepository.findChats(userId);
+      let equals = lastChats.length == chats.length;
+  
+      if (!equals) {
+        const chatObjects = chats.map((chat)=>mongoChatToProtoChatObjectEz(chat));
+        const res = new GetChatsResponseEz(chatObjects);
+        call.write(res);
+      }
+    }
+
+    runInterval();
+    setInterval(runInterval, 500);
+  };
+
+  async getChatMessages (call: ServerUnaryCall<GetChatMessagesRequest, GetChatMessagesResponse>, callback: sendUnaryData<GetChatMessagesResponse>) {
+    console.log('getChatMessages', call.request.toObject());
+    const req = call.request as GetChatMessagesRequestEz;
+    const { chatId } = req;
+
+    const chat = await chatRepository.findChat(chatId);
+    if (!chat) {
+      callback(new Error('Chat not found'));
+    }
+    const messages = await chatRepository.findMessages(chatId);
+
+    const protoMessages = messages.map((message)=>{
+      return mongoMessageToProtoMessageEz(message);
+    });
+    
+    const res = new GetChatMessagesResponseEz(protoMessages);
+    callback(null, res);
+  };
+
+  async setChatTitle (call: ServerUnaryCall<SetChatTitleRequest, SetChatTitleResponse>, callback: sendUnaryData<SetChatTitleResponse>) {
+    console.log('setChatTitle', call.request.toObject());
+    const req = call.request as SetChatTitleRequestEz;
+    const { chatId, title } = req;
+
+    await chatRepository.updateChatTitle(chatId, title);
+
+    callback(null, new SetChatTitleResponseEz());
+  };
+
+  async addMessage (call: ServerUnaryCall<AddMessageRequest, AddMessageResponse>, callback: sendUnaryData<AddMessageResponse>) {
+    console.log('addMessage', call.request.toObject());
+    const req = call.request as AddMessageRequestEz;
+    const { chatId, text, sender } = req;
+
+    let newMessage = await chatRepository.addMessage(
+      chatId, text, protoMessageSenderToMongoMessageSender(sender)
+    );
+
+    const message = mongoMessageToProtoMessageEz(newMessage);
+    callback(null, new AddMessageResponseEz(message));
   };
 }

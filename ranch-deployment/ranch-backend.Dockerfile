@@ -19,7 +19,7 @@ COPY ./ranch-proto /ranch-proto
 
 # Install dependencies
 COPY ./ranch-backend/package*.json .
-RUN npm i --verbose --omit=dev --omit=optional
+RUN npm i --verbose --omit=optional
 COPY ./ranch-backend .
 
 # Run
