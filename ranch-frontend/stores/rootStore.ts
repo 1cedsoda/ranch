@@ -3,7 +3,7 @@ import { AlpacaPromiseClient, ChatClient, ChatPromiseClient } from "ranch-proto/
 import { AuthState, authSlice, initialAuthState } from "./auth"
 import { AlpacaStoreState, alpacaSlice, initialAlpacaState } from "./alpaca"
 import { useDispatch } from "react-redux"
-import { ChatStoreState, initialChatState } from "./chat"
+import { ChatStoreState, chatSlice, initialChatState } from "./chat"
 
 export type RootState = {
     alpaca: AlpacaStoreState,
@@ -32,7 +32,8 @@ export const createStore = () =>
     configureStore({
         reducer: {
             alpaca: alpacaSlice.reducer,
-            auth: authSlice.reducer
+            auth: authSlice.reducer,
+            chat: chatSlice.reducer,
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware({
             thunk: {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AddMessageResponseEz = exports.AddMessageRequestEz = exports.SetChatTitleResponseEz = exports.SetChatTitleRequestEz = exports.GetChatMessagesResponseEz = exports.GetChatMessagesRequestEz = exports.GetChatsResponseEz = exports.GetChatsRequestEz = exports.ChatObjectEz = exports.MessageEz = void 0;
+exports.AddMessageResponseEz = exports.AddMessageRequestEz = exports.SetChatTitleResponseEz = exports.SetChatTitleRequestEz = exports.GetChatMessagesResponseEz = exports.GetChatMessagesRequestEz = exports.GetChatsResponseEz = exports.GetChatsRequestEz = exports.CreateChatResponseEz = exports.CreateChatRequestEz = exports.ChatObjectEz = exports.MessageEz = void 0;
 const chat_pb_1 = require("../../gen/chat_pb");
 class MessageEz extends chat_pb_1.Message {
     constructor(id, chatId, sender, timestamp, text) {
@@ -61,6 +61,28 @@ Object.defineProperty(chat_pb_1.ChatObject.prototype, 'title', {
         title ? this.setTitle(title) : this.clearTitle();
     },
 });
+class CreateChatRequestEz extends chat_pb_1.CreateChatRequest {
+    constructor(userId) {
+        super();
+        this.userId = userId;
+    }
+}
+exports.CreateChatRequestEz = CreateChatRequestEz;
+Object.defineProperty(chat_pb_1.CreateChatRequest.prototype, 'userId', {
+    get() { return this.getUserid(); },
+    set(userId) { this.setUserid(userId); },
+});
+class CreateChatResponseEz extends chat_pb_1.CreateChatResponse {
+    constructor(chat) {
+        super();
+        this.chat = chat;
+    }
+}
+exports.CreateChatResponseEz = CreateChatResponseEz;
+Object.defineProperty(chat_pb_1.CreateChatResponse.prototype, 'chat', {
+    get() { return this.getChat(); },
+    set(chat) { this.setChat(chat); },
+});
 class GetChatsRequestEz extends chat_pb_1.GetChatsRequest {
     constructor(userId) {
         super();
@@ -119,18 +141,17 @@ Object.defineProperty(chat_pb_1.SetChatTitleRequest.prototype, 'chatId', {
 });
 Object.defineProperty(chat_pb_1.SetChatTitleRequest.prototype, 'title', {
     get() { return this.getTitle(); },
-    set(title) {
-        title ? this.setTitle(title) : this.clearTitle();
-    },
+    set(title) { this.setTitle(title); },
 });
 class SetChatTitleResponseEz extends chat_pb_1.SetChatTitleResponse {
 }
 exports.SetChatTitleResponseEz = SetChatTitleResponseEz;
 class AddMessageRequestEz extends chat_pb_1.AddMessageRequest {
-    constructor(chatId, message) {
+    constructor(chatId, text, sender) {
         super();
         this.chatId = chatId;
-        this.message = message;
+        this.text = text;
+        this.sender = chat_pb_1.MessageSender.USER;
     }
 }
 exports.AddMessageRequestEz = AddMessageRequestEz;
@@ -138,10 +159,22 @@ Object.defineProperty(chat_pb_1.AddMessageRequest.prototype, 'chatId', {
     get() { return this.getChatid(); },
     set(chatId) { this.setChatid(chatId); },
 });
-Object.defineProperty(chat_pb_1.AddMessageRequest.prototype, 'message', {
+Object.defineProperty(chat_pb_1.AddMessageRequest.prototype, 'text', {
+    get() { return this.getText(); },
+    set(text) { this.setText(text); },
+});
+Object.defineProperty(chat_pb_1.AddMessageRequest.prototype, 'sender', {
+    get() { return this.getSender(); },
+    set(sender) { this.setSender(sender); },
+});
+class AddMessageResponseEz extends chat_pb_1.AddMessageResponse {
+    constructor(message) {
+        super();
+        this.message = message;
+    }
+}
+exports.AddMessageResponseEz = AddMessageResponseEz;
+Object.defineProperty(chat_pb_1.AddMessageResponse.prototype, 'message', {
     get() { return this.getMessage(); },
     set(message) { this.setMessage(message); },
 });
-class AddMessageResponseEz extends chat_pb_1.AddMessageResponse {
-}
-exports.AddMessageResponseEz = AddMessageResponseEz;

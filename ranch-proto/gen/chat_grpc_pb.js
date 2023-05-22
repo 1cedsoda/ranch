@@ -27,6 +27,28 @@ function deserialize_AddMessageResponse(buffer_arg) {
   return chat_pb.AddMessageResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_CreateChatRequest(arg) {
+  if (!(arg instanceof chat_pb.CreateChatRequest)) {
+    throw new Error('Expected argument of type CreateChatRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_CreateChatRequest(buffer_arg) {
+  return chat_pb.CreateChatRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_CreateChatResponse(arg) {
+  if (!(arg instanceof chat_pb.CreateChatResponse)) {
+    throw new Error('Expected argument of type CreateChatResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_CreateChatResponse(buffer_arg) {
+  return chat_pb.CreateChatResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_GetChatMessagesRequest(arg) {
   if (!(arg instanceof chat_pb.GetChatMessagesRequest)) {
     throw new Error('Expected argument of type GetChatMessagesRequest');
@@ -95,6 +117,17 @@ function deserialize_SetChatTitleResponse(buffer_arg) {
 
 
 var ChatService = exports.ChatService = {
+  createChat: {
+    path: '/Chat/CreateChat',
+    requestStream: false,
+    responseStream: false,
+    requestType: chat_pb.CreateChatRequest,
+    responseType: chat_pb.CreateChatResponse,
+    requestSerialize: serialize_CreateChatRequest,
+    requestDeserialize: deserialize_CreateChatRequest,
+    responseSerialize: serialize_CreateChatResponse,
+    responseDeserialize: deserialize_CreateChatResponse,
+  },
   getChats: {
     path: '/Chat/GetChats',
     requestStream: false,

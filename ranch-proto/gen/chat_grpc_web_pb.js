@@ -78,6 +78,67 @@ proto.ChatPromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
+ *   !proto.CreateChatRequest,
+ *   !proto.CreateChatResponse>}
+ */
+const methodDescriptor_Chat_CreateChat = new grpc.web.MethodDescriptor(
+  '/Chat/CreateChat',
+  grpc.web.MethodType.UNARY,
+  proto.CreateChatRequest,
+  proto.CreateChatResponse,
+  /**
+   * @param {!proto.CreateChatRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.CreateChatResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.CreateChatRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.CreateChatResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.CreateChatResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.ChatClient.prototype.createChat =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/Chat/CreateChat',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_CreateChat,
+      callback);
+};
+
+
+/**
+ * @param {!proto.CreateChatRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.CreateChatResponse>}
+ *     Promise that resolves to the response
+ */
+proto.ChatPromiseClient.prototype.createChat =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/Chat/CreateChat',
+      request,
+      metadata || {},
+      methodDescriptor_Chat_CreateChat);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
  *   !proto.GetChatsRequest,
  *   !proto.GetChatsResponse>}
  */

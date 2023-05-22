@@ -3,6 +3,7 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
 service Chat {
+    rpc CreateChat (CreateChatRequest) returns (CreateChatResponse) {}
     rpc GetChats (GetChatsRequest) returns (GetChatsResponse) {}
     rpc StreamChats (GetChatsRequest) returns (stream GetChatsResponse) {}
     rpc GetChatMessages (GetChatMessagesRequest) returns (GetChatMessagesResponse) {}
@@ -30,6 +31,15 @@ message ChatObject {
     optional string title = 4;
 }
 
+// === CreateChat ===
+message CreateChatRequest {
+    string userId = 1;
+}
+
+message CreateChatResponse {
+    ChatObject chat = 1;
+}
+
 // === GetChats ===
 message GetChatsRequest {
     string userId = 1;
@@ -51,7 +61,7 @@ message GetChatMessagesResponse {
 // === SetChatTitle ===
 message SetChatTitleRequest {
     string chatId = 1;
-    optional string title = 2;
+    string title = 2;
 }
 
 message SetChatTitleResponse {
@@ -59,14 +69,14 @@ message SetChatTitleResponse {
 }
 
 // === AddMessage ===
-
 message AddMessageRequest {
     string chatId = 1;
-    Message message = 2;
+    string text = 2;
+    MessageSender sender = 3;
 }
 
 message AddMessageResponse {
-    
+    Message message = 1;
 }
 
 

@@ -1,13 +1,9 @@
-import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit'
-import { AddMessageRequestEz, AlpacaState, ChatObject, ChatObjectEz, GetChatMessagesRequestEz, GetChatsRequestEz, GetChatsResponseEz, GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseEz, Message, MessageEz, PromptRequest, PromptRequestEz, PromptResponse, PromptResponseEz, SetChatTitleRequestEz } from 'ranch-proto/dist/pb'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AddMessageRequestEz, ChatObjectEz, CreateChatRequestEz, GetChatMessagesRequestEz, GetChatsRequestEz, GetChatsResponseEz, MessageEz, MessageSender, SetChatTitleRequestEz } from 'ranch-proto/dist/pb'
 import { RootState, ThunkExtra } from './rootStore'
 import { ClientReadableStream } from 'grpc-web'
-import { init } from 'next/dist/compiled/@vercel/og/satori'
-
 
 // === STORE ===
-
-
 export interface ChatStoreState {
     chats: ChatObjectEz[],
     messages: MessageEz[]
@@ -36,18 +32,26 @@ export const chatSlice = createSlice({
     initialState: initialChatState,
     reducers: {
         setChat: (state: ChatStoreState, actions: { payload: SetChatPayload }) => {
+          console.log("setChat", actions.payload)
+          // merge based on chatId
+          
           return {
               ...state,
-              chats: [...state.chats, actions.payload]
+              chats: [
+                ...state.chats.filter((chat)=>chat.getId() != actions.payload.getId()),
+                actions.payload,
+              ]
           }
         },
         setChats: (state: ChatStoreState, actions: { payload: SetChatsPayload }) => {
+          console.log("setChats", actions.payload)
           return {
             ...state,
-            chats: [...state.chats, ...actions.payload]
+            chats: actions.payload,
           }
         },
         setMessage: (state: ChatStoreState, actions: { payload: SetMessagePaylaod }) => {
+          console.log("setMessage", actions.payload)
           const newMessages: MessageEz[] = [actions.payload];
           const newMessagesIds = newMessages.map(message => message.id);
           
@@ -60,6 +64,7 @@ export const chatSlice = createSlice({
           }
         },
         setMessages: (state: ChatStoreState, actions: { payload: SetMessagesPaylaod }) => {
+          console.log("setMessages", actions.payload)
           const newMessages: MessageEz[] = actions.payload;
           const newMessagesIds = newMessages.map(message => message.id);
           
@@ -72,6 +77,7 @@ export const chatSlice = createSlice({
           }
         },
         setChatTitleReducer: (state: ChatStoreState, actions: { payload: SetChatTitlePayload }) => {
+          console.log("setChatTitleReducer", actions.payload)
           const { chatId, title } = actions.payload;
           const chat = state.chats.find(chat => chat.id === chatId);
           if (chat) {
@@ -88,6 +94,7 @@ export const chatSlice = createSlice({
           }
         },
         initializeForUser: (state: ChatStoreState, actions: { payload: InitializeForUserPayload }) => {
+          console.log("initializeForUser", actions.payload)
           return {
             ...state,
             chats: [],
@@ -100,19 +107,41 @@ export const chatSlice = createSlice({
 export const { setChat, setChats, setMessage, setMessages, setChatTitleReducer, initializeForUser } = chatSlice.actions
 
 // === ACTIONS ===
-export const getChats = createAsyncThunk<void, GetChatsRequestEz, ThunkExtra>(
+export type CreateChatParams = {
+  userId: string,
+}
+export const createChat = createAsyncThunk<void, CreateChatParams, ThunkExtra>(
+  "chat/createChat",
+  async (params, { dispatch, extra: { chatClient } }) => {
+    console.log("chat/createChat", params)
+    const req = new CreateChatRequestEz(params.userId);
+    const res = await chatClient.createChat(req);
+    const chat = res.getChat() as ChatObjectEz;
+    dispatch(setChat(chat));
+  }
+);
+
+export type GetChatsParams = {
+  userId: string,
+}
+export const getChats = createAsyncThunk<void, GetChatsParams, ThunkExtra>(
   "chat/getChats",
-  async (request: GetChatsRequestEz, { dispatch, rejectWithValue, extra: { chatClient } }) => {
-    const protoResponse = await chatClient.getChats(request);
-    const chats = protoResponse.getChatsList() as ChatObjectEz[];
+  async (params, { dispatch, extra: { chatClient } }) => {
+    console.log("chat/getChats", params)
+    const req = new GetChatsRequestEz(params.userId);
+    const res = await chatClient.getChats(req);
+    const chats = res.getChatsList() as ChatObjectEz[];
     dispatch(setChats(chats));
   }
 );
 
-export const streamChats = createAsyncThunk<void, GetChatsRequestEz, ThunkExtra>(
+export type StreamChatsParams = GetChatsParams
+export const streamChats = createAsyncThunk<void, StreamChatsParams, ThunkExtra>(
   "chat/streamChats",
-  async (request: GetChatsRequestEz, { dispatch, rejectWithValue, extra: { chatClient } }) => {
-    const stream = chatClient.streamChats(request) as ClientReadableStream<GetChatsResponseEz>;
+  async (params, { dispatch, rejectWithValue, extra: { chatClient } }) => {
+    console.log("chat/streamChats", params)
+    const req = new GetChatsRequestEz(params.userId);
+    const stream = chatClient.streamChats(req) as ClientReadableStream<GetChatsResponseEz>;
     
     stream.on("data", (res: GetChatsResponseEz) => {
       const chats = res.chats as ChatObjectEz[];
@@ -125,31 +154,49 @@ export const streamChats = createAsyncThunk<void, GetChatsRequestEz, ThunkExtra>
   }
 );
 
-export const getChatMessages = createAsyncThunk<void, GetChatMessagesRequestEz, ThunkExtra>(
+export type GetChatMessagesParams = {
+  chatId: string,
+}
+export const getChatMessages = createAsyncThunk<void, GetChatMessagesParams, ThunkExtra>(
   "chat/getChatMessages",
-  async (request: GetChatMessagesRequestEz, { dispatch, rejectWithValue, extra: { chatClient } }) => {
-    const protoResponse = await chatClient.getChatMessages(request);
-    const messages = protoResponse.getMessagesList() as MessageEz[];
+  async (params, { dispatch, extra: { chatClient } }) => {
+    console.log("chat/getChatMessages", params)
+    const req = new GetChatMessagesRequestEz(params.chatId);
+    const res = await chatClient.getChatMessages(req);
+    const messages = res.getMessagesList() as MessageEz[];
     dispatch(setMessages(messages));
   }
 );
 
-export const setChatTitle = createAsyncThunk<void, SetChatTitleRequestEz, ThunkExtra>(
+export type SetChatTitleParams = {
+  chatId: string,
+  title: string
+}
+export const setChatTitle = createAsyncThunk<void, SetChatTitleParams, ThunkExtra>(
   "chat/setChatTitle",
-  async (request: SetChatTitleRequestEz, { dispatch, rejectWithValue, extra: { chatClient } }) => {
-    chatClient.setChatTitle(request);
+  async (params, { dispatch, extra: { chatClient } }) => {
+    console.log("chat/setChatTitle", params)
+    const req = new SetChatTitleRequestEz(params.chatId, params.title);
+    chatClient.setChatTitle(req);
     dispatch(setChatTitleReducer({
-      chatId: request.chatId,
-      title: request.title ?? ''
+      chatId: req.chatId,
+      title: req.title ?? ''
     }));
   }
 );
 
-export const addMessage = createAsyncThunk<void, AddMessageRequestEz, ThunkExtra>(
+export type AddMessageParams = {
+  chatId: string,
+  text: string
+  sender: MessageSender
+}
+export const addMessage = createAsyncThunk<void, AddMessageParams, ThunkExtra>(
   "chat/addMessage",
-  async (request: AddMessageRequestEz, { dispatch, rejectWithValue, extra: { chatClient } }) => {
-    chatClient.addMessage(request);
-    const message = request.message as MessageEz;
+  async (params, { dispatch, extra: { chatClient } }) => {
+    console.log("chat/addMessage", params)
+    const req = new AddMessageRequestEz(params.chatId, params.text, params.sender);
+    const res = await chatClient.addMessage(req);
+    const message = res.getMessage() as MessageEz;
     dispatch(setMessage(message));
   }
 );

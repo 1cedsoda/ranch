@@ -22,8 +22,5 @@ COPY ./ranch-backend/package*.json .
 RUN npm i --verbose --omit=optional
 COPY ./ranch-backend .
 
-# Generate prisma client
-RUN npx prisma generate
-
 # Run
 CMD ["npm", "run", "start"]

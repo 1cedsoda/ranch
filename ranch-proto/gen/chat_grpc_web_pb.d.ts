@@ -8,6 +8,13 @@ export class ChatClient {
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
 
+  createChat(
+    request: chat_pb.CreateChatRequest,
+    metadata: grpcWeb.Metadata | undefined,
+    callback: (err: grpcWeb.RpcError,
+               response: chat_pb.CreateChatResponse) => void
+  ): grpcWeb.ClientReadableStream<chat_pb.CreateChatResponse>;
+
   getChats(
     request: chat_pb.GetChatsRequest,
     metadata: grpcWeb.Metadata | undefined,
@@ -47,6 +54,11 @@ export class ChatPromiseClient {
   constructor (hostname: string,
                credentials?: null | { [index: string]: string; },
                options?: null | { [index: string]: any; });
+
+  createChat(
+    request: chat_pb.CreateChatRequest,
+    metadata?: grpcWeb.Metadata
+  ): Promise<chat_pb.CreateChatResponse>;
 
   getChats(
     request: chat_pb.GetChatsRequest,

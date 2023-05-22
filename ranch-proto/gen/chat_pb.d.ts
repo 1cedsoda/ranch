@@ -77,6 +77,49 @@ export namespace ChatObject {
     }
 }
 
+export class CreateChatRequest extends jspb.Message { 
+    getUserid(): string;
+    setUserid(value: string): CreateChatRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateChatRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateChatRequest): CreateChatRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateChatRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateChatRequest;
+    static deserializeBinaryFromReader(message: CreateChatRequest, reader: jspb.BinaryReader): CreateChatRequest;
+}
+
+export namespace CreateChatRequest {
+    export type AsObject = {
+        userid: string,
+    }
+}
+
+export class CreateChatResponse extends jspb.Message { 
+
+    hasChat(): boolean;
+    clearChat(): void;
+    getChat(): ChatObject | undefined;
+    setChat(value?: ChatObject): CreateChatResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateChatResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateChatResponse): CreateChatResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateChatResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateChatResponse;
+    static deserializeBinaryFromReader(message: CreateChatResponse, reader: jspb.BinaryReader): CreateChatResponse;
+}
+
+export namespace CreateChatResponse {
+    export type AsObject = {
+        chat?: ChatObject.AsObject,
+    }
+}
+
 export class GetChatsRequest extends jspb.Message { 
     getUserid(): string;
     setUserid(value: string): GetChatsRequest;
@@ -164,10 +207,7 @@ export namespace GetChatMessagesResponse {
 export class SetChatTitleRequest extends jspb.Message { 
     getChatid(): string;
     setChatid(value: string): SetChatTitleRequest;
-
-    hasTitle(): boolean;
-    clearTitle(): void;
-    getTitle(): string | undefined;
+    getTitle(): string;
     setTitle(value: string): SetChatTitleRequest;
 
     serializeBinary(): Uint8Array;
@@ -183,7 +223,7 @@ export class SetChatTitleRequest extends jspb.Message {
 export namespace SetChatTitleRequest {
     export type AsObject = {
         chatid: string,
-        title?: string,
+        title: string,
     }
 }
 
@@ -207,11 +247,10 @@ export namespace SetChatTitleResponse {
 export class AddMessageRequest extends jspb.Message { 
     getChatid(): string;
     setChatid(value: string): AddMessageRequest;
-
-    hasMessage(): boolean;
-    clearMessage(): void;
-    getMessage(): Message | undefined;
-    setMessage(value?: Message): AddMessageRequest;
+    getText(): string;
+    setText(value: string): AddMessageRequest;
+    getSender(): MessageSender;
+    setSender(value: MessageSender): AddMessageRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): AddMessageRequest.AsObject;
@@ -226,11 +265,17 @@ export class AddMessageRequest extends jspb.Message {
 export namespace AddMessageRequest {
     export type AsObject = {
         chatid: string,
-        message?: Message.AsObject,
+        text: string,
+        sender: MessageSender,
     }
 }
 
 export class AddMessageResponse extends jspb.Message { 
+
+    hasMessage(): boolean;
+    clearMessage(): void;
+    getMessage(): Message | undefined;
+    setMessage(value?: Message): AddMessageResponse;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): AddMessageResponse.AsObject;
@@ -244,6 +289,7 @@ export class AddMessageResponse extends jspb.Message {
 
 export namespace AddMessageResponse {
     export type AsObject = {
+        message?: Message.AsObject,
     }
 }
 
