@@ -18,3 +18,5 @@ __exportStar(require("./ez/alpaca_pb"), exports);
 __exportStar(require("../gen/alpaca_pb"), exports);
 __exportStar(require("./ez/chat_pb"), exports);
 __exportStar(require("../gen/chat_pb"), exports);
+__exportStar(require("./ez/auth_pb"), exports);
+__exportStar(require("../gen/auth_pb"), exports);
