@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getState, selectAlpacaStore, streamPrompt, streamState } from '../stores/alpaca';
+import { AlpacaStoreState, getState, selectAlpacaStore, streamPrompt, streamState } from '../stores/alpaca';
 import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import styles from '../styles/main.module.scss';
 import Logo from './logo';
 import { Stream } from 'stream';
-import { useRootDispatch } from '../stores/rootStore';
+import { RootThunkDispatch, useRootDispatch } from '../stores/rootStore';
 
 var letter = '';
 
@@ -13,10 +13,7 @@ interface componentProps {
     handleLogin : ((value: boolean) => void);
 }
 
-// const dispatch = useRootDispatch();
-// const alpacaStore = useSelector(selectAlpacaStore);
-
-function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element, handleLogin : ((value: boolean) => void))
+function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messages : JSX.Element, handleLogin : ((value: boolean) => void), dispatch : RootThunkDispatch, alpacaStore : AlpacaStoreState)
 {
     const message = (document.getElementById('messageArea') as HTMLTextAreaElement).value;
     if (message == '') return;
@@ -62,10 +59,18 @@ function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messag
         </>
     );
     (document.getElementById('messageArea') as HTMLTextAreaElement).value = '';
-    // dispatch(streamPrompt({
-    //     id: "test",
-    //     prompt: message
-    //   }));
+    if (letter != '')
+    {
+        (document.getElementById('sendButton') as HTMLImageElement).style.display = 'none';
+        dispatch(streamPrompt({
+            id: "message",
+            prompt: message
+      }));
+        // const interval = setInterval(() => {
+        //     console.log(alpacaStore);
+        // }, 200);
+    }
+
 }
 
 function showSidebar()
@@ -80,6 +85,8 @@ function showSidebar()
 
 export default function Chatbox(props : componentProps)
 {
+    const dispatch = useRootDispatch();
+    const alpacaStore = useSelector(selectAlpacaStore);
     
     const [messages, setMessages] = useState(
         <div className={classNames(styles.messageDiv)}>
@@ -87,11 +94,12 @@ export default function Chatbox(props : componentProps)
             <span className={classNames(styles.spanMessage)}>What is your alias?</span>
         </div>
     )
+
     useEffect(()=>{
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Enter' && document.activeElement?.id == 'messageArea')
             {
-                sendMessage(setMessages, messages, props.handleLogin);
+                sendMessage(setMessages, messages, props.handleLogin, dispatch, alpacaStore);
             }
         });
         const chatbox = document.getElementById("chatbox") as HTMLDivElement;
@@ -106,7 +114,7 @@ export default function Chatbox(props : componentProps)
             </div>
             <div className={classNames(styles.messagebox)} id="messagebox">
                 <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
-                <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin)}/>
+                <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin, dispatch, alpacaStore)} id="sendButton"/>
             </div>
         </div>
     )
