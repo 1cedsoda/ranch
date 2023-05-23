@@ -24,9 +24,12 @@ function sendMessage(setMessages : Dispatch<SetStateAction<JSX.Element>>, messag
     if (words.length == 1 && letter == '')
     {
         handleLogin(true);
-        (document.getElementById('sidebar') as HTMLDivElement).style.width = '15rem';
         letter = message.charAt(0).toUpperCase();
-        showSidebar();
+        if(window.innerWidth >= 850)
+        {
+            (document.getElementById('sidebar') as HTMLDivElement).style.width = '15rem';
+            showSidebar();
+        }
         setMessages(
             <>
             {messages}
@@ -91,6 +94,8 @@ export default function Chatbox(props : componentProps)
                 sendMessage(setMessages, messages, props.handleLogin);
             }
         });
+        const chatbox = document.getElementById("chatbox") as HTMLDivElement;
+        chatbox.style.maxHeight = chatbox.offsetHeight + 'px';
     }, [])
 
     return (
@@ -99,7 +104,7 @@ export default function Chatbox(props : componentProps)
             <div className={classNames(styles.chatbox)} id="chatbox">
                 {messages}
             </div>
-            <div className={classNames(styles.messagebox)}>
+            <div className={classNames(styles.messagebox)} id="messagebox">
                 <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
                 <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin)}/>
             </div>

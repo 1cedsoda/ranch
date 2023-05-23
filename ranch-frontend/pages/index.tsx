@@ -28,14 +28,42 @@ const landingPage: NextPage = () => {
         setLogin(value);
     };
     const handleResize = useCallback(() => {
-        const sidebar = document.getElementById('sidebar') as HTMLDivElement;
-        if (window.innerWidth < 850 && login)
-        {
-            sidebar.style.width = '0rem';
+        try {
+            const sidebar = document.getElementById('sidebar') as HTMLDivElement;
+            if (window.innerWidth < 850 && login)
+            {
+                sidebar.style.width = '0rem';
+            }
+            else if(login)
+            {
+                // (document.getElementById('sidebar') as HTMLDivElement).style.width = '15rem';
+                sidebar.style.width = '15rem';
+                if (sidebar.style.transform != 'translateX(0)')
+                {
+                    sidebar.style.transform = 'translateX(0)';
+                }
+            }
+            // const chatbox = document.getElementById('chatbox') as HTMLDivElement;
+            // const messagebox = document.getElementById('messagebox') as HTMLDivElement;
+            // const chatboxRect = chatbox.getBoundingClientRect();
+            // const messageboxRect = messagebox.getBoundingClientRect();
+
+            // if (chatboxRect.bottom + 10 > messageboxRect.top)
+            // {
+            //     chatbox.style.maxHeight = (messageboxRect.top - 8 - chatboxRect.top) + 'px';
+            //     chatbox.style.height = (messageboxRect.top - 8 - chatboxRect.top) + 'px';
+            //     // chatbox.style.maxHeight = (chatbox.style.height - 1) + 'rem';
+            //     // chatbox.style.height = '0rem';
+            // }
+            // console.log(chatboxRect.bottom, messageboxRect.top);
+            // if (chatboxRect.bottom + 5 >= messageboxRect.top)
+            // {
+            //     chatbox.style.maxHeight = (chatbox.style.height - 1) + 'rem';
+            //     chatbox.style.height = '0rem';
+            // }
         }
-        else if(login)
-        {
-            sidebar.style.width = '15rem';
+        catch (error) {
+            console.log(error);
         }
     }, [login]);
 
