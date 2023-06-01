@@ -1,71 +1,117 @@
-import { ServerReadableStream, ServerUnaryCall, ServerWritableStream, handleServerStreamingCall, handleUnaryCall, loadPackageDefinition, sendUnaryData } from '@grpc/grpc-js'
-import { IAlpacaServer } from 'ranch-proto/dist/grpc'
-import { GetStateRequest, GetStateRequestEz, GetStateResponse, GetStateResponseEz, PromptRequest, PromptRequestEz, PromptResponse, PromptResponseEz } from 'ranch-proto/dist/pb'
-import { alpacaRunnerManager } from '../alpaca/runner_manager'
-import { alpacaStateToProto } from '../alpaca/runner_state'
-import { AlpacaRunner } from '../alpaca/runner'
-import { UntypedHandleCall } from '@grpc/grpc-js'
+import {
+  ServerReadableStream,
+  ServerUnaryCall,
+  ServerWritableStream,
+  handleServerStreamingCall,
+  handleUnaryCall,
+  loadPackageDefinition,
+  sendUnaryData,
+} from "@grpc/grpc-js";
+import { IAlpacaServer } from "ranch-proto/dist/grpc";
+import {
+  GetStateRequest,
+  GetStateRequestEz,
+  GetStateResponse,
+  GetStateResponseEz,
+  PromptRequest,
+  PromptRequestEz,
+  PromptResponse,
+  PromptResponseEz,
+} from "ranch-proto/dist/pb";
+import { alpacaRunnerManager } from "../alpaca/runner_manager";
+import { alpacaStateToProto } from "../alpaca/runner_state";
+import { AlpacaRunner } from "../alpaca/runner";
+import { UntypedHandleCall } from "@grpc/grpc-js";
+import { authRepository } from "../repository/auth";
 export class AlpacaServer implements IAlpacaServer {
-  [name: string]: UntypedHandleCall
-  getState (call: ServerUnaryCall<GetStateRequest, GetStateResponse>, callback: sendUnaryData<GetStateResponse>) {
-    const req = call.request as GetStateRequestEz
-    const { id } = req
-    console.log('AlpacaServer.getState', req.toObject())
+  [name: string]: UntypedHandleCall;
 
-    let runner = alpacaRunnerManager.getRunner(id)
+  async getState(
+    call: ServerUnaryCall<GetStateRequest, GetStateResponse>,
+    callback: sendUnaryData<GetStateResponse>
+  ) {
+    const req = call.request as GetStateRequestEz;
+
+    // protect call
+    await authRepository.protectGrpcUnary(call, callback);
+
+    // get auth token
+    const { id } = req;
+    console.log("AlpacaServer.getState", req.toObject());
+
+    let runner = alpacaRunnerManager.getRunner(id);
 
     if (runner == null) {
-      runner = alpacaRunnerManager.createRunner(id)
+      runner = alpacaRunnerManager.createRunner(id);
     }
 
-    callback(null, runnerToStateResponse(id, runner))
+    callback(null, runnerToStateResponse(id, runner));
   }
 
-  streamState (call: ServerWritableStream<GetStateRequest, GetStateResponse>) {
-    const req = call.request as GetStateRequestEz
-    const { id } = req
-    console.log('AlpacaServer.streamState', req.toObject())
+  async streamState(
+    call: ServerWritableStream<GetStateRequest, GetStateResponse>
+  ) {
+    const req = call.request as GetStateRequestEz;
 
-    let runner = alpacaRunnerManager.getRunner(id)
+    // protect call
+    await authRepository.protectGrpcStream(call);
+
+    const { id } = req;
+    console.log("AlpacaServer.streamState", req.toObject());
+
+    let runner = alpacaRunnerManager.getRunner(id);
 
     if (runner == null) {
-      runner = alpacaRunnerManager.createRunner(id)
+      runner = alpacaRunnerManager.createRunner(id);
     }
 
-    let res = runnerToStateResponse(id, runner)
-    call.write(res)
+    let res = runnerToStateResponse(id, runner);
+    call.write(res);
 
     runner.onStateChange((state) => {
-      let runner = alpacaRunnerManager.getRunner(id)
+      let runner = alpacaRunnerManager.getRunner(id);
       if (runner == null) {
-        return call.end()
+        return call.end();
       }
-      res = runnerToStateResponse(id, runner)
-      call.write(res)
-    })
+      res = runnerToStateResponse(id, runner);
+      call.write(res);
+    });
   }
 
-  prompt (call: ServerWritableStream<PromptRequest, PromptResponse>) {
-    const req = call.request as PromptRequestEz
-    const { id } = req
-    console.log('AlpacaServer.prompt', req.toObject())
+  async prompt(call: ServerWritableStream<PromptRequest, PromptResponse>) {
+    const req = call.request as PromptRequestEz;
 
-    const prompt = req.prompt
-    const runner = alpacaRunnerManager.getRunner(id)
+    // protect call
+    await authRepository.protectGrpcStream(call);
+
+    const { id } = req;
+    console.log("AlpacaServer.prompt", req.toObject());
+
+    const prompt = req.prompt;
+    const runner = alpacaRunnerManager.getRunner(id);
 
     if (runner == null) {
-      return call.end()
+      return call.end();
     }
 
-    runner.prompt(prompt, (text) => {
-      const res = new PromptResponseEz(text)
-      call.write(res)
-    }, () => {
-      call.end()
-    }, (error) => {
-      call.end()
-    })
+    runner.prompt(
+      prompt,
+      (text) => {
+        const res = new PromptResponseEz(text);
+        call.write(res);
+      },
+      () => {
+        call.end();
+      },
+      (error) => {
+        call.end();
+      }
+    );
   }
 }
 
-const runnerToStateResponse = (id: string, runner: AlpacaRunner): GetStateResponse => new GetStateResponseEz(id, alpacaStateToProto(runner.state))
+const runnerToStateResponse = (
+  id: string,
+  runner: AlpacaRunner
+): GetStateResponse =>
+  new GetStateResponseEz(id, alpacaStateToProto(runner.state));
