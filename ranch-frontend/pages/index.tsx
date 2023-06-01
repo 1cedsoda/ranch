@@ -43,24 +43,6 @@ const landingPage: NextPage = () => {
                     sidebar.style.transform = 'translateX(0)';
                 }
             }
-            // const chatbox = document.getElementById('chatbox') as HTMLDivElement;
-            // const messagebox = document.getElementById('messagebox') as HTMLDivElement;
-            // const chatboxRect = chatbox.getBoundingClientRect();
-            // const messageboxRect = messagebox.getBoundingClientRect();
-
-            // if (chatboxRect.bottom + 10 > messageboxRect.top)
-            // {
-            //     chatbox.style.maxHeight = (messageboxRect.top - 8 - chatboxRect.top) + 'px';
-            //     chatbox.style.height = (messageboxRect.top - 8 - chatboxRect.top) + 'px';
-            //     // chatbox.style.maxHeight = (chatbox.style.height - 1) + 'rem';
-            //     // chatbox.style.height = '0rem';
-            // }
-            // console.log(chatboxRect.bottom, messageboxRect.top);
-            // if (chatboxRect.bottom + 5 >= messageboxRect.top)
-            // {
-            //     chatbox.style.maxHeight = (chatbox.style.height - 1) + 'rem';
-            //     chatbox.style.height = '0rem';
-            // }
         }
         catch (error) {
             console.log(error);
@@ -73,6 +55,18 @@ const landingPage: NextPage = () => {
             window.removeEventListener('resize', handleResize);
           };
     }, [handleResize]);
+
+    useEffect(() => {
+        const jsonToken = localStorage.getItem('ranch_token');
+        if (jsonToken)
+        {
+            //TODO check if token is valid
+        }
+        else
+        {
+            window.location.href = './login';
+        }
+    }, []);
 
 
     const [pageStyle, setPageStyle] = useState(classNames(styles.landingPage));

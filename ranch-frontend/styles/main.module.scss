@@ -69,10 +69,10 @@ $sidebar-color: #242424;
 }
 
 .logoBar {
-    margin-top: 0.25rem;
+    padding-top: 0.25rem;
     display: flex;
     align-items: center;
-    padding-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
     justify-content: center;
     width: 100%;
 }
@@ -155,6 +155,7 @@ $sidebar-color: #242424;
     overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
+    // height: 100%;
     // overflow-x: inherit;
 }
 
@@ -162,8 +163,8 @@ $sidebar-color: #242424;
     background-color: #ffffff;
     height: 2rem;
     margin: 0;
-    margin-top: 0.5rem;
-    margin-bottom: 2rem;
+    // padding-top: 0.5rem;
+    // padding-bottom: 2rem;
     border-radius: 0.5rem;
     overflow: hidden;
     display: grid;
@@ -172,6 +173,13 @@ $sidebar-color: #242424;
     width: 100%;
     // position: absolute;
 
+}
+
+.outerMessagebox {
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+    width: 100%;
+    // height: 100%;
 }
 
 .textinput {
@@ -209,7 +217,8 @@ $sidebar-color: #242424;
     padding-left: 1rem;
     padding-right: 3rem;
     // width: auto;
-    width: 90%;
+    // width: 90%;
+    // height: 100%;
     // overflow: hidden;
     // padding: 1rem;
 }
@@ -238,8 +247,9 @@ $sidebar-color: #242424;
 .chatboxComponent {
     justify-items: center;
     width: 90%;
+    height: 100vh;
     display: grid;
-    grid-template-rows: max-content 1fr max-content;
+    grid-template-rows: max-content minmax(0, 1fr) max-content;
 }
 
 .chatHistoryInput {

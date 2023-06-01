@@ -102,19 +102,21 @@ export default function Chatbox(props : componentProps)
                 sendMessage(setMessages, messages, props.handleLogin, dispatch, alpacaStore);
             }
         });
-        const chatbox = document.getElementById("chatbox") as HTMLDivElement;
-        chatbox.style.maxHeight = chatbox.offsetHeight + 'px';
+        // const chatbox = document.getElementById("chatbox") as HTMLDivElement;
+        // chatbox.style.maxHeight = chatbox.offsetHeight + 'px';
     }, [])
 
     return (
-        <div className={classNames(styles.chatboxComponent)}>
-            <Logo className={classNames(styles.logoBar)} h1Classname={classNames(styles.h1MainPage)} logoClassname={classNames(styles.logoMainPage)}/>
+        <div className={classNames(styles.chatboxComponent)} id="chatboxComponent">
+            <Logo className={classNames(styles.logoBar)} h1Classname={classNames(styles.h1MainPage)} logoClassname={classNames(styles.logoMainPage)} id="logoBar"/>
             <div className={classNames(styles.chatbox)} id="chatbox">
                 {messages}
             </div>
-            <div className={classNames(styles.messagebox)} id="messagebox">
-                <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
-                <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin, dispatch, alpacaStore)} id="sendButton"/>
+            <div className={classNames(styles.outerMessagebox)}>
+                <div className={classNames(styles.messagebox)} id="messagebox">
+                    <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
+                    <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage(setMessages, messages, props.handleLogin, dispatch, alpacaStore)} id="sendButton"/>
+                </div>
             </div>
         </div>
     )
