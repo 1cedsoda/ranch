@@ -104,6 +104,16 @@ export const { loginPending, loginSuccess, loginFailure, logoutReducer } =
 // === ACTIONS ===
 export const selectAuthStore = (state: RootState) => state.auth;
 
+export const selectGrpcAuthMetadata = createSelector(
+  selectAuthStore,
+  (auth) => {
+    if (!auth.token) {
+      return undefined;
+    }
+    return { token: auth.token };
+  }
+);
+
 export type LoginParams = {
   username: string;
   password: string;
