@@ -164,10 +164,11 @@ export type GetChatsParams = {
 };
 export const getChats = createAsyncThunk<void, GetChatsParams, ThunkExtra>(
   "chat/getChats",
-  async (params, { dispatch, extra: { chatClient } }) => {
+  async (params, { getState, dispatch, extra: { chatClient } }) => {
     console.log("chat/getChats", params);
     const req = new GetChatsRequestEz(params.userId);
-    const res = await chatClient.getChats(req);
+    const metadata = selectGrpcAuthMetadata(getState() as RootState);
+    const res = await chatClient.getChats(req, metadata);
     const chats = res.getChatsList() as ChatObjectEz[];
     dispatch(setChats(chats));
   }
