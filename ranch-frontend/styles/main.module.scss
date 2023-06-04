@@ -92,10 +92,10 @@ $sidebar-color: #242424;
 .sidebar {
     height: 100vh;
     // min-width: 15rem;
-    width: 0rem;
+    width: 15rem;
     // background-color: #d5d5d5;
     background-color: $sidebar-color;
-    transform: translateX(-100%);
+    // transform: translateX(-100%);
     // display: none;
     // display: flex;
     

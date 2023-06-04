@@ -10,6 +10,9 @@ import { Stream } from 'stream';
 import { useRootDispatch } from '../stores/rootStore';
 import { createGlobalStyle } from 'styled-components';
 import styles from '../styles/login.module.scss';
+import { useForm } from 'react-hook-form';
+import { login, logout, selectAuthStore } from '../stores/auth';
+import { useRouter } from 'next/router';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
@@ -109,58 +112,80 @@ function signUp_switch() {
     container.className = className;
 }
 
-function signIn(){
-    const form = document.getElementById('sign_in_form') as HTMLFormElement;
-    const email_or_username = (form.elements.namedItem('email_or_username') as HTMLInputElement).value;
-    const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-    const queryParams = `email_or_username=${encodeURIComponent(email_or_username)}&password=${encodeURIComponent(password)}`;
-    //TODO: put request to put the user information in the database and get the user token and store it in the local storage
-}
-
-function signUp(){
-    const form = document.getElementById('sign_up_form') as HTMLFormElement;
-    const username = (form.elements.namedItem('username') as HTMLInputElement).value;
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
-    const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-    const queryParams = `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-    //TODO: get request to get the user token and store it in the local storage
-}
-
 export const Page: NextPage = () => {
+    const router = useRouter();
+    const dispatch = useRootDispatch();
+    const authStore = useSelector(selectAuthStore);
+    const handleLogin = useCallback((usernameValue : string, passwordValue : string) => {
+        dispatch(login({
+          username: usernameValue,
+          password: passwordValue,
+        }))
+      }, [])
+    const { register: registerSignup, handleSubmit: handleSubmitSignup} = useForm({ shouldUseNativeValidation: true });
+    const { register: registerSignIn, handleSubmit: handleSubmitSignIn} = useForm({ shouldUseNativeValidation: true });
+    const signUpSubmit = async (data : any) => {
+        handleLogin(data.username, data.password);
+      };
+    const signInSubmit = async (data : any) => {
+        handleLogin(data.email_or_username, data.password);
+    }; 
+
+    useEffect(() => {
+        if (authStore.userId != undefined)
+        {
+            localStorage.setItem('ranch_token', authStore.token as string);
+            localStorage.setItem('ranch_username', authStore.username as string);
+            router.push('./');
+        }
+    }, [authStore]);
+
+    const hasLetter = (value : string) => {if(!/[A-Za-z]/.test(value)) return 'Letter required!'};
+    const hasNumber = (value : string) => {if(!/[0-9]/.test(value)) return 'Number required!'}; 
+    const hasSpecialChar = (value : string) => {if(!/[!@#$%^&*]/.test(value)) return 'Special character required!'};
+
     return (
         <div>
             <GlobalStyle />
         <div className={styles.container} id="container">
         <div className={classNames(styles.form_container, styles.sign_up_container)}>
-            <form id="sign_up_form">
+            <form id="sign_up_form" onSubmit={handleSubmitSignup(signUpSubmit)}>
                 <div className={styles.container_div}>
                     <div>
                         <h1>Sign up</h1>
                     </div>
                     <div className={styles.innerContent}>
-                        <input type="text" placeholder="Username" name='username'/>
-                        <input type="email" placeholder="Email" name='email'/>
-                        <input type="password" placeholder="Password" name='username'/>
+                        <input type="text" placeholder="Username" {...registerSignup("username", {required: "Please enter your username!"})}/>
+                        <input type="email" placeholder="Email" {...registerSignup("email", {required: "Please enter your email!"})}/>
+                        <input type="password" placeholder="Password" {...registerSignup("password", {required: "Please enter your password!",minLength: { value: 8, message: 'The password must be at least 8 characters long!' }, maxLength: {value: 40, message:'The password must be less than or equal to 40 characters!'}, validate: {
+                            hasLetter,
+                            hasNumber,
+                            hasSpecialChar
+                        }})}/>
                     </div>
                     <div>
-                        <button onClick={signUp}>Sign Up</button>
+                        <button type='submit'>Sign Up</button>
                     </div>
                 </div>
             </form>
         </div>
         <div className={classNames(styles.form_container, styles.sign_in_container)}>
-            <form id="sign_in_form">
+            <form id="sign_in_form" onSubmit={handleSubmitSignIn(signInSubmit)}>
                 <div className={styles.container_div}>
                     <div>
                         <h1>Sign in</h1>
                     </div>
                     <div className={styles.innerContent}>
-                        <input type="text" placeholder="Email or Username" name='email_or_username'/>
-                        <input type="password" placeholder="Password" name='password'/>
+                        <input type="text" placeholder="Email or Username" {...registerSignIn("email_or_username", {required: "Please enter your email or username!"})}/>
+                        <input type="password" placeholder="Password" {...registerSignIn("password", {required: "Please enter your password!", minLength: { value: 8, message: 'The password must be at least 8 characters long!' }, maxLength: {value: 40, message:'The password must be less than or equal to 40 characters!'}, validate: {
+                            hasLetter,
+                            hasNumber,
+                            hasSpecialChar
+                        }})}/>
                         <a href="#">Forgot your password?</a>
                     </div>
                     <div>
-                        <button onClick={signIn}>Sign In</button>
+                        <button type='submit'>Sign In</button>
                     </div>
                 </div>
             </form>

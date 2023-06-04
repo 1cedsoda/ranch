@@ -9,13 +9,15 @@ import Chatbox from '../components/chatbox';
 import Sidebar from '../components/sidebar';
 import { Stream } from 'stream';
 import { useRootDispatch } from '../stores/rootStore';
+import { useRouter } from 'next/router';
 
-function changeToMainPage(setPageStyle : Dispatch<SetStateAction<string>>, setContent : Dispatch<SetStateAction<JSX.Element>>, handleLoginChanged : (value: boolean) => void)
+function changeToMainPage(setPageStyle : Dispatch<SetStateAction<string>>, setContent : Dispatch<SetStateAction<JSX.Element>>, setChatPage : Dispatch<SetStateAction<boolean>>)
 {
+    setChatPage(true);
     setContent(
         <>
             <Sidebar/>
-            <Chatbox handleLogin={handleLoginChanged}/>
+            <Chatbox />
         </>
     );
     setPageStyle(classNames(styles.mainPage));
@@ -23,31 +25,24 @@ function changeToMainPage(setPageStyle : Dispatch<SetStateAction<string>>, setCo
 
 const landingPage: NextPage = () => {
     
-    const [login, setLogin] = useState(false);
-    const handleLoginChanged = (value : boolean) => {
-        setLogin(value);
-    };
+    const router = useRouter();
+    const [chatPage, setChatPage] = useState<boolean>(false);
     const handleResize = useCallback(() => {
         try {
             const sidebar = document.getElementById('sidebar') as HTMLDivElement;
-            if (window.innerWidth < 850 && login)
+            if (window.innerWidth < 850 && chatPage)
             {
                 sidebar.style.width = '0rem';
             }
-            else if(login)
+            else if(chatPage)
             {
-                // (document.getElementById('sidebar') as HTMLDivElement).style.width = '15rem';
                 sidebar.style.width = '15rem';
-                if (sidebar.style.transform != 'translateX(0)')
-                {
-                    sidebar.style.transform = 'translateX(0)';
-                }
             }
         }
         catch (error) {
             console.log(error);
         }
-    }, [login]);
+    }, [chatPage]);
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -64,7 +59,7 @@ const landingPage: NextPage = () => {
         }
         else
         {
-            window.location.href = './login';
+            router.push('./login');
         }
     }, []);
 
@@ -74,7 +69,7 @@ const landingPage: NextPage = () => {
         <div>
             <Logo className={classNames(styles.logoBar)} logoClassname={classNames(styles.logo)} h1Classname={classNames(styles.h1)}/>
             <div className={classNames(styles.goButtonContainer)} id='goButtonContainer'>
-                <button className={classNames(styles.goButton)} onClick={() => changeToMainPage(setPageStyle, setContent, handleLoginChanged)}>Go</button>
+                <button className={classNames(styles.goButton)} onClick={() => changeToMainPage(setPageStyle, setContent, setChatPage)}>Go</button>
             </div>
         </div>
     );
