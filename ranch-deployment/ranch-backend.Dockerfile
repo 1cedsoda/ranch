@@ -9,8 +9,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install alpaca.cpp
-RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp
-RUN cd /alpaca.cpp && make chat
+RUN cd / && git clone https://github.com/antimatter15/alpaca.cpp 
+RUN mv /alpaca.cpp /alpaca
+RUN cd /alpaca && make chat
 
 # Install ranch-proto
 COPY ./ranch-proto/package*.json /ranch-proto/

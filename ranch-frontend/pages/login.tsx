@@ -136,6 +136,7 @@ export const Page: NextPage = () => {
         {
             localStorage.setItem('ranch_token', authStore.token as string);
             localStorage.setItem('ranch_username', authStore.username as string);
+            localStorage.setItem('ranch_userId', authStore.userId as string);
             router.push('./');
         }
     }, [authStore]);

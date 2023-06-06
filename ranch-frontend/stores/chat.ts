@@ -6,7 +6,8 @@ import { ClientReadableStream } from 'grpc-web'
 // === STORE ===
 export interface ChatStoreState {
     chats: ChatObjectEz[],
-    messages: MessageEz[]
+    messages: MessageEz[],
+    selectedChatId?: string | undefined,
 }
 
 export const initialChatState: ChatStoreState = {
