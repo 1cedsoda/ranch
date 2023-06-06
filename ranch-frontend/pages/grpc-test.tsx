@@ -5,7 +5,7 @@ import { createRef, useCallback, useEffect, useRef, useState } from 'react';
 import { Stream } from 'stream';
 import { useRootDispatch } from '../stores/rootStore';
 import { addMessage, createChat, getChatMessages, getChats, initializeForUser, selectChatStore, setChatTitle, streamChats } from '../stores/chat';
-import style from './grpc-test.module.scss';
+import style from '../styles/grpc-test.module.scss';
 import classNames from 'classnames';
 import { MessageSender } from 'ranch-proto/gen/chat_pb';
 import { login, logout, selectAuthStore } from '../stores/auth';

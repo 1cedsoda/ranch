@@ -44,7 +44,7 @@ services:
     depends_on:
       - mongodb
     volumes:
-      - ./.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin:/alpaca.cpp/ggml-alpaca-7b-q4.bin
+      - ./.volumes/alpaca/ggml-alpaca-7b-q4.bin:/alpaca/ggml-alpaca-7b-q4.bin
       - ../ranch-backend/src:/ranch-backend/src
     networks:
       - public
@@ -60,7 +60,7 @@ services:
       - mongo:/data/db
     networks:
       - public
-  
+
   # mongo-express:
   #   image: mongo-express
   #   restart: "no"

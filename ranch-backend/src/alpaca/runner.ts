@@ -10,7 +10,7 @@ export class AlpacaRunner extends EventEmitter {
     super()
     this.state = AlpacaRunnerState.INIT
     this.cp = spawn('./chat', [], {
-      cwd: '/alpaca.cpp',
+      cwd: '/alpaca',
       shell: true
     })
     this.emit('state', AlpacaRunnerState.INIT)

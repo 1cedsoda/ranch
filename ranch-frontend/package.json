@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@types/jsonwebtoken": "^9.0.2",
+    "@types/styled-components": "^5.1.26",
     "classnames": "^2.3.2",
     "google-protobuf": "^3.21.2",
     "grpc-web": "^1.4.2",
@@ -19,8 +20,11 @@
     "ranch-proto": "file:../ranch-proto",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.44.3",
     "react-redux": "^8.0.5",
+    "react-router-dom": "^6.11.2",
     "sass": "^1.62.1",
+    "styled-components": "^5.3.11",
     "typescript": "5.0.4"
   },
   "devDependencies": {
