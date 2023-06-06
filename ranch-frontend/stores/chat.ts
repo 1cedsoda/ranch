@@ -205,5 +205,21 @@ export const addMessage = createAsyncThunk<void, AddMessageParams, ThunkExtra>(
 // === SELECTORS ===
 export const selectChatStore = (state: RootState): ChatStoreState => state.chat
 
+export const selectChat = (state: RootState, chatId: string): {
+  chat: ChatObjectEz,
+  messages: MessageEz[]
+} | undefined => {
+  const chat = state.chat.chats.find(chat => chat.id === chatId);
+  if (chat) {
+    const messages = state.chat.messages.filter(message => message.chatId === chatId);
+    return {
+      chat,
+      messages
+    }
+  } else {
+    return undefined;
+  }
+}
+
 // === EXPORT ===
 export default chatSlice.reducer
