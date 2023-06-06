@@ -11,7 +11,6 @@ import {
 } from "ranch-proto/dist/pb";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { getState } from "./alpaca";
-
 interface MyJwtPayload extends JwtPayload {
   userId: string;
   username: string;
@@ -25,27 +24,7 @@ export interface AuthState {
   loading: "idle" | "pending" | "rejected";
 }
 
-function loadInitialState(): AuthState | undefined {
-  const token = localStorage.getItem("jwt");
-  if (!token) {
-    return undefined;
-  }
-
-  const decoded = jwt.decode(token);
-  if (typeof decoded === "string" || !decoded) {
-    return undefined;
-  }
-
-  const payload = decoded as MyJwtPayload;
-  return {
-    userId: payload.userId,
-    username: payload.username,
-    token: token,
-    loading: "idle",
-  };
-}
-
-export const initialAuthState: AuthState = loadInitialState() || {
+export const initialAuthState: AuthState = {
   userId: undefined,
   username: undefined,
   token: undefined,
@@ -110,7 +89,9 @@ export const selectGrpcAuthMetadata = createSelector(
     if (!auth.token) {
       return undefined;
     }
-    return { token: auth.token };
+    return {
+      "token": auth.token,
+    };
   }
 );
 
@@ -153,5 +134,30 @@ export const logout = createAsyncThunk<void, void, ThunkExtra>(
   async (payload, { dispatch }) => {
     console.log("auth/logout", payload);
     dispatch(logoutReducer(null));
+  }
+);
+
+export const loadFromLocalStorage = createAsyncThunk<void, void, ThunkExtra>(
+  "auth/loadFromLocalStorage",
+  async (payload, { dispatch }) => {
+    console.log("auth/loadFromLocalStorage", payload);
+
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      return undefined;
+    }
+
+    const decoded = jwt.decode(token);
+    if (typeof decoded === "string" || !decoded) {
+      return undefined;
+    }
+
+    const jwtPayload = decoded as MyJwtPayload;
+
+    dispatch(loginSuccess({
+      userId: jwtPayload.userId,
+      username: jwtPayload.username,
+      token: token,
+    }));
   }
 );
