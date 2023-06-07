@@ -42,13 +42,14 @@ export default function Sidebar()
                 <div className={classNames(styles.sidebarComponents)}>
                     <button className={classNames(styles.newChatButton)}>New Chat</button>
                 </div>
-                {chatStore.chats.map((chat, index) => {
+                {chatStore.chats.map(() => {
                     return (
                         <div className={classNames(styles.sidebarComponents)}>
-                        <div className={classNames(styles.sidebarInnerComponents)}>
-                            <img src='/edit.svg' width='20px' height='20px' />
+                            <div className={classNames(styles.sidebarInnerComponents)}>
+                                <input type='text' className={classNames(styles.chatHistoryInput)} defaultValue={'Chat'} disabled/>
+                                <img src='/edit.svg' width='20px' height='20px' />
+                            </div>
                         </div>
-                    </div>
                     )
                 })}
             </div>
