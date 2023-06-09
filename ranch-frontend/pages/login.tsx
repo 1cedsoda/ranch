@@ -1,105 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { getState, selectAlpacaStore, streamPrompt, streamState } from '../stores/alpaca';
+import { useSelector } from 'react-redux';
 import type { NextPage } from 'next';
-import React, { Dispatch, SetStateAction, use, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import classNames from 'classnames';
-import Logo from '../components/logo';
-import Chatbox from '../components/chatbox';
-import Sidebar from '../components/sidebar';
-import { Stream } from 'stream';
 import { useRootDispatch } from '../stores/rootStore';
 import { createGlobalStyle } from 'styled-components';
 import styles from '../styles/login.module.scss';
 import { useForm } from 'react-hook-form';
-import { login, logout, selectAuthStore } from '../stores/auth';
+import { login,  selectAuthStore } from '../stores/auth';
 import { useRouter } from 'next/router';
-
-const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-
-* {
-	box-sizing: border-box;
-}
-
-body {
-	background: #f6f5f7;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	font-family: 'Montserrat', sans-serif;
-	height: 100vh;
-	margin: -20px 0 50px;
-}
-
-h1 {
-    font-weight: bold;
-	margin: 0;
-}
-
-h2 {
-	text-align: center;
-}
-
-p {
-    font-size: 14px;
-	font-weight: 100;
-	line-height: 20px;
-	letter-spacing: 0.5px;
-	margin: 20px 0 30px;
-}
-
-span {
-	font-size: 12px;
-}
-
-a {
-    color: #333;
-	font-size: 14px;
-	text-decoration: none;
-	margin: 15px 0;
-}
-
-button {
-	border-radius: 20px;
-	border: 1px solid #d41fb9;
-	background-color: #d41fb9;
-	color: #FFFFFF;
-	font-size: 12px;
-	font-weight: bold;
-	padding: 12px 45px;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-	transition: transform 80ms ease-in;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-button:focus {
-    outline: none;
-}
-
-form {
-	background-color: #FFFFFF;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	padding: 0 50px;
-	height: 100%;
-	text-align: center;
-}
-
-input {
-    background-color: #eee;
-	border: none;
-	padding: 12px 15px;
-	margin: 8px 0;
-	width: 100%;
-}
-`;
 
 function signIn_switch() {
     const container = document.getElementById('container') as HTMLDivElement;
@@ -152,7 +60,6 @@ export const Page: NextPage = () => {
 
     return (
         <div>
-            <GlobalStyle />
             <div className={styles.container} id="container">
                 <div className={classNames(styles.form_container, styles.sign_up_container)}>
                     <form id="sign_up_form" onSubmit={handleSubmitSignup(signUpSubmit)}>
