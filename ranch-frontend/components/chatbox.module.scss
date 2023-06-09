@@ -110,6 +110,7 @@ $sidebar-color: #242424;
     grid-template-columns: 1fr max-content;
     align-items: center;
     width: 100%;
+    cursor: pointer;
     // position: absolute;
 
 }
@@ -122,6 +123,7 @@ $sidebar-color: #242424;
 }
 
 .textinput {
+    cursor: text;
     // height: 100%;
     // width: 60.5rem;
     // margin-left: 1rem;

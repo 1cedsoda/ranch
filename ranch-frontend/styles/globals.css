@@ -1,11 +1,6 @@
-body {
-  padding: 0;
-  margin: 0;
-
-  color: #8A92A1;
-  overflow: auto;
-  background: #e3e3e3;
-  cursor: url('/cursor.png'), auto;
+/* Global variables */
+:root {
+ --background-main: #F1F6FA;
 }
 
 /* Customize the scrollbar */
@@ -46,7 +41,7 @@ button, a, input, textarea, div{
 }
 
 body {
-	background: #f6f5f7;
+	background: var(--background-main);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -54,6 +49,11 @@ body {
 	font-family: 'Montserrat', sans-serif;
 	height: 100vh;
 	margin: -20px 0 50px;
+	padding: 0;
+	margin: 0;
+	color: #8A92A1;
+	overflow: auto;
+	cursor: url('/cursor.png'), auto;
 }
 
 h1 {
@@ -95,6 +95,7 @@ button {
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
+	cursor: pointer;
 }
 
 button:active {
