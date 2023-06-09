@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import { useRootDispatch } from '../stores/rootStore';
 import { createGlobalStyle } from 'styled-components';
-import styles from '../styles/login.module.scss';
+import styles from './login.module.scss';
 import { useForm } from 'react-hook-form';
 import { login,  selectAuthStore } from '../stores/auth';
 import { useRouter } from 'next/router';

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import classNames from 'classnames';
-import styles from '../styles/go.module.scss';
+import styles from './go.module.scss';
 import Logo from '../components/logo';
 import { useRouter } from 'next/router';
 
