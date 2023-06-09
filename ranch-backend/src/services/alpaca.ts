@@ -23,6 +23,8 @@ import { alpacaStateToProto } from "../alpaca/runner_state";
 import { AlpacaRunner } from "../alpaca/runner";
 import { UntypedHandleCall } from "@grpc/grpc-js";
 import { authRepository } from "../repository/auth";
+import { Status } from "@grpc/grpc-js/build/src/constants";
+import { endWithStatus } from "../utils/call";
 export class AlpacaServer implements IAlpacaServer {
   [name: string]: UntypedHandleCall;
 
@@ -33,7 +35,8 @@ export class AlpacaServer implements IAlpacaServer {
     const req = call.request as GetStateRequestEz;
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback);
+    const allow = await authRepository.protectGrpcUnary(call, callback);
+    if (!allow) return;
 
     // get auth token
     const { id } = req;
@@ -41,7 +44,7 @@ export class AlpacaServer implements IAlpacaServer {
 
     let runner = alpacaRunnerManager.getRunner(id);
 
-    if (runner == null) {
+    if (!runner) {
       runner = alpacaRunnerManager.createRunner(id);
     }
 
@@ -49,19 +52,20 @@ export class AlpacaServer implements IAlpacaServer {
   }
 
   async streamState(
-    call: ServerWritableStream<GetStateRequest, GetStateResponse>
+    call: ServerWritableStream<GetStateRequest, GetStateResponse>,
   ) {
     const req = call.request as GetStateRequestEz;
 
     // protect call
-    await authRepository.protectGrpcStream(call);
+    const allow = await authRepository.protectGrpcStream(call);
+    if (!allow) return;
 
     const { id } = req;
     console.log("AlpacaServer.streamState", req.toObject());
 
     let runner = alpacaRunnerManager.getRunner(id);
 
-    if (runner == null) {
+    if (!runner) {
       runner = alpacaRunnerManager.createRunner(id);
     }
 
@@ -70,8 +74,11 @@ export class AlpacaServer implements IAlpacaServer {
 
     runner.onStateChange((state) => {
       let runner = alpacaRunnerManager.getRunner(id);
-      if (runner == null) {
-        return call.end();
+      if (!runner) {
+        return call.emit("error", {
+          code: Status.NOT_FOUND,
+          message: "Runner not found",
+        });
       }
       res = runnerToStateResponse(id, runner);
       call.write(res);
@@ -82,7 +89,8 @@ export class AlpacaServer implements IAlpacaServer {
     const req = call.request as PromptRequestEz;
 
     // protect call
-    await authRepository.protectGrpcStream(call);
+    const allow = await authRepository.protectGrpcStream(call);
+    if (!allow) return;
 
     const { id } = req;
     console.log("AlpacaServer.prompt", req.toObject());
@@ -90,8 +98,8 @@ export class AlpacaServer implements IAlpacaServer {
     const prompt = req.prompt;
     const runner = alpacaRunnerManager.getRunner(id);
 
-    if (runner == null) {
-      return call.end();
+    if (!runner) {
+      return endWithStatus(call, Status.NOT_FOUND, new Error("Runner not found"));
     }
 
     runner.prompt(

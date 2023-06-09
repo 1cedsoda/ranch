@@ -44,6 +44,7 @@ import {
 } from "../mongo/mappers";
 import { chatRepository } from "../repository/chat";
 import { authRepository } from "../repository/auth";
+import { Status } from "@grpc/grpc-js/build/src/constants";
 
 export class ChatServer implements IChatServer {
   [name: string]: UntypedHandleCall;
@@ -57,7 +58,8 @@ export class ChatServer implements IChatServer {
     const { userId } = req;
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback, userId);
+    const allow = await authRepository.protectGrpcUnary(call, callback, userId);
+    if (!allow) return;
 
     const chat = await chatRepository.createChat(userId);
 
@@ -75,7 +77,8 @@ export class ChatServer implements IChatServer {
     const { userId } = req;
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback, userId);
+    const allow = await authRepository.protectGrpcUnary(call, callback, userId);
+    if (!allow) return;
 
     const chats = await chatRepository.findChats(userId);
 
@@ -92,7 +95,8 @@ export class ChatServer implements IChatServer {
     const { userId } = req;
 
     // protect call
-    await authRepository.protectGrpcStream(call, userId);
+    const allow = await authRepository.protectGrpcStream(call, userId);
+    if (!allow) return;
 
     let lastChats: mongo.IChat[] = [];
 
@@ -123,12 +127,16 @@ export class ChatServer implements IChatServer {
 
     const chat = await chatRepository.findChat(chatId);
     if (!chat) {
-      callback(new Error("Chat not found"));
+      callback({
+        code: Status.NOT_FOUND,
+        ...new Error("Chat not found")
+      });
       return;
     }
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    const allow = await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    if (!allow) return;
 
     const messages = await chatRepository.findMessages(chatId);
 
@@ -150,12 +158,16 @@ export class ChatServer implements IChatServer {
 
     const chat = await chatRepository.findChat(chatId);
     if (!chat) {
-      callback(new Error("Chat not found"));
+      callback({
+        code: Status.NOT_FOUND,
+        ...new Error("Chat not found")
+      });
       return;
     }
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    const allow = await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    if (!allow) return;
 
     await chatRepository.updateChatTitle(chatId, title);
 
@@ -172,12 +184,16 @@ export class ChatServer implements IChatServer {
 
     const chat = await chatRepository.findChat(chatId);
     if (!chat) {
-      callback(new Error("Chat not found"));
+      callback({
+        code: Status.NOT_FOUND,
+        ...new Error("Chat not found")
+      });
       return;
     }
 
     // protect call
-    await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    const allow = await authRepository.protectGrpcUnary(call, callback, chat.userId);
+    if (!allow) return;
 
     let newMessage = await chatRepository.addMessage(
       chatId,

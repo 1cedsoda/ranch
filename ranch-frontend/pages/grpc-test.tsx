@@ -47,14 +47,14 @@ export const Page: NextPage = () => {
   }
 
   useEffect(() => {
+    if (!authStore.userId) {
+      return;
+    }
     dispatch(initializeForUser({
-      userId: userIdValue,
+      userId: authStore.userId,
     }))
     console.log(chatStore);
   }, []);
-
-  const userIdRef = createRef<HTMLInputElement>();
-  const [userIdValue, setUserIdValue] = useState("myUserId");
 
   const messageRef = createRef<HTMLInputElement>();
   const [messageValue, setMessageValue] = useState("myMessage");
@@ -63,27 +63,39 @@ export const Page: NextPage = () => {
   const [titleValue, setTitleValue] = useState("myTitle");
 
   function handleCreateChat() {
+    if (!authStore.userId) {
+      return;
+    }
     dispatch(createChat({
-      userId: userIdValue,
+      userId: authStore.userId,
     }))
   }
 
   // handleGetChats
   function handleGetChats() {
+    if (!authStore.userId) {
+      return;
+    }
     dispatch(getChats({
-      userId: userIdValue,
+      userId: authStore.userId,
     }))
   }
 
   // handleStreamChats
   function handleStreamChats() {
+    if (!authStore.userId) {
+      return;
+    }
     dispatch(streamChats({
-      userId: userIdValue,
+      userId: authStore.userId,
     }))
   }
 
   // handleGetChatMessages
   const handleGetChatMessages = useCallback(() => {
+    if (chatStore.chats.length === 0) {
+      return;
+    }
     console.log(chatStore.chats);
     dispatch(getChatMessages({
       chatId: chatStore.chats[0].id,
@@ -92,6 +104,9 @@ export const Page: NextPage = () => {
 
   // handleSetChatTitle
   const handleSetChatTitle = useCallback(() => {
+    if (chatStore.chats.length === 0) {
+      return;
+    }
     dispatch(setChatTitle({
       chatId: chatStore.chats[0].id,
       title: titleValue,
@@ -100,6 +115,9 @@ export const Page: NextPage = () => {
 
   // handleAddMessage
   const handleAddMessage = useCallback(() => {
+    if (chatStore.chats.length === 0) {
+      return;
+    }
     dispatch(addMessage({
       chatId: chatStore.chats[0].id,
       text: messageValue,
@@ -151,15 +169,6 @@ export const Page: NextPage = () => {
       </div>
       <div className={classNames(style.vertical)}>
         <h2>ChatService</h2>
-        <div className={classNames(style.horizontal)}>
-          <span>userId</span>
-          <input ref={userIdRef} type='text' value={userIdValue} onChange={(e) => {
-            dispatch(initializeForUser({
-              userId: e.target.value,
-            }));
-            setUserIdValue(e.target.value)}
-          }/>
-        </div>
         <div className={classNames(style.horizontal)}>
           <span>message</span>
           <input ref={messageRef} type='text' value={messageValue} onChange={(e) => setMessageValue(e.target.value)}/>

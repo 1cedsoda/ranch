@@ -122,6 +122,7 @@ export const streamState = createAsyncThunk<
     stream.on("end", () => {});
 
     stream.on("error", (error: any) => {
+      console.log("alpaca/streamState error", error)
       rejectWithValue(error);
     });
   }
@@ -147,6 +148,7 @@ export const getState = createAsyncThunk<void, GetStateParams, ThunkExtra>(
         })
       );
     } catch (error) {
+      console.log("alpaca/getState error", error);
       rejectWithValue(error);
     }
   }
@@ -186,6 +188,7 @@ export const streamPrompt = createAsyncThunk<
     });
 
     stream.on("error", (error: any) => {
+      console.log("alpaca/streamPrompt error", error);
       rejectWithValue(error);
     });
   }

@@ -101,7 +101,7 @@ export type LoginParams = {
 };
 export const login = createAsyncThunk<void, LoginParams, ThunkExtra>(
   "auth/login",
-  async (payload, { dispatch, extra: { authClient } }) => {
+  async (payload, { dispatch, rejectWithValue, extra: { authClient } }) => {
     console.log("auth/login", payload);
     const { username, password } = payload;
     dispatch(loginPending(null));
@@ -139,17 +139,19 @@ export const logout = createAsyncThunk<void, void, ThunkExtra>(
 
 export const loadFromLocalStorage = createAsyncThunk<void, void, ThunkExtra>(
   "auth/loadFromLocalStorage",
-  async (payload, { dispatch }) => {
+  async (payload, { dispatch, rejectWithValue }) => {
     console.log("auth/loadFromLocalStorage", payload);
 
     const token = localStorage.getItem("jwt");
     if (!token) {
-      return undefined;
+      console.log("auth/loadFromLocalStorage: No token")
+      return rejectWithValue(undefined);
     }
 
     const decoded = jwt.decode(token);
     if (typeof decoded === "string" || !decoded) {
-      return undefined;
+      console.log("auth/loadFromLocalStorage: Invalid token")
+      return rejectWithValue(undefined);
     }
 
     const jwtPayload = decoded as MyJwtPayload;
