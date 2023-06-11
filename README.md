@@ -31,6 +31,7 @@ Ai Code Translator
 ## Download Alpaca Model Weights
 1. Download the model file [ggml-alpaca-7b-q4.bin](https://huggingface.co/Sosaka/Alpaca-native-4bit-ggml/blob/main/ggml-alpaca-7b-q4.bin)
 2. Place it into `ranch-deployment/.volumes/alpaca.cpp/ggml-alpaca-7b-q4.bin`
+3.Download and install a font: (https://fonts.google.com/specimen/Rubik+Wet+Paint/tester?preview.text=Ranch&preview.text_type=custom)
 
 
 # Ports

@@ -8,7 +8,7 @@ import Sidebar from '../components/sidebar';
 import { useRouter } from 'next/router';
 import { selectAuthStore } from '../stores/auth';
 
-const landingPage: NextPage = () => {
+const mainChatPage: NextPage = () => {
     
     const router = useRouter();
     const authState = useSelector(selectAuthStore);
@@ -27,5 +27,5 @@ const landingPage: NextPage = () => {
     )
 }
 
-export default landingPage
+export default mainChatPage
 
