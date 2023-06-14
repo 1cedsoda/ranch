@@ -1,7 +1,81 @@
-.mainPage {
-    display: flex;
-    justify-items: center;
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    // grid-template-rows: auto 1fr;
+.main {
+    display: block;
+    position: relative;
 }
+
+.logoContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.logo img {
+    width: 50%;
+    height: 100%;
+    object-fit: contain;    
+    border-radius: 50%;
+    filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title h1 {
+    margin: 0;
+    padding: 0;
+    color: var(--font-logo-main);
+}
+
+.title p {
+    font-weight: 400;
+    font-size: 50px;
+    font-family: 'Rubik Wet Paint', cursive;
+    filter: drop-shadow(1px 3px 4px rgba(0, 0, 0, 0.25));
+}
+
+@font-face {
+    font-family: "Rubik Wet Paint", sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+  
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5; 
+}
+
+.test {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5; 
+}
+
