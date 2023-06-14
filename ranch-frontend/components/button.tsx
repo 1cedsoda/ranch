@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames';
-import {Routes, Route, useNavigate} from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 
 function Button() {
+  const router = useRouter();
   // const navigate = useNavigate();
 
   // const navigateToIndex = () => {
@@ -12,7 +13,7 @@ function Button() {
   // };
 
   return (
-    <button className={classNames(styles.button)}>Start<div className={classNames(styles.hoverEffect)}><div></div></div></button>
+    <button className={classNames(styles.button)} onClick={() => router.push('/go')} >Start<div className={classNames(styles.hoverEffect)}><div></div></div></button>
   );
 }
 
