@@ -1,5 +1,5 @@
 # ranch
-Ai Code Translator
+ChatGPT-Style UI for Alpaca
 
 # Tech Stack
 ## Frontend
