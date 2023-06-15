@@ -14,18 +14,7 @@ export default function Chatbox() {
   const alpacaStore = useSelector(selectAlpacaStore);
   const initialState = useRef(true);
   const authStore = useSelector(selectAuthStore);
-  const [value, setValue] = useState('');
   const [containerHeight, setContainerHeight] = useState('auto');
-
-  const handleChange = (event: { target: { value: React.SetStateAction<string>; scrollHeight: any; }; }) => {
-    setValue(event.target.value);
-    updateContainerHeight(event.target.scrollHeight);
-  };
-
-  const updateContainerHeight = (scrollHeight: any) => {
-    setContainerHeight(`${scrollHeight}px`);
-  };
-
 
   const [messages, setMessages] = useState(
     <div className={classNames(styles.messageDiv)}>

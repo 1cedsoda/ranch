@@ -39,10 +39,11 @@ export default function EmptyTextarea() {
     background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
     // border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]}; // default
     border: none;
-    box-shadow: 0px 2px 24px ${
-      theme.palette.mode === "dark" ? blue[900] : blue[100]
-    };
   
+    //   box-shadow: 0px 2px 24px ${
+      theme.palette.mode === "dark" ? blue[900] : blue[100]
+    }; // default
+
     &:hover {
       border-color: ${blue[400]};
     }
