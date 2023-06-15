@@ -13,7 +13,7 @@ function Button() {
   // };
 
   return (
-    <button className={classNames(styles.button)} onClick={() => router.push('/go')} >Start<div className={classNames(styles.hoverEffect)}><div></div></div></button>
+    <button className={classNames(styles.button)} onClick={() => router.push('/chat')} >Start<div className={classNames(styles.hoverEffect)}><div></div></div></button>
   );
 }
 

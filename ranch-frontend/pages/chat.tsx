@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import classNames from 'classnames';
-import styles from './go.module.scss';
-import Logo from '../components/logo';
+import styles from './chat.module.scss';
 import { useRouter } from 'next/router';
 import  Chatbox  from '../components/chatbox';
 import Sidebar from '../components/sidebar';
