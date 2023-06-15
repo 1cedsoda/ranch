@@ -86,16 +86,12 @@ $sidebar-color: #242424;
 .chatbox {
     background-color: #28121200;
     justify-content: center;
-    // height: 25rem;
-    // height: 70%;
     border-radius: 0.5rem;
     margin: 0;
     padding: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 100%;
-    // height: 100%;
-    // overflow-x: inherit;
+    margin-bottom: auto;
 }
 
 .messagebox {
@@ -112,8 +108,9 @@ $sidebar-color: #242424;
 }
 
 .outerMessagebox {
-    position: relative;
-    min-height: 100vh;
+    margin-top: auto;
+    margin-bottom: 1rem;
+    width: 100%;
 }
 
 .textinput {
@@ -181,11 +178,11 @@ $sidebar-color: #242424;
 }
 
 .chatboxComponent {
-    justify-items: center;
-    width: 90%;
+    justify-items: center;   
     height: 100vh;
     display: grid;
     grid-template-rows: max-content minmax(0, 1fr) max-content;
+    margin-left: 270px;
 }
 
 .chatHistoryInput {
