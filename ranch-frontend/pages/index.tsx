@@ -22,7 +22,7 @@ const landingPage: NextPage = () => {
 
     return (
         <div>
-        {/* <video className='test' src="test.mov" autoPlay loop muted /> */}
+        {/* <video className='test' autoPlay loop muted src="test.mov" /> */}
           {/* <style>
             @import
             url('https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap');

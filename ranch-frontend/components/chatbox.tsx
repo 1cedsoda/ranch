@@ -3,16 +3,29 @@ import { selectAlpacaStore, streamPrompt, streamState } from "../stores/alpaca";
 import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import styles from "./chatbox.module.scss";
-import Logo from "./logo";
 import { useRootDispatch } from "../stores/rootStore";
 import { AlpacaState } from "ranch-proto/gen/alpaca_pb";
 import { selectAuthStore } from "../stores/auth";
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import EmptyTextarea from "./textarea";
 
 export default function Chatbox() {
   const dispatch = useRootDispatch();
   const alpacaStore = useSelector(selectAlpacaStore);
   const initialState = useRef(true);
   const authStore = useSelector(selectAuthStore);
+  const [value, setValue] = useState('');
+  const [containerHeight, setContainerHeight] = useState('auto');
+
+  const handleChange = (event: { target: { value: React.SetStateAction<string>; scrollHeight: any; }; }) => {
+    setValue(event.target.value);
+    updateContainerHeight(event.target.scrollHeight);
+  };
+
+  const updateContainerHeight = (scrollHeight: any) => {
+    setContainerHeight(`${scrollHeight}px`);
+  };
+
 
   const [messages, setMessages] = useState(
     <div className={classNames(styles.messageDiv)}>
@@ -83,7 +96,7 @@ export default function Chatbox() {
 
   function sendMessage() {
     const message = (
-      document.getElementById("messageArea") as HTMLTextAreaElement
+      document.getElementById("textarea") as HTMLTextAreaElement
     ).value;
     console.log(message);
     const letter = authStore.username?.charAt(0).toUpperCase();
@@ -110,7 +123,7 @@ export default function Chatbox() {
           </div> */}
       </>
     );
-    (document.getElementById("messageArea") as HTMLTextAreaElement).value = "";
+    (document.getElementById("textarea") as HTMLTextAreaElement).value = "";
     handleStreamPrompt(message);
   }
 
@@ -121,13 +134,16 @@ export default function Chatbox() {
         {messages}
       </div>
       <div className={classNames(styles.outerMessagebox)}>
-        <div className={classNames(styles.messagebox)} id="messagebox">
-          <textarea
+        <div className={classNames(styles.messagebox)} style={{height: containerHeight}} id="messagebox">
+          {/* <textarea
             className={classNames(styles.textinput)}
             rows={1}
             placeholder="Send a message."
             id="messageArea"
-          />
+            onChange={handleChange}
+            value={value}
+          /> */}
+          <EmptyTextarea />
           <img
             src="/send.svg"
             alt="Send Logo"
@@ -140,3 +156,7 @@ export default function Chatbox() {
     </div>
   );
 }
+
+
+
+
