@@ -74,7 +74,6 @@ const chatSchema = new Schema<IChat>({
 const userSchema = new Schema<IUser>({
   username: String,
   password_hash: String,
-  password_salt: String,
 });
 
 export const Chat = model<IChat>('Chat', chatSchema);

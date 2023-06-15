@@ -55,6 +55,7 @@ class ChatRepository {
         const newMessage = await Message.create({
             chatId: chatId,
             text: text,
+            sender: sender,
             timestamp: new Date(),
         });
 
