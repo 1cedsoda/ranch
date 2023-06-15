@@ -46,7 +46,7 @@ export default function Chatbox() {
       document.addEventListener("keydown", function (event) {
         if (
           event.key === "Enter" &&
-          document.activeElement?.id == "messageArea"
+          document.activeElement?.id == "textarea"
         ) {
           sendMessage();
         }

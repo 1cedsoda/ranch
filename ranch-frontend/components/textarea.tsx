@@ -46,7 +46,7 @@ export default function EmptyTextarea() {
     &:hover {
       border-color: ${blue[400]};
     }
-  
+
   
     // firefox
     &:focus-visible {
