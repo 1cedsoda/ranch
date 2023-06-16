@@ -8,6 +8,7 @@ import { ChatServer } from './services/chat'
 import { AuthServer } from './services/auth'
 import { AlpacaService, AuthService, ChatService } from 'ranch-proto/dist/grpc'
 import * as mongo from './mongo/mongo'
+import { MockAlpacaServer } from './services/mockAlpaca'
 
 mongo.connect()
 const server = new Server()
