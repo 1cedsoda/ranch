@@ -13,6 +13,7 @@ const landingPage: NextPage = () => {
     const router = useRouter();
 
     useEffect(() => {
+        sessionStorage.setItem('loadNewChat', 'false');
         if (!authStore.token)
         {
             router.push('./login');

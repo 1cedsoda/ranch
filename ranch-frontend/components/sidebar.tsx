@@ -13,9 +13,13 @@ export default function Sidebar()
     const authStore = useSelector(selectAuthStore);
 
     useEffect(() => {
-        dispatch(createChat({
-            userId: authStore.userId as string,
-          }))
+        if (sessionStorage.getItem('loadNewChat') == 'false')
+        {
+            dispatch(createChat({
+                userId: authStore.userId as string,
+              }))
+            sessionStorage.setItem('loadNewChat', 'true');
+        }
         dispatch(getChats({
             userId: authStore.userId as string,
         }));
@@ -59,16 +63,16 @@ export default function Sidebar()
                     <button className={classNames(styles.newChatButton)} onClick={() => addChat()}>New Chat</button>
                 </div>
                 <div className={classNames(styles.sidebarComponents)}>
-                    <div className={classNames(styles.sidebarInnerComponents)}>
-                        <input id='_input' type='text' className={classNames(styles.chatHistoryInput)} defaultValue={'New Chat'} disabled onBlur={() => changeChatTitle('_input', 'chatStore.chats[0].id')}/>
-                        <img src='/edit.svg' width='20px' height='20px' onClick={() => editChatTitle('_input')}/>
+                    <div className={classNames(styles.sidebarInnerComponents)} onClick={() => loadChat(chatStore.chats[0].id || '')}>
+                        <input id='_input' type='text' className={classNames(styles.chatHistoryInput)} defaultValue={'New Chat'} disabled onBlur={() => changeChatTitle(chatStore.chats[0].id || '' + '_input', chatStore.chats[0].id || '')}/>
+                        <img src='/edit.svg' width='20px' height='20px' onClick={() => editChatTitle(chatStore.chats[0].id || '' + '_input')}/>
                     </div>
                 </div>
                 {chatStore.chats.map((ChatObjectEz) => {
                     return (
                         <div className={classNames(styles.sidebarComponents)}>
                             <div className={classNames(styles.sidebarInnerComponents)} id={ChatObjectEz.id} onClick={() => loadChat(ChatObjectEz.id)}>
-                                <input id={ChatObjectEz.id + '_input'} type='text' className={classNames(styles.chatHistoryInput)} defaultValue={'New Chat'} disabled onBlur={() => changeChatTitle(ChatObjectEz.id + '_input', ChatObjectEz.id)}/>
+                                <input id={ChatObjectEz.id + '_input'} type='text' className={classNames(styles.chatHistoryInput)} defaultValue={ChatObjectEz.title as string} disabled onBlur={() => changeChatTitle(ChatObjectEz.id + '_input', ChatObjectEz.id)}/>
                                 <img src='/edit.svg' width='20px' height='20px' onClick={() => editChatTitle(ChatObjectEz.id + '_input')}/>
                             </div>
                         </div>
