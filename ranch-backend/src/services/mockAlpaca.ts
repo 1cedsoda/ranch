@@ -27,7 +27,7 @@ import {
   import { Status } from "@grpc/grpc-js/build/src/constants";
   import { endWithStatus } from "../utils/call";
   
-  export class AlpacaServer implements IAlpacaServer {
+  export class MockAlpacaServer implements IAlpacaServer {
     [name: string]: UntypedHandleCall;
   
     async getState(
