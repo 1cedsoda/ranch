@@ -6,7 +6,6 @@ import styles from "./chatbox.module.scss";
 import { useRootDispatch } from "../stores/rootStore";
 import { AlpacaState } from "ranch-proto/gen/alpaca_pb";
 import { selectAuthStore } from "../stores/auth";
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import EmptyTextarea from "./textarea";
 
 export default function Chatbox() {
@@ -106,10 +105,7 @@ export default function Chatbox() {
           </svg>
           <span className={classNames(styles.spanMessage)}>{message}</span>
         </div>
-        {/* <div className={classNames(styles.messageDiv)}>
-            <img src="/ranchLogo.jpg" alt="Ranch Logo" className={classNames(styles.chatboxLogo)} />
-            <span className={classNames(styles.spanMessage)}></span>
-          </div> */}
+
       </>
     );
     (document.getElementById("textarea") as HTMLTextAreaElement).value = "";
@@ -124,14 +120,6 @@ export default function Chatbox() {
       </div>
       <div className={classNames(styles.outerMessagebox)}>
         <div className={classNames(styles.messagebox)} style={{height: containerHeight}} id="messagebox">
-          {/* <textarea
-            className={classNames(styles.textinput)}
-            rows={1}
-            placeholder="Send a message."
-            id="messageArea"
-            onChange={handleChange}
-            value={value}
-          /> */}
           <EmptyTextarea />
           <img
             src="/send.svg"
