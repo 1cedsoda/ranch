@@ -133,7 +133,7 @@ export const Page: NextPage = () => {
 
     useEffect(() => {
         if (authStore.token) {
-            router.push('./');
+            router.push('./go');
         }
     }, [authStore]);
 

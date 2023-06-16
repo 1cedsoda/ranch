@@ -40,4 +40,4 @@ export class MockAlpacaRunnerManager extends AlpacaRunnerManager {
   }
 }
 
-export const alpacaRunnerManager = MockAlpacaRunnerManager.singleton
+export const mockAlpacaRunnerManager = MockAlpacaRunnerManager.singleton

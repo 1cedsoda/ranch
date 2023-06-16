@@ -14,9 +14,8 @@ const landingPage: NextPage = () => {
     const authStore = useSelector(selectAuthStore);
 
     useEffect(() => {
-        if (authStore.token == undefined)
+        if (!authStore.token)
         {
-            console.log(authStore);
             router.push('./login');
         }
     }, []);
