@@ -11,6 +11,7 @@ import { selectAuthStore } from '../stores/auth';
 const landingPage: NextPage = () => {
     
     const router = useRouter();
+<<<<<<< Updated upstream
     const authState = useSelector(selectAuthStore);
     
     useEffect(() => {
@@ -23,6 +24,24 @@ const landingPage: NextPage = () => {
         <div className={classNames(styles.mainPage)}>
             <Sidebar/>
             <Chatbox />
+=======
+    const authStore = useSelector(selectAuthStore);
+
+    useEffect(() => {
+        if (authStore.token == undefined)
+        {
+            console.log(authStore);
+            router.push('./login');
+        }
+    }, []);
+
+    return (
+        <div>
+            <div className={classNames(styles.mainPage)}>
+                <Sidebar/>
+                <Chatbox />
+            </div>
+>>>>>>> Stashed changes
         </div>
     )
 }

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { useRootDispatch } from '../stores/rootStore';
 import { createGlobalStyle } from 'styled-components';
 import styles from './login.module.scss';
+import styles from './login.module.scss';
 import { useForm } from 'react-hook-form';
 import { login,  selectAuthStore } from '../stores/auth';
 import { useRouter } from 'next/router';
@@ -40,10 +41,7 @@ export const Page: NextPage = () => {
     };
 
     useEffect(() => {
-        if (authStore.userId != undefined) {
-            localStorage.setItem('ranch_token', authStore.token as string);
-            localStorage.setItem('ranch_username', authStore.username as string);
-            localStorage.setItem('ranch_userId', authStore.userId as string);
+        if (authStore.token) {
             router.push('./');
         }
     }, [authStore]);
@@ -96,7 +94,7 @@ export const Page: NextPage = () => {
                                 <h1>Sign in</h1>
                             </div>
                             <div className={styles.innerContent}>
-                                <input type="text" placeholder="Email or Username" {...registerSignIn("email_or_username", { required: "Please enter your username!" })} />
+                                <input type="text" placeholder="Username" {...registerSignIn("email_or_username", { required: "Please enter your username!" })} />
                                 <input type="password" placeholder="Password" {...registerSignIn("password", {
                                     required: "Please enter your password!", minLength: { value: 8, message: 'The password must be at least 8 characters long!' }, maxLength: { value: 40, message: 'The password must be less than or equal to 40 characters!' }, validate: {
                                         hasLetter,

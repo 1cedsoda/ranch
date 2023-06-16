@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 .landingPage {
     height: 100vh;
     justify-content: center;
@@ -7,6 +8,45 @@
 }
 
 //go Button styles
+=======
+$background-color: #e3e3e3;
+$ranch-color: #d41fb9;
+$sidebar-color: #242424;
+
+.landingPage {
+    height: 100vh;
+    // justify-content: center;
+    // align-items: center;
+    // display: flex;
+    // flex-direction: row;
+}
+
+.h1 {
+    font-size: 5rem;
+    padding-left: 1rem;
+    margin: 0;
+    text-shadow: 0.125rem 0.125rem 0.125rem rgb(128, 128, 128);
+    color: white;
+    
+}
+
+.logoBar {
+    padding-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.logo {
+    border-radius: 100%;
+    box-shadow: 0.125rem 0.125rem 0.125rem $ranch-color;
+    width: 5.5rem;
+    height: 5.5rem;
+}
+
+>>>>>>> Stashed changes
 .goButton {
     color: white;
     background: #D466C3;
@@ -29,6 +69,7 @@
     font-size: 5.450rem;
 }
 
+<<<<<<< Updated upstream
 .logoBar {
     padding-top: 0.25rem;
     display: flex;
@@ -45,6 +86,8 @@
     height: 5.5rem;
 }
 
+=======
+>>>>>>> Stashed changes
 .goButtonContainer {
     display: flex;
     justify-content: center;
