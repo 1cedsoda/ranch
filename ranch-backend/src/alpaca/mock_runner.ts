@@ -1,18 +1,19 @@
 import { ChildProcessWithoutNullStreams } from "child_process";
-import { AlpacaRunner } from "./runner";
 import { AlpacaRunnerState } from "./runner_state";
-import { set } from "mongoose";
+import EventEmitter from "events";
 
-export class MockAlapcaRunner extends AlpacaRunner {
+export class MockAlapcaRunner extends EventEmitter {
     cp: ChildProcessWithoutNullStreams
     state: AlpacaRunnerState
 
     constructor() {
-        super();
+        super()
         this.cp = undefined as unknown as ChildProcessWithoutNullStreams;
         this.state = AlpacaRunnerState.INIT
+        this.emit('state', this.state)
         setTimeout(() => {
             this.state = AlpacaRunnerState.READY
+            this.emit('state', this.state)
         }, 3000)
     }
 
@@ -76,7 +77,7 @@ export class MockAlapcaRunner extends AlpacaRunner {
             this.emit('state', this.state)
             this.emit('ready')
             }
-        }, 500)
+        }, 300)
       }
     
 }

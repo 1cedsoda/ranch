@@ -25,6 +25,8 @@ import { UntypedHandleCall } from "@grpc/grpc-js";
 import { authRepository } from "../repository/auth";
 import { Status } from "@grpc/grpc-js/build/src/constants";
 import { endWithStatus } from "../utils/call";
+import { mockAlpacaRunnerManager } from "../alpaca/mock_runner_manager";
+import { MockAlapcaRunner } from "../alpaca/mock_runner";
 export class AlpacaServer implements IAlpacaServer {
   [name: string]: UntypedHandleCall;
 
@@ -42,13 +44,13 @@ export class AlpacaServer implements IAlpacaServer {
     const { id } = req;
     console.log("AlpacaServer.getState", req.toObject());
 
-    let runner = alpacaRunnerManager.getRunner(id);
+    let runner = mockAlpacaRunnerManager.getRunner(id);
 
     if (!runner) {
-      runner = alpacaRunnerManager.createRunner(id);
+      runner = mockAlpacaRunnerManager.createRunner(id);
     }
 
-    callback(null, runnerToStateResponse(id, runner));
+    callback(null, mockRunnerToStateResponse(id, runner));
   }
 
   async streamState(
@@ -63,24 +65,24 @@ export class AlpacaServer implements IAlpacaServer {
     const { id } = req;
     console.log("AlpacaServer.streamState", req.toObject());
 
-    let runner = alpacaRunnerManager.getRunner(id);
+    let runner = mockAlpacaRunnerManager.getRunner(id);
 
     if (!runner) {
-      runner = alpacaRunnerManager.createRunner(id);
+      runner = mockAlpacaRunnerManager.createRunner(id);
     }
 
-    let res = runnerToStateResponse(id, runner);
+    let res = mockRunnerToStateResponse(id, runner);
     call.write(res);
 
     runner.onStateChange((state) => {
-      let runner = alpacaRunnerManager.getRunner(id);
+      let runner = mockAlpacaRunnerManager.getRunner(id);
       if (!runner) {
         return call.emit("error", {
           code: Status.NOT_FOUND,
           message: "Runner not found",
         });
       }
-      res = runnerToStateResponse(id, runner);
+      res = mockRunnerToStateResponse(id, runner);
       call.write(res);
     });
   }
@@ -96,7 +98,7 @@ export class AlpacaServer implements IAlpacaServer {
     console.log("AlpacaServer.prompt", req.toObject());
 
     const prompt = req.prompt;
-    const runner = alpacaRunnerManager.getRunner(id);
+    const runner = mockAlpacaRunnerManager.getRunner(id);
 
     if (!runner) {
       return endWithStatus(call, Status.NOT_FOUND, new Error("Runner not found"));
@@ -123,3 +125,10 @@ const runnerToStateResponse = (
   runner: AlpacaRunner
 ): GetStateResponse =>
   new GetStateResponseEz(id, alpacaStateToProto(runner.state));
+
+const mockRunnerToStateResponse = (
+  id: string,
+  runner: MockAlapcaRunner
+): GetStateResponse =>
+  new GetStateResponseEz(id, alpacaStateToProto(runner.state));
+  

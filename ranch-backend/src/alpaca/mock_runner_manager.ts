@@ -2,7 +2,7 @@ import { MockAlapcaRunner } from './mock_runner'
 import { AlpacaRunner } from './runner'
 import { AlpacaRunnerManager } from './runner_manager'
 
-export class MockAlpacaRunnerManager extends AlpacaRunnerManager {
+export class MockAlpacaRunnerManager {
   runners: Record<string, MockAlapcaRunner>
 
   // singleton
@@ -13,7 +13,6 @@ export class MockAlpacaRunnerManager extends AlpacaRunnerManager {
   }
 
   constructor () {
-    super();
     this.runners = {
       // prepared_runner: new AlpacaRunner()
     }
