@@ -3,7 +3,6 @@ import { AlpacaStoreState, getState, selectAlpacaStore, streamPrompt, streamStat
 import React, { Dispatch, MutableRefObject, SetStateAction, use, useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import styles from './chatbox.module.scss';
-import Logo from './logo';
 import { Stream } from 'stream';
 import { RootThunkDispatch, useRootDispatch } from '../stores/rootStore';
 import { AlpacaState } from 'ranch-proto/gen/alpaca_pb';
@@ -95,7 +94,10 @@ export default function Chatbox()
 
     return (
       <div className={classNames(styles.chatboxComponent)} id="chatboxComponent">
-          <Logo className={classNames(styles.logoBar)} h1Classname={classNames(styles.h1MainPage)} logoClassname={classNames(styles.logoMainPage)} id="logoBar"/>
+          <div className={classNames(styles.logoBar)}>
+            <img src="/ranchLogo.jpg" alt="Ranch Logo" className={classNames(styles.logoMainPage)} id='mainLogo'/>
+            <h1 className={classNames(styles.h1MainPage)} id='h1'>Ranch</h1>
+          </div>
           <div className={classNames(styles.chatbox)} id="chatbox">
               {chatStore.messages.map((MessageEz) => {
                 if (MessageEz.sender === MessageSender.USER)

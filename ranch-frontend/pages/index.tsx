@@ -3,7 +3,6 @@ import type { NextPage } from 'next';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
-import Logo from '../components/logo';
 import { useRouter } from 'next/router';
 import { selectAuthStore } from '../stores/auth';
 
@@ -23,7 +22,10 @@ const landingPage: NextPage = () => {
     return (
         <div>
             <div className={classNames(styles.landingPage)}>
-                <Logo className={classNames(styles.logoBar)} logoClassname={classNames(styles.logo)} h1Classname={classNames(styles.h1)}/>
+                <div className={classNames(styles.logoBar)}>
+                    <img src="/ranchLogo.jpg" alt="Ranch Logo" className={classNames(styles.logo)} id='mainLogo'/>
+                    <h1 className={classNames(styles.h1)} id='h1'>Ranch</h1>
+                </div>
                 <div className={classNames(styles.goButtonContainer)} id='goButtonContainer'>
                     <button className={classNames(styles.goButton)} onClick={() => router.push('./chat')}>Start</button>
                 </div>
