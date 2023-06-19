@@ -3,7 +3,6 @@ import { getState, selectAlpacaStore, streamPrompt, streamState } from '../store
 import type { NextPage } from 'next';
 import React, { Dispatch, SetStateAction, use, useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import Logo from '../components/logo';
 import Chatbox from '../components/chatbox';
 import Sidebar from '../components/sidebar';
 import { Stream } from 'stream';
@@ -22,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
 }
 
 body {
-	background: #f6f5f7;
+	background: #e2ecfc;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -120,7 +119,9 @@ export const Page: NextPage = () => {
         dispatch(login({
             username: usernameValue,
             password: passwordValue,
-        }))
+        }));
+        router.push('./');
+        // setTimeout(() => {router.push('./');}, 1000)
     }, [])
     const { register: registerSignup, handleSubmit: handleSubmitSignup } = useForm({ shouldUseNativeValidation: true });
     const { register: registerSignIn, handleSubmit: handleSubmitSignIn } = useForm({ shouldUseNativeValidation: true });
@@ -194,7 +195,6 @@ export const Page: NextPage = () => {
                                         hasSpecialChar
                                     }
                                 })} />
-                                <a href="#">Forgot your password?</a>
                             </div>
                             <div>
                                 <button type='submit'>Sign In</button>

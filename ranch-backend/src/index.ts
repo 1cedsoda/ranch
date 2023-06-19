@@ -12,8 +12,8 @@ import { MockAlpacaServer } from './services/mockAlpaca'
 
 mongo.connect()
 const server = new Server()
-// server.addService(AlpacaService as any, new AlpacaServer())
-server.addService(AlpacaService as any, new MockAlpacaServer())
+server.addService(AlpacaService as any, new AlpacaServer())
+// server.addService(AlpacaService as any, new MockAlpacaServer())
 server.addService(ChatService as any, new ChatServer())
 server.addService(AuthService as any, new AuthServer())
 server.bindAsync('0.0.0.0:8080', ServerCredentials.createInsecure(), () => {

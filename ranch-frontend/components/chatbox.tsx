@@ -16,20 +16,15 @@ export default function Chatbox()
     const alpacaStore = useSelector(selectAlpacaStore);
     const authStore = useSelector(selectAuthStore);
     const chatStore = useSelector(selectChatStore);
-
+    const responseFinished = useRef(false);
+    const [username, setUsername] = useState<string>('')
 
     useEffect(()=>{
-          document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' && document.activeElement?.id == 'messageArea')
-            {
-              sendMessage();
-            }
-          });
-
           dispatch(streamState({
               id: authStore.userId + '_prompt',
             }));
           (document.getElementById('sendButton') as HTMLImageElement).style.display = 'none';
+          setUsername(authStore.username as string);
         }
     , []);
 
@@ -44,12 +39,19 @@ export default function Chatbox()
       }
       if (alpacaStore.promptResponse != undefined && alpacaStore.state == AlpacaState.READY && alpacaStore.promptRunning === false)
       {
-        console.log(alpacaStore);
-        dispatch(addMessage({
-          chatId: chatStore.chats[0].id,
-          text: alpacaStore.promptResponse,
-          sender: MessageSender.BOT
-        }));
+        if (!responseFinished.current)
+        {
+          responseFinished.current = true;
+          dispatch(addMessage({
+            chatId: sessionStorage.getItem('currentChatId') || '',
+            text: alpacaStore.promptResponse,
+            sender: MessageSender.BOT
+          }));
+        }
+      }
+      else
+      {
+        responseFinished.current = false;
       }
     }, [alpacaStore]);
 
@@ -57,7 +59,7 @@ export default function Chatbox()
         if (alpacaStore.state == AlpacaState.READY)
         {
           dispatch(addMessage({
-            chatId: chatStore.chats[0].id,
+            chatId: sessionStorage.getItem('currentChatId') || '',
             text: alpacaPromptValue,
             sender: MessageSender.USER
           }));
@@ -92,6 +94,18 @@ export default function Chatbox()
       handleStreamPrompt(message);
     }
 
+    function changeSize()
+    {
+      const messageArea = (document.getElementById('messageArea') as HTMLTextAreaElement);
+      const heightBefore = parseInt(messageArea.style.height.split('px')[0]);
+      messageArea.style.height = '0';
+      messageArea.style.height = (messageArea.scrollHeight - 26) + "px";
+      if (parseInt(messageArea.style.height.split('px')[0]) > 120)
+      {
+        messageArea.style.height = heightBefore + 'px';
+      }
+    }
+
     return (
       <div className={classNames(styles.chatboxComponent)} id="chatboxComponent">
           <div className={classNames(styles.logoBar)}>
@@ -99,12 +113,16 @@ export default function Chatbox()
             <h1 className={classNames(styles.h1MainPage)} id='h1'>Ranch</h1>
           </div>
           <div className={classNames(styles.chatbox)} id="chatbox">
-              {chatStore.messages.map((MessageEz) => {
-                if (MessageEz.sender === MessageSender.USER)
+              <div className={classNames(styles.messageDiv)}>
+                  <img src="/ranchLogo.jpg" alt="Ranch Logo" className={classNames(styles.chatboxLogo)} />
+                  <span className={classNames(styles.spanMessage)}>Hi {username}! How can I help you today?</span>
+                </div>
+              {chatStore.messages.map((MessageEz, index) => {
+                if (index == 0 || index % 2 == 0) //quick fix cause MessageSender does not work
                 {
                   return (
                     <div className={classNames(styles.messageDiv)} id={MessageEz.id}>
-                      <svg fill="#000000" width="2.5rem" height="2.5rem" xmlns="http://www.w3.org/2000/svg">
+                      <svg fill="#6da1ef" width="2.5rem" height="2.5rem" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="20" cy="20" r="1.25rem"></circle>
                         <text x="15" y="25" fill="white">{authStore.username?.charAt(0).toUpperCase()}</text>
                       </svg>
@@ -121,11 +139,32 @@ export default function Chatbox()
                     </div>
                   )
                 }
+                // if (MessageEz.sender === MessageSender.USER)
+                // {
+                //   return (
+                //     <div className={classNames(styles.messageDiv)} id={MessageEz.id}>
+                //       <svg fill="#6da1ef" width="2.5rem" height="2.5rem" xmlns="http://www.w3.org/2000/svg">
+                //         <circle cx="20" cy="20" r="1.25rem"></circle>
+                //         <text x="15" y="25" fill="white">{authStore.username?.charAt(0).toUpperCase()}</text>
+                //       </svg>
+                //       <span className={classNames(styles.spanMessage)}>{MessageEz.text}</span>
+                //     </div>
+                //   )
+                // }
+                // else
+                // {
+                //   return (
+                //     <div className={classNames(styles.messageDiv)}>
+                //       <img src="/ranchLogo.jpg" alt="Ranch Logo" className={classNames(styles.chatboxLogo)} />
+                //       <span className={classNames(styles.spanMessage)}>{MessageEz.text}</span>
+                //     </div>
+                //   )
+                // }
               })}
           </div>
           <div className={classNames(styles.outerMessagebox)}>
               <div className={classNames(styles.messagebox)} id="messagebox">
-                  <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea"/>
+                  <textarea className={classNames(styles.textinput)} rows={1} placeholder='Send a message.' id="messageArea" onInput={changeSize}/>
                   <img src="/send.svg" alt="Send Logo" className={classNames(styles.messageboxIcon)} onClick={() => sendMessage()} id="sendButton"/>
               </div>
           </div>

@@ -14,30 +14,54 @@ $sidebar-color: #242424;
     font-size: 5rem;
     padding-left: 1rem;
     margin: 0;
-    text-shadow: 0.125rem 0.125rem 0.125rem rgb(128, 128, 128);
+    text-shadow: 0rem 0rem 0.5rem rgba(0,0,0,0.3);
+                //  0px 0px 5px rgba(0,0,0,0.05);
+
     color: white;
     
 }
 
 .logoBar {
-    padding-top: 0.25rem;
+    // padding-top: 0.25rem;
     display: flex;
     align-items: center;
-    padding-bottom: 0.5rem;
+    padding-bottom: 2rem;
     justify-content: center;
     width: 100%;
 }
 
 .logo {
     border-radius: 100%;
-    box-shadow: 0.125rem 0.125rem 0.125rem $ranch-color;
-    width: 5.5rem;
-    height: 5.5rem;
+    box-shadow: 0rem 0rem 0.5rem rgba(0,0,0,0.3);
+    width: 6rem;
+    height: 6rem;
 }
 
+// .goButton {
+//     color: white;
+//     background: #D466C3;
+//     border: none;
+//     border-radius: 2rem;
+//     padding-left: 4rem;
+//     padding-right: 4rem;
+//     padding-top: 1.325rem;
+//     padding-bottom: 1.325rem;
+//     font-size: 4rem;
+//     text-align: center;
+// }
+
+// .goButton:hover {
+//     box-shadow: 0 0.313rem 0.938rem rgba(217, 70, 217, 0.4);
+//     padding-left: 4rem;
+//     padding-right: 4rem;
+//     padding-top: 1.325rem;
+//     padding-bottom: 1.325rem;
+//     font-size: 5rem;
+// }
+
 .goButton {
-    color: white;
-    background: #D466C3;
+    border-color: #D466C3;
+    color: #fff;
     border: none;
     border-radius: 2rem;
     padding-left: 4rem;
@@ -46,16 +70,20 @@ $sidebar-color: #242424;
     padding-bottom: 1.325rem;
     font-size: 4rem;
     text-align: center;
-}
-
-.goButton:hover {
-    box-shadow: 0 0.313rem 0.938rem rgba(217, 70, 217, 0.4);
-    padding-left: 4rem;
-    padding-right: 4rem;
-    padding-top: 1.325rem;
-    padding-bottom: 1.325rem;
-    font-size: 5rem;
-}
+    box-shadow: 0 0 3.125rem 3.125rem #D466C3 inset, 0 0 0 0 #D466C3;
+    background-color: transparent;
+    transition: all 150ms ease-in-out;
+    text-shadow: 0rem 0rem 0.5rem rgba(0,0,0,0.3);
+    
+    &:hover {
+      box-shadow: 0 0 10px 0 #D466C3 inset, 0 0 10px 4px #D466C3;
+      color: #D466C3;
+    }
+    &:active {
+      box-shadow: 0 0 3.125rem 3.125rem #D466C3 inset, 0 0 0 0 #D466C3;
+      color: #fff;
+    }
+  }
 
 .goButtonContainer {
     display: flex;

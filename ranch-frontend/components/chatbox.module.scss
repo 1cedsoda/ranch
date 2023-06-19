@@ -1,6 +1,8 @@
 $background-color: #e3e3e3;
 $ranch-color: #d41fb9;
 $sidebar-color: #242424;
+$text-color: #6da1ef;
+$border-color: #9cbff4;
 
 .messageDiv {
     display: grid;
@@ -20,11 +22,12 @@ $sidebar-color: #242424;
     padding-top: 0.688rem;
     padding-left: 1rem;
     font-size: 1rem;
+    color: $text-color;
 }
 
 .chatboxComponent {
     justify-items: center;
-    width: 90%;
+    width: 65%;
     height: 100vh;
     display: grid;
     grid-template-rows: max-content minmax(0, 1fr) max-content;
@@ -37,19 +40,20 @@ $sidebar-color: #242424;
     padding-bottom: 0.5rem;
     justify-content: center;
     width: 100%;
+    background: transparent;
 }
 
 .h1MainPage {
     font-size: 2.5rem;
     padding-left: 1rem;
     margin: 0;
-    text-shadow: 0.125rem 0.125rem 0.125rem rgb(128, 128, 128);
-    color: white;
+    // text-shadow: 0rem 0rem 0.5rem rgba(0,0,0,0.3);
+    color: $ranch-color;
 }
 
 .logoMainPage {
     border-radius: 100%;
-    box-shadow: 0.125rem 0.125rem 0.125rem $ranch-color;
+    // box-shadow: 0.125rem 0.125rem 0.125rem $ranch-color;
     width: 3.5rem;
     height: 3.5rem;
 }
@@ -87,12 +91,17 @@ $sidebar-color: #242424;
     padding-left: 1rem;
     border: none;
     font-size: 1rem;
-    overflow-y: hidden;
-    padding: 0.8rem;
+    overflow-y: auto;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
     resize: none;
-    color: #8A92A1;
-    line-height: 100%; 
+    color: #6da1ef;
+    line-height: 1.25; 
     vertical-align: middle;
+    word-wrap: break-word;
+    
     // width: 90%;
     // border-radius: 0.5rem;
     background-color: transparent;
@@ -104,9 +113,16 @@ $sidebar-color: #242424;
     outline: none;
 }
 
+.textinput::placeholder {
+    color: $text-color;
+}
+
 .messageboxIcon {
     width: 1.5rem;
     height: 1.5rem;
     margin-right: 0.5rem;
     margin-left: 0.5rem;
+    margin-bottom: 0.688rem;
+    margin-top: 0.688rem;
+    align-self: flex-end;
 }
